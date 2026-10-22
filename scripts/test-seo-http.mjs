@@ -79,6 +79,21 @@ try {
     assert.equal(response.headers.get("location"), expectedLocation, "Unexpected redirect: " + requested);
   }
 
+  const historicArticleUrls = [
+    "/blog/стоимость-трансфера-минск-варшава/",
+    "/блог/стоимость-трансфера-минск-варшава/",
+    "/blog/стоимость-трансфер-минск-варшава",
+  ];
+  for (const oldUrl of historicArticleUrls) {
+    const response = await fetch(url + encodeURI(oldUrl), { redirect: "manual" });
+    assert.equal(response.status, 301, "Historic blog article must redirect: " + oldUrl);
+    assert.equal(
+      decodeURI(response.headers.get("location") || ""),
+      "/блог/стоимость-трансфер-минск-варшава",
+      "Historic blog URL must redirect straight to its canonical path"
+    );
+  }
+
   const blogQuery = await fetch(url + "/blog?q=%7Bsearch_term_string%7D");
   assert.equal(blogQuery.status, 200, "Blog query parameters must not be redirected to language routes");
 
