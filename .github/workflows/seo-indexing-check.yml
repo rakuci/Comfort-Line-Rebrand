@@ -70,3 +70,5 @@ jobs:
           }
           console.log("PASS: prerendered canonical, hreflang and H1 on priority routes");
           NODE
+      - name: Verify production HTTP redirects and crawl headers
+        run: node scripts/test-seo-http.mjs
