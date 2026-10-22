@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Даугавпилс | Латвия | ComfortLine",
     titleEn: "Minsk to Daugavpils Transfer | Latvia | ComfortLine",
-    descRu: "Прямой трансфер из Минска в Даугавпилс. пробег и время по согласованному КПП. Крепость XIX века, Центр Марка Ротко. КПП Григоровщина–Патерниеки по доступности; цена по запросу.",
-    descEn: "Direct transfer from Minsk to Daugavpils. distance and timing confirmed once the checkpoint is selected. 19th-c fortress, Mark Rothko Art Centre. Grigorovshchina–Pāternieki access checked; individual quote on request.",
+    descRu: "Индивидуальный трансфер Минск — Даугавпилс. Маршрут и время уточняем по действующему КПП. Подача по адресу, цена по запросу.",
+    descEn: "Private Minsk–Daugavpils transfer. Checkpoint and travel time confirmed before departure. Door-to-door pickup, comfortable car, quote on request.",
     pathRu: "/трансфер-минск-даугавпилс",
     pathEn: "/minsk-daugavpils-transfer",
     breadcrumbRu: "Трансфер Минск–Даугавпилс",
