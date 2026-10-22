@@ -244,6 +244,15 @@ const INDEX_PATH = path.join(PUBLIC_DIR, "index.html");
 
 const CANONICAL_HOST = "comfortline.by";
 
+// Old shared-page links used ?lang=en before language-specific /en routes existed.
+// Redirect only these known duplicates; other query parameters may be meaningful.
+const LEGACY_EN_QUERY_ROUTES = new Map([
+  ["/", "/en"],
+  ["/faq", "/en/faq"],
+  ["/terms", "/en/terms"],
+  ["/privacy", "/en/privacy"],
+]);
+
 const server = http.createServer((req, res) => {
   try {
     const url = new URL(req.url ?? "/", `http://localhost`);
@@ -260,6 +269,25 @@ const server = http.createServer((req, res) => {
       res.writeHead(301, { "Location": location, "Cache-Control": "public, max-age=86400" });
       res.end();
       return;
+    }
+
+    // --- 0. Normalize legacy ?lang=en on the four shared pages. ---
+    // A 301 gives Google one unambiguous language URL per document.
+    // Keep unrelated query parameters (for example campaign attribution).
+    const legacyLang = url.searchParams.get("lang");
+    if (legacyLang === "en" || legacyLang === "ru") {
+      const normalizedPath = rawPath.length > 1 ? rawPath.replace(/\/+$/, "") : rawPath;
+      const englishPath = LEGACY_EN_QUERY_ROUTES.get(normalizedPath);
+      if (englishPath) {
+        const target = legacyLang === "en" ? englishPath : normalizedPath;
+        const remaining = new URLSearchParams(url.searchParams);
+        remaining.delete("lang");
+        const remainingQuery = remaining.toString();
+        const location = target + (remainingQuery ? "?" + remainingQuery : "");
+        res.writeHead(301, { Location: location, "Cache-Control": "public, max-age=86400" });
+        res.end();
+        return;
+      }
     }
 
     // --- 0a. Legacy URL redirects (old slugs → current slugs) ---
