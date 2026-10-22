@@ -132,7 +132,7 @@ const data: RoutePageData = {
     titleRu: "Трансфер Минск — Краков | Королевская столица Польши",
     titleEn: "Minsk to Kraków Transfer | Poland's Royal Capital",
     descRu: "Прямой трансфер из Минска в Краков. ~750 км, 8–11 ч. Вавельский замок, Главная площадь, Величка. КПП выбираем по текущему режиму работы; стоимость по запросу.",
-    descEn: "Direct transfer from Minsk to Kraków. ~750 km, 8–11 hrs. Wawel Castle, Main Square, Wieliczka. Checkpoint selected according to current rules; individual quote on request.",
+    descEn: "Private Minsk–Kraków transfer to your address or KRK airport. Border checkpoint confirmed before travel. Comfortable car, fare on request.",
     pathRu: "/трансфер-минск-краков",
     pathEn: "/minsk-krakow-transfer",
     breadcrumbRu: "Трансфер Минск–Краков",
