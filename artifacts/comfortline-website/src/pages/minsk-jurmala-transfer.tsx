@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Юрмала | Балтийский курорт Латвии",
     titleEn: "Minsk to Jūrmala Transfer | Latvia's Baltic Resort",
-    descRu: "Прямой трансфер из Минска в Юрмалу. ~490 км, 5,5–7 ч. Пляж, сосновый лес, санатории, деревянные дачи. КПП Григоровщина–Патерниеки по доступности, цена по запросу.",
-    descEn: "Direct transfer from Minsk to Jūrmala. ~490 km, 5.5–7 hrs. Baltic beach, pine forest, spas, Art Nouveau dachas. Grigorovshchina–Pāternieki crossing subject to availability; quote on request.",
+    descRu: "Трансфер Минск — Юрмала до отеля или санатория. Подача по адресу; КПП уточняем перед поездкой. Стоимость по запросу.",
+    descEn: "Private Minsk–Jūrmala transfer to your hotel or spa. Door-to-door service; checkpoint availability checked before travel. Request a quote.",
     pathRu: "/трансфер-минск-юрмала",
     pathEn: "/minsk-jurmala-transfer",
     breadcrumbRu: "Трансфер Минск–Юрмала",
