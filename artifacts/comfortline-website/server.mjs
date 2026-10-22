@@ -305,10 +305,11 @@ const server = http.createServer((req, res) => {
       // HTML must revalidate so users always get the latest app shell.
       // Immutable caching is only safe for fingerprinted build files.
       // robots.txt, sitemap.xml, RSS and other unversioned assets must revalidate.
-      const fingerprinted = /[\\/]assets[\\/].+-[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9]+$/.test(filePath);
+      const assetDir = path.relative(PUBLIC_DIR, filePath).split(path.sep)[0] === "assets";
+      const fingerprinted = assetDir && /-[A-Za-z0-9_-]{8,}\.[A-Za-z0-9]+$/.test(path.basename(filePath));
       const cache = fingerprinted
         ? "public, max-age=31536000, immutable"
-        : /\\.(?:xml|txt|html|json)$/i.test(filePath)
+        : [".xml", ".txt", ".html", ".json"].includes(ext)
           ? "public, max-age=0, must-revalidate"
           : "public, max-age=86400";
       const extraHeaders = path.basename(filePath) === "feed.xml"
