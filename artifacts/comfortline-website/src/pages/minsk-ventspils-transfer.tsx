@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Вентспилс | Латвия | ComfortLine",
     titleEn: "Minsk to Ventspils Transfer | Latvia | ComfortLine",
-    descRu: "Прямой трансфер из Минска в Вентспилс. ~620 км, 7–9 ч. Пляж Голубой флаг, замок Ливонского ордена, синие коровы. КПП Григоровщина–Патерниеки по доступности; цена по запросу.",
-    descEn: "Direct transfer from Minsk to Ventspils. ~620 km, 7–9 hrs. Blue Flag beach, Livonian Order castle, blue cow sculptures. Grigorovshchina–Pāternieki access checked; individual quote on request.",
+    descRu: "Трансфер Минск — Вентспилс до отеля, порта или нужного адреса. Комфортная поездка, КПП уточняем перед выездом. Цена по запросу.",
+    descEn: "Private Minsk–Ventspils transfer to your hotel, port or address. Checkpoint access confirmed before travel. Comfortable car, quote on request.",
     pathRu: "/трансфер-минск-вентспилс",
     pathEn: "/minsk-ventspils-transfer",
     breadcrumbRu: "Трансфер Минск–Вентспилс",
