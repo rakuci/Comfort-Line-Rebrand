@@ -62,7 +62,27 @@ try {
   assert.equal(redirect.status, 301);
   assert.equal(decodeURI(redirect.headers.get("location") || ""), route);
 
-  console.log("PASS: robots/sitemap freshness, RSS and 404 noindex, route 200 and canonical 301");
+  // Old ?lang=en links found by Google must resolve to the current
+  // language-specific URLs, without creating additional indexable duplicates.
+  const legacyLanguageCases = [
+    ["/?lang=en", "/en"],
+    ["/faq?lang=en", "/en/faq"],
+    ["/terms?lang=en", "/en/terms"],
+    ["/privacy?lang=en", "/en/privacy"],
+    ["/faq/?lang=en", "/en/faq"],
+    ["/faq?lang=ru", "/faq"],
+    ["/faq?lang=en&utm_source=google", "/en/faq?utm_source=google"],
+  ];
+  for (const [requested, expectedLocation] of legacyLanguageCases) {
+    const response = await fetch(url + requested, { redirect: "manual" });
+    assert.equal(response.status, 301, "Expected permanent language redirect: " + requested);
+    assert.equal(response.headers.get("location"), expectedLocation, "Unexpected redirect: " + requested);
+  }
+
+  const blogQuery = await fetch(url + "/blog?q=%7Bsearch_term_string%7D");
+  assert.equal(blogQuery.status, 200, "Blog query parameters must not be redirected to language routes");
+
+  console.log("PASS: robots/sitemap freshness, RSS and 404 noindex, route 200, canonical and language 301");
 } finally {
   child.kill("SIGTERM");
 }
