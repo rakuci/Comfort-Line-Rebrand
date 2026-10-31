@@ -2,7 +2,7 @@
 type ModuleMap = Record<string, () => Promise<Record<string, unknown>>>;
 export const modules: ModuleMap = {
   "./components/mockups/comfortline-cinematic/Cinematic.tsx": () => import("../components/mockups/comfortline-cinematic/Cinematic.tsx"),
-  "./components/mockups/comfortline-editorial/Editorial.tsx": () => import("../components/mockups/comfortline-editorial/Editorial.tsx"),
   "./components/mockups/comfortline-concierge/Concierge.tsx": () => import("../components/mockups/comfortline-concierge/Concierge.tsx"),
+  "./components/mockups/comfortline-editorial/Editorial.tsx": () => import("../components/mockups/comfortline-editorial/Editorial.tsx"),
   "./components/mockups/comfortline-grid/GridCommand.tsx": () => import("../components/mockups/comfortline-grid/GridCommand.tsx")
 };
