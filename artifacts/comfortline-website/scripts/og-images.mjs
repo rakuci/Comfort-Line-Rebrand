@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectAllRoutes } from "./route-manifest.mjs";
 import { layoutOgText } from "./lib/og-text-layout.mjs";
+import { configureOgFonts, OG_FONT_FAMILY } from "./lib/og-fonts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist", "public");
@@ -48,7 +49,7 @@ export function textFor(route, lang) {
 
 export function svgFor({ title, subtitle }, phoneDisplay) {
   const layout = layoutOgText({ title, subtitle });
-  const textBlock = (block, fill, weight) => `<text fill="${fill}" font-family="Arial, Helvetica, sans-serif" font-weight="${weight}" font-size="${block.fontSize}">${block.lines.map((line) => `<tspan x="${line.x}" y="${line.y}">${escapeXml(line.text)}</tspan>`).join("")}</text>`;
+  const textBlock = (block, fill, weight) => `<text fill="${fill}" font-family="${OG_FONT_FAMILY}" font-weight="${weight}" font-size="${block.fontSize}">${block.lines.map((line) => `<tspan x="${line.x}" y="${line.y}">${escapeXml(line.text)}</tspan>`).join("")}</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
     <defs>
       <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -64,13 +65,13 @@ export function svgFor({ title, subtitle }, phoneDisplay) {
     <rect width="${W}" height="${H}" fill="url(#bg)"/>
     <rect x="0" y="0" width="14" height="${H}" fill="url(#gold)"/>
     <g transform="translate(80, 100)">
-      <text x="0" y="0" fill="${GOLD}" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28" letter-spacing="6">COMFORTLINE</text>
+      <text x="0" y="0" fill="${GOLD}" font-family="${OG_FONT_FAMILY}" font-weight="700" font-size="28" letter-spacing="6">COMFORTLINE</text>
     </g>
-    ${textBlock(layout.title, FG, 800)}
+    ${textBlock(layout.title, FG, 700)}
     ${textBlock(layout.subtitle, MUTED, 400)}
     <g transform="translate(80, 540)">
-      <text x="0" y="0" fill="${FG}" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="24">comfortline.by</text>
-      <text x="350" y="0" fill="${MUTED}" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="24">${escapeXml(phoneDisplay)}</text>
+      <text x="0" y="0" fill="${FG}" font-family="${OG_FONT_FAMILY}" font-weight="700" font-size="24">comfortline.by</text>
+      <text x="350" y="0" fill="${MUTED}" font-family="${OG_FONT_FAMILY}" font-weight="400" font-size="24">${escapeXml(phoneDisplay)}</text>
     </g>
   </svg>`;
 }
@@ -92,6 +93,7 @@ export function planOgImages(routes) {
 }
 
 async function main() {
+  configureOgFonts();
   const { default: sharp } = await import("sharp");
   const { BUSINESS } = await import("../src/seo/seo-config.ts");
   if (!fs.existsSync(DIST)) {

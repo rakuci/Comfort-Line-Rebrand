@@ -1,5 +1,5 @@
-// Conservative em advances for the Arial/Helvetica/sans-serif SVG stack.
-// These include headroom for the DejaVu Sans fallback used by sharp/librsvg.
+// Conservative em advances for the pinned DejaVu Sans regular/bold SVG faces.
+// These retain headroom rather than depending on host font metrics.
 // No font loading, native rendering, or file access is needed to plan a layout.
 export function measureText(text, fontSize) {
   let em = 0;
