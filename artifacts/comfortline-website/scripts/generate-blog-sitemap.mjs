@@ -31,9 +31,8 @@ const SITEMAP_PATH = path.join(ROOT, "public", "sitemap.xml");
 const SITE_URL = "https://comfortline.by";
 const BLOG_BASE_RU = "/блог";
 const BLOG_BASE_EN = "/blog";
-const TODAY = new Date().toISOString().slice(0, 10);
 
-function extractArticles(src) {
+export function extractArticles(src) {
   const startMarker = "export const ARTICLES: Article[] = [";
   const startIdx = src.indexOf(startMarker);
   if (startIdx === -1) {
@@ -77,7 +76,8 @@ function extractArticles(src) {
       const slug = /(?<!\w)slug:\s*"([^"]+)"/.exec(objStr)?.[1];
       const slugEn = /slugEn:\s*"([^"]+)"/.exec(objStr)?.[1];
       const dateISO = /dateISO:\s*"([^"]+)"/.exec(objStr)?.[1];
-      if (slug) articles.push({ slug, slugEn, dateISO });
+      const dateModified = /dateModified:\s*"([^"]+)"/.exec(objStr)?.[1];
+      if (slug) articles.push({ slug, slugEn, dateISO, dateModified });
     } else {
       i++;
     }
@@ -92,7 +92,8 @@ function buildArticleUrlBlocks(article) {
   }
   const ruLoc = `${SITE_URL}${encodeURI(`${BLOG_BASE_RU}/${article.slug}`)}`;
   const enLoc = `${SITE_URL}${BLOG_BASE_EN}/${article.slugEn}`;
-  const lastmod = article.dateISO || TODAY;
+  const lastmod = article.dateModified || article.dateISO;
+  if (!lastmod) throw new Error(`Missing article date: ${article.slug}`);
 
   const block = (loc) => `  <url>
       <loc>${loc}</loc>
@@ -116,7 +117,7 @@ function isPerArticleBlogBlock(block) {
   return /\/blog\/[^/]+$/.test(loc) || /\/%D0%B1%D0%BB%D0%BE%D0%B3\/[^/]+$/.test(loc);
 }
 
-function regenerateSitemap(sitemapXml, articles) {
+export function regenerateSitemap(sitemapXml, articles) {
   const blockRegex = /  <url>[\s\S]*?<\/url>/g;
   const blocks = sitemapXml.match(blockRegex) || [];
 
@@ -167,4 +168,4 @@ function main() {
   );
 }
 
-main();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

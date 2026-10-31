@@ -50,3 +50,62 @@ localized link, missing translations, altered publication identities, changed
 visa counts/cutoffs, wrong canonicals/hreflang and incomplete prerendered
 content fail. Rendered checks use jsdom without scripts or resource loading;
 no browser or running server is required.
+
+## Separate sitemap and social-preview regression checks
+
+These checks are independent of the HTML canonical/hreflang and border-policy
+suite above. From `artifacts/comfortline-website`, run:
+
+```sh
+pnpm run check:blog:discovery
+```
+
+This offline command runs mutation tests, checks the **existing**
+`public/sitemap.xml` (it does not repair it), and compares the route parser and
+OG generator's pure image plan against real TypeScript article data and the
+preserved publication/social identities. It checks every RU/EN URL and
+reciprocal ru/en/x-default alternate, rejects missing/duplicate/orphan article
+entries, and requires `lastmod = dateModified || dateISO` — never build time.
+Both image filenames and title/subtitle languages are checked. Unit tests do
+not generate images, start a browser/server, contact search engines, or fetch
+network resources.
+
+To check actual built artifacts, including all 28 article JPEGs (format and
+1200×630 dimensions), OG/secure/Twitter image targets, `og:url`, share dates
+and Article schema image targets:
+
+```sh
+pnpm run check:blog:discovery:generated
+```
+
+Missing built files fail; there is no silent skip or default-image fallback.
+This command reads `dist/public/sitemap.xml` as well as the source sitemap.
+To prepare fresh output **without IndexNow or other network submission**:
+
+```sh
+pnpm run sitemap:blog
+pnpm run check:blog:discovery
+pnpm exec vite build --config vite.config.ts
+pnpm run og
+node scripts/prerender.mjs
+pnpm run check:blog:discovery:generated
+```
+
+Only the explicit `og` generation step renders images. Re-running either
+checker never regenerates images or rewrites outputs. Normal `build` runs
+both discovery commands before its existing IndexNow step.
+
+### Mutation proof
+
+The unit command includes negative cases for a localized `<loc>` switched to
+RU, stale slugs, nonreciprocal alternates, stale/build-day modification dates,
+wrong-language image filenames/overlays, and stale OG/Twitter/schema targets.
+For manual verification on disposable output, change an English article
+`<loc>` or `lastmod` in `public/sitemap.xml` and run
+`pnpm run check:blog:discovery`: it must exit nonzero. Restore with
+`pnpm run sitemap:blog`. After building, change an article's `og:image` or
+`twitter:image` in its `dist/public/blog/<slug>/index.html`, or remove its
+`dist/public/og/<ogSlug>-en.jpg`, and run
+`pnpm run check:blog:discovery:generated`: it must exit nonzero. Restore built
+files with the offline preparation sequence above. Do not run regeneration
+before a mutation check; doing so would repair the defect being tested.

@@ -3,7 +3,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { collectAllRoutes } from "./route-manifest.mjs";
-import { BUSINESS } from "../src/seo/seo-config.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist", "public");
@@ -36,7 +35,7 @@ function truncate(s, max) {
  * Russian copy every route defines first — otherwise the social preview
  * looks unfinished/wrong-language when an English URL is shared.
  */
-function textFor(route, lang) {
+export function textFor(route, lang) {
   if (lang === "en") {
     const title = route.h1En || route.titleEn;
     const subtitle = truncate(route.introEn || route.descEn || "", MAX_SUBTITLE_LEN);
@@ -47,7 +46,7 @@ function textFor(route, lang) {
   return { title, subtitle };
 }
 
-function svgFor({ title, subtitle }) {
+export function svgFor({ title, subtitle }, phoneDisplay) {
   const safeTitle = escapeXml(title);
   const safeSubtitle = escapeXml(subtitle);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -75,12 +74,29 @@ function svgFor({ title, subtitle }) {
     </g>
     <g transform="translate(80, 540)">
       <text x="0" y="0" fill="${FG}" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="24">comfortline.by</text>
-      <text x="350" y="0" fill="${MUTED}" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="24">${escapeXml(BUSINESS.phoneDisplay)}</text>
+      <text x="350" y="0" fill="${MUTED}" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="24">${escapeXml(phoneDisplay)}</text>
     </g>
   </svg>`;
 }
 
+// Pure output plan shared with offline checks; importing this module never
+// loads application TS, renders JPEGs, writes files, or starts the generator.
+export function planOgImages(routes) {
+  const seen = new Set();
+  return routes.flatMap((route) => {
+    if (!route.ogSlug || seen.has(route.ogSlug)) return [];
+    seen.add(route.ogSlug);
+    return ["ru", "en"].map((lang) => ({
+      routePath: lang === "ru" ? route.pathRu : route.pathEn,
+      lang,
+      imagePath: `/og/${route.ogSlug}-${lang}.jpg`,
+      ...textFor(route, lang),
+    }));
+  });
+}
+
 async function main() {
+  const { BUSINESS } = await import("../src/seo/seo-config.ts");
   if (!fs.existsSync(DIST)) {
     console.error("[og] dist/public not found, run vite build first");
     process.exit(1);
@@ -94,24 +110,18 @@ async function main() {
   // Each route gets a RU and an EN image (/og/<slug>-ru.jpg, /og/<slug>-en.jpg)
   // built from that language's own fields, so English pages never advertise
   // a Russian-language social preview.
-  const seen = new Set();
   let count = 0;
-  for (const route of allRoutes) {
-    if (!route.ogSlug || seen.has(route.ogSlug)) continue;
-    seen.add(route.ogSlug);
-
-    for (const lang of ["ru", "en"]) {
-      const svg = svgFor(textFor(route, lang));
-      const outPath = path.join(OG_DIR, `${route.ogSlug}-${lang}.jpg`);
-      await sharp(Buffer.from(svg)).jpeg({ quality: 90, mozjpeg: true }).toFile(outPath);
-      console.log(`[og] ${route.ogSlug}-${lang}.jpg`);
-      count++;
-    }
+  for (const image of planOgImages(allRoutes)) {
+    const svg = svgFor(image, BUSINESS.phoneDisplay);
+    const outPath = path.join(DIST, image.imagePath);
+    await sharp(Buffer.from(svg)).jpeg({ quality: 90, mozjpeg: true }).toFile(outPath);
+    console.log(`[og] ${image.imagePath}`);
+    count++;
   }
   console.log(`[og] generated ${count} OG images in dist/public/og/`);
 }
 
-main().catch((e) => {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((e) => {
   console.error("[og] failed:", e);
   process.exit(1);
 });
