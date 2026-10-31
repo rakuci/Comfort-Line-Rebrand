@@ -9,11 +9,12 @@ import { collectAllRoutes, SITE_URL, DEFAULT_OG_IMAGE } from "./route-manifest.m
 import { createDataLoader } from "./lib/load-blog-data.mjs";
 import { validateRenderedBlogPages } from "./lib/blog-content-validation.mjs";
 import { renderRouteMarkup, validateRenderedRouteDocument } from "./lib/route-content-validation.mjs";
+import { collectNonArticleShareExpectations } from "./lib/non-article-share-expectations.mjs";
+import { validateGeneratedNonArticleDiscovery } from "./lib/blog-discovery-validation.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist", "public");
-const OG_DIR = path.join(DIST, "og");
 
 // ============================================================================
 // SSR bootstrap — jsdom globals + a Vite SSR module loader for src/ssr-entry.tsx
@@ -104,7 +105,7 @@ function escapeHtml(s) {
     .replace(/'/g, "&#39;");
 }
 
-function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
+function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup, dist = DIST) {
   const isRu = lang === "ru";
   const title = isRu ? route.titleRu : route.titleEn;
   const desc = isRu ? route.descRu : route.descEn;
@@ -120,7 +121,7 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
   // it — any route-specific file that failed to generate falls back to the
   // stable, always-present site-wide opengraph.jpg instead of a broken image URL.
   const ogImage =
-    route.ogSlug && fs.existsSync(path.join(OG_DIR, `${route.ogSlug}-${lang}.jpg`))
+    route.ogSlug && fs.existsSync(path.join(dist, "og", `${route.ogSlug}-${lang}.jpg`))
       ? `${SITE_URL}/og/${route.ogSlug}-${lang}.jpg`
       : DEFAULT_OG_IMAGE;
   const ogType = route.isArticle ? "article" : "website";
@@ -423,7 +424,7 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
     for (const route of allRoutes) {
       for (const lang of ["ru", "en"]) {
         const routePath = lang === "ru" ? route.pathRu : route.pathEn;
-        const html = buildHtml(template, route, lang, blogIndexRoute, renderMarkup(loader.SsrApp, routePath));
+        const html = buildHtml(template, route, lang, blogIndexRoute, renderMarkup(loader.SsrApp, routePath), dist);
         if (checkedRoutes.has(route)) validateRenderedRouteDocument(html, route, lang);
         written.push(emit(routePath, html, dist));
       }
@@ -439,6 +440,9 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
   const { ARTICLES } = createDataLoader()("blog-articles");
   const validatedBlogPages = validateRenderedBlogPages(ARTICLES, dist);
   console.log(`[prerender] offline blog regression checks passed for ${validatedBlogPages} localized pages.`);
+  const shareRoutes = collectNonArticleShareExpectations();
+  await validateGeneratedNonArticleDiscovery(shareRoutes, dist);
+  console.log(`[prerender] offline share-image checks passed for ${shareRoutes.length * 2} transfer/fleet/blog-index pages.`);
 
   console.log(
     `[prerender] wrote ${written.length} files for ${allRoutes.length} routes (${manualRoutes.length} manual, ${autoRoutes.length} auto, ${vehicleRoutes.length} vehicle, ${1 + blogArticleRoutes.length} blog):`,

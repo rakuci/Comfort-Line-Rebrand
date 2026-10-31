@@ -7,7 +7,7 @@
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "pnpm run check:routes && pnpm run check:blog:source && node scripts/convert-images.mjs && node scripts/generate-blog-sitemap.mjs && pnpm run check:blog:discovery && vite build --config vite.config.ts && node scripts/og-images.mjs && node scripts/prerender.mjs && pnpm run check:blog:discovery:generated && node scripts/indexnow.mjs",
     "check:routes": "node --test scripts/tests/route-content-validation.test.mjs",
-    "check:blog:discovery": "node --test scripts/tests/blog-discovery-validation.test.mjs && node scripts/check-blog-discovery.mjs",
+    "check:blog:discovery": "node --test scripts/tests/blog-discovery-validation.test.mjs scripts/tests/non-article-discovery-validation.test.mjs && node scripts/check-blog-discovery.mjs",
     "check:blog:discovery:generated": "node scripts/check-blog-discovery.mjs --generated && pnpm run check:blog:client",
     "check:blog:client": "node --test scripts/tests/blog-client-images.test.mjs",
     "check:blog:source": "node scripts/check-border-guide.mjs && node --test scripts/tests/blog-content-validation.test.mjs && node scripts/check-blog-content.mjs --source",

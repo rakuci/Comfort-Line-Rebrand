@@ -102,6 +102,34 @@ Only the explicit `og` generation step renders images. Re-running either
 checker never regenerates images or rewrites outputs. Normal `build` runs
 both discovery commands before its existing IndexNow step.
 
+### Transfer, fleet and blog-index share previews
+
+The same discovery commands also protect every localized transfer route
+(including country and Europe overviews), fleet detail page and blog index.
+An independent TypeScript AST reader reads the actual TSX copy and SEO paths,
+separately from the manifest's regex parser. It checks each manifest route
+and the **full** OG generator plan, including filename collisions and silent
+deduplication, against those expectations. English/Russian filenames, titles
+and truncated subtitles must agree with the source. Fleet image identities
+use their vehicle keys, not necessarily their English URL slugs.
+
+The generated check reads each expected JPEG and requires JPEG format and
+1200×630 dimensions. Each built head must have exactly one correct localized
+`og:url`, `og:image`, `og:image:secure_url` and `twitter:image`, plus matching
+locale, website type, dimensions, MIME type and large-image Twitter card.
+Missing output, default-image fallback, stale or wrong-language targets and
+duplicate tags fail. Direct prerendering runs these non-article output checks
+too; a fallback image cannot silently pass prerendering.
+
+`scripts/tests/non-article-discovery-validation.test.mjs` covers transfer,
+airport, country, Europe overview, bespoke V-Class, mapped fleet and blog
+index representatives. Negative cases include shared parser/plan drift,
+deduped images, missing/corrupt JPEGs, wrong dimensions/format, missing HTML,
+and bad OG/Twitter tags in both languages. Image metadata tests reuse static
+committed JPEG bytes with edited headers; unit tests never render images.
+These are built-output checks, not client hydration/navigation or page-body
+SSR checks.
+
 ### Mutation proof
 
 The unit command includes negative cases for a localized `<loc>` switched to

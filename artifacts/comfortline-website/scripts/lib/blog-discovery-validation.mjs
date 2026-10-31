@@ -139,3 +139,75 @@ export async function validateGeneratedBlogDiscovery(articles, dist) {
     }
   }
 }
+
+// Expected routes come from the independent page-source reader, while routes
+// and images are the actual manifest and generator plan (including deduping).
+export function validateNonArticleImagePlan(expectedRoutes, routes, images) {
+  for (const expected of expectedRoutes) {
+    const label = expected.pathEn;
+    const matches = routes.filter((r) => r.pathRu === expected.pathRu);
+    assert.equal(matches.length, 1, `${label}: share manifest missing or duplicated`);
+    const route = matches[0];
+    assert.equal(route.pathEn, expected.pathEn, `${label}: share manifest English path`);
+    assert.equal(route.ogSlug, expected.ogSlug, `${label}: share image identity`);
+    for (const [lang, suffix] of [["ru", "Ru"], ["en", "En"]]) {
+      const routePath = expected[`path${suffix}`];
+      const plans = images.filter((i) => i.routePath === routePath);
+      assert.equal(plans.length, 1, `${routePath}: share image plan missing or duplicated`);
+      const image = plans[0];
+      assert.equal(image.lang, lang, `${routePath}: share image plan language`);
+      assert.equal(image.imagePath, imageFor(expected, lang), `${routePath}: share-image target`);
+      assert.equal(images.filter((i) => i.imagePath === image.imagePath).length, 1,
+        `${routePath}: share image filename collision`);
+      assert.equal(image.title, expected[`h1${suffix}`], `${routePath}: share-image title language`);
+      const intro = expected[`intro${suffix}`];
+      const subtitle = intro.length > 90 ? `${intro.slice(0, 89).trimEnd()}…` : intro;
+      assert.equal(image.subtitle, subtitle, `${routePath}: share-image subtitle language`);
+    }
+  }
+}
+
+export function validateNonArticleShareDocument(html, route, lang) {
+  const dom = new JSDOM(html);
+  try {
+    const doc = dom.window.document;
+    const routePath = lang === "ru" ? route.pathRu : route.pathEn;
+    const image = urlFor(imageFor(route, lang));
+    for (const [attr, key, expected] of [
+      ["property", "og:url", urlFor(routePath)],
+      ["property", "og:type", "website"],
+      ["property", "og:locale", lang === "ru" ? "ru_RU" : "en_US"],
+      ["property", "og:image", image],
+      ["property", "og:image:secure_url", image],
+      ["property", "og:image:width", "1200"],
+      ["property", "og:image:height", "630"],
+      ["property", "og:image:type", "image/jpeg"],
+      ["name", "twitter:card", "summary_large_image"],
+      ["name", "twitter:image", image],
+    ]) {
+      const tags = doc.head.querySelectorAll(`meta[${attr}="${key}"]`);
+      assert.equal(tags.length, 1, `${routePath}: missing/duplicate ${key}`);
+      assert.equal(tags[0].getAttribute("content"), expected, `${routePath}: share ${key} target`);
+    }
+  } finally {
+    dom.window.close();
+  }
+}
+
+export async function validateGeneratedNonArticleDiscovery(expectedRoutes, dist) {
+  for (const route of expectedRoutes) {
+    for (const lang of ["ru", "en"]) {
+      const routePath = lang === "ru" ? route.pathRu : route.pathEn;
+      const file = join(dist, imageFor(route, lang));
+      let metadata;
+      try {
+        metadata = await sharp(file).metadata();
+      } catch (cause) {
+        throw new Error(`${routePath}: missing or invalid generated share image ${file}: ${cause.message}`, { cause });
+      }
+      assert.deepEqual([metadata.format, metadata.width, metadata.height], ["jpeg", 1200, 630],
+        `${routePath}: generated OG image must be a 1200×630 JPEG`);
+      validateNonArticleShareDocument(readFileSync(join(dist, routePath, "index.html"), "utf8"), route, lang);
+    }
+  }
+}

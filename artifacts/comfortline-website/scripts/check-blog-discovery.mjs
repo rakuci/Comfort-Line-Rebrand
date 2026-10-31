@@ -4,9 +4,11 @@ import { fileURLToPath } from "node:url";
 import { createDataLoader } from "./lib/load-blog-data.mjs";
 import { collectAllRoutes } from "./route-manifest.mjs";
 import { planOgImages } from "./og-images.mjs";
+import { collectNonArticleShareExpectations } from "./lib/non-article-share-expectations.mjs";
 import {
   validateDiscoveryIdentities, validateBlogSitemap, validateBlogImagePlan,
   validateGeneratedBlogDiscovery,
+  validateNonArticleImagePlan, validateGeneratedNonArticleDiscovery,
 } from "./lib/blog-discovery-validation.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -17,13 +19,16 @@ try {
   }
   const { ARTICLES } = createDataLoader()("blog-articles");
   validateDiscoveryIdentities(ARTICLES);
-  const { blogArticleRoutes } = collectAllRoutes();
+  const { allRoutes, blogArticleRoutes } = collectAllRoutes();
+  const nonArticles = collectNonArticleShareExpectations();
+  validateNonArticleImagePlan(nonArticles, allRoutes, planOgImages(allRoutes));
   validateBlogImagePlan(ARTICLES, blogArticleRoutes, planOgImages(blogArticleRoutes));
   validateBlogSitemap(readFileSync(resolve(root, "public/sitemap.xml"), "utf8"), ARTICLES);
   if (args.includes("--generated")) {
     await validateGeneratedBlogDiscovery(ARTICLES, resolve(root, "dist/public"));
+    await validateGeneratedNonArticleDiscovery(nonArticles, resolve(root, "dist/public"));
   }
-  console.log(`[blog-discovery] Passed ${ARTICLES.length} article pairs: XML URLs/alternates/dates, localized share plans${args.length ? ", built sitemap, JPEGs and social metadata" : ""}. Offline; no images regenerated.`);
+  console.log(`[blog-discovery] Passed ${ARTICLES.length} article pairs and ${nonArticles.length} transfer/fleet/blog-index pairs: XML URLs/alternates/dates, localized share plans${args.length ? ", built sitemap, JPEGs and social metadata" : ""}. Offline; no images regenerated.`);
 } catch (error) {
   console.error(`[blog-discovery] FAILED: ${error.message}`);
   process.exitCode = 1;
