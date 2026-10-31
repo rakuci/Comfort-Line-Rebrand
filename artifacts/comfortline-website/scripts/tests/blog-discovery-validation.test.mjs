@@ -14,9 +14,13 @@ import {
 import { EXPECTED_ORIGIN } from "../fixtures/blog-policy-expectations.mjs";
 
 const { ARTICLES } = createDataLoader()("blog-articles");
-const routes = collectAllRoutes().blogArticleRoutes;
+// Date-drift mutations need an actually revised article, not whichever new
+// publication happens to be first on the blog.
+const article = ARTICLES.find((a) => a.dateModified > a.dateISO);
+assert.ok(article, "Date regression tests require an editorially revised article");
+const routes = collectAllRoutes().blogArticleRoutes.sort((a, b) =>
+  Number(b.ogSlug === article.ogSlug) - Number(a.ogSlug === article.ogSlug));
 const images = planOgImages(routes);
-const article = ARTICLES[0];
 const ruUrl = new URL(`/блог/${article.slug}`, EXPECTED_ORIGIN).href;
 const enUrl = `${EXPECTED_ORIGIN}/blog/${article.slugEn}`;
 const sitemap = readFileSync(new URL("../../public/sitemap.xml", import.meta.url), "utf8");
@@ -135,7 +139,7 @@ test("generated checks fail explicitly on missing and invalid images; no JPEG ge
     writeFileSync(join(temp, "sitemap.xml"), generated);
     await assert.rejects(validateGeneratedBlogDiscovery(ARTICLES, temp), /Input file is missing/);
     mkdirSync(join(temp, "og"));
-    writeFileSync(join(temp, `og/${article.ogSlug}-ru.jpg`), "not a JPEG");
+    writeFileSync(join(temp, `og/${ARTICLES[0].ogSlug}-ru.jpg`), "not a JPEG");
     await assert.rejects(validateGeneratedBlogDiscovery(ARTICLES, temp), /unsupported image format/);
   } finally {
     rmSync(temp, { recursive: true, force: true });

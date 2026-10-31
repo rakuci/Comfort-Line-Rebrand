@@ -13,7 +13,7 @@
     "check:blog:discovery": "node --test scripts/tests/blog-discovery-validation.test.mjs scripts/tests/non-article-discovery-validation.test.mjs && node scripts/check-blog-discovery.mjs",
     "check:blog:discovery:generated": "node scripts/check-blog-discovery.mjs --generated && pnpm run check:blog:client",
     "check:blog:client": "node --test scripts/tests/blog-client-images.test.mjs",
-    "check:blog:source": "node scripts/check-border-guide.mjs && node --test scripts/tests/blog-content-validation.test.mjs && node scripts/check-blog-content.mjs --source",
+    "check:blog:source": "node scripts/check-border-guide.mjs && node --test scripts/tests/blog-content-validation.test.mjs scripts/tests/shopping-enquiry.test.mjs scripts/tests/shopping-enquiry-client.test.mjs && node scripts/check-blog-content.mjs --source",
     "check:blog": "pnpm run check:blog:source && node scripts/check-blog-content.mjs --rendered",
     "sitemap:blog": "node scripts/generate-blog-sitemap.mjs",
     "webp": "node scripts/convert-images.mjs",

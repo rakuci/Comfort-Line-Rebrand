@@ -129,9 +129,16 @@ export function validateRenderedBlogDocument(html, article, lang) {
     for (const block of body) {
       // React renders callout paragraphs as adjacent <p> nodes: textContent
       // inserts no separator between them, unlike a visual line break.
-      const fragments = [block.text, ...(block.items ?? [])].filter(Boolean).flatMap((s) => s.split("\n\n"));
+      const visible = (s) => block.markdown ? s.replace(/\*\*([^*]+)\*\*/g, "$1").replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, "$1") : s;
+      const fragments = [block.text, ...(block.items ?? [])].filter(Boolean).flatMap((s) => s.split("\n\n")).map(visible);
       for (const fragment of fragments) {
         assert(text.includes(normalize(fragment)), `${context}: missing rendered ${block.type} content "${fragment.slice(0, 65)}"`);
+      }
+      if (block.markdown) {
+        const copy = [block.text, ...(block.items ?? []), ...(block.headers ?? []), ...(block.rows ?? []).flat()].filter(Boolean).join("\n");
+        for (const [, label, href] of copy.matchAll(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g)) {
+          assert([...rendered.querySelectorAll("a[href]")].some((a) => a.href === new URL(href).href && normalize(a.textContent) === normalize(label)), `${context}: lost inline source ${href}`);
+        }
       }
       if (block.type === "link") {
         const expected = new URL(block.href, EXPECTED_ORIGIN).href;
@@ -148,9 +155,10 @@ export function validateRenderedBlogDocument(html, article, lang) {
     const sourceTables = body.filter((b) => b.type === "table");
     assert.equal(tables.length, sourceTables.length, `${context}: table count drift`);
     for (let i = 0; i < tables.length; i++) {
+      const visible = (s) => normalize(sourceTables[i].markdown ? s.replace(/\*\*([^*]+)\*\*/g, "$1").replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, "$1") : s);
       const rows = [...tables[i].querySelectorAll("tbody tr")].map((row) => [...row.querySelectorAll("td")].map((cell) => normalize(cell.textContent)));
-      assert.deepEqual(rows, sourceTables[i].rows.map((row) => row.map(normalize)), `${context}: table ${i + 1} differs from source`);
-      assert.deepEqual([...tables[i].querySelectorAll("th")].map((cell) => normalize(cell.textContent)), sourceTables[i].headers.map(normalize), `${context}: table headings drift`);
+      assert.deepEqual(rows, sourceTables[i].rows.map((row) => row.map(visible)), `${context}: table ${i + 1} differs from source`);
+      assert.deepEqual([...tables[i].querySelectorAll("th")].map((cell) => normalize(cell.textContent)), sourceTables[i].headers.map(visible), `${context}: table headings drift`);
     }
     const structured = [...document.querySelectorAll('script[type="application/ld+json"]')].flatMap((s) => flattenJsonLd(JSON.parse(s.textContent)));
     const articles = structured.filter((s) => [].concat(s["@type"]).includes("Article"));

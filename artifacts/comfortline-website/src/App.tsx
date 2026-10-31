@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/context/language-context";
+import { ShoppingEnquiryProvider } from "@/context/shopping-enquiry-context";
 
 const LandingPage                  = lazy(() => import("@/pages/landing"));
 const PrivacyPolicyPage            = lazy(() => import("@/pages/privacy-policy"));
@@ -199,7 +200,9 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} hook={useNormalizedLocation}>
             <LanguageProvider>
-              <Router />
+              <ShoppingEnquiryProvider>
+                <Router />
+              </ShoppingEnquiryProvider>
             </LanguageProvider>
           </WouterRouter>
           <Toaster />

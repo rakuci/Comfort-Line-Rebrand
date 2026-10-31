@@ -9,6 +9,8 @@ import NotFound from "@/pages/not-found";
 import { Seo } from "@/seo/Seo";
 import { GlobalBookingModal } from "@/components/sections/GlobalBookingModal";
 import { BorderVehicleChecker } from "@/components/sections/BorderVehicleChecker";
+import { ShoppingEnquiry } from "@/components/sections/ShoppingEnquiry";
+import { BlogInlineText } from "@/components/blog-inline-text";
 import { BorderQueueWidget } from "@/components/sections/BorderQueueWidget";
 import {
   ARTICLES,
@@ -20,6 +22,7 @@ import {
 import { SITE_URL, BUSINESS } from "@/seo/seo-config";
 
 function renderBlock(block: Block, idx: number) {
+  const inline = (text: string) => block.markdown ? <BlogInlineText text={text} /> : text;
   switch (block.type) {
     case "editorial-correction":
       return (
@@ -29,32 +32,32 @@ function renderBlock(block: Block, idx: number) {
             {block.heading}
           </div>
           <div className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed space-y-2">
-            {block.text.split("\n\n").map((para, i) => <p key={i}>{para}</p>)}
+            {block.text.split("\n\n").map((para, i) => <p key={i}>{inline(para)}</p>)}
           </div>
         </div>
       );
     case "info-notice":
       return (
         <div key={idx} className="rounded-xl border border-border bg-muted/50 px-4 py-3 my-4 text-sm text-foreground/70 leading-relaxed italic">
-          {block.text}
+          {inline(block.text)}
         </div>
       );
     case "h2":
       return (
         <h2 key={idx} id={block.id} className="text-2xl font-bold text-foreground mt-10 mb-4 scroll-mt-28">
-          {block.text}
+          {inline(block.text)}
         </h2>
       );
     case "h3":
       return (
         <h3 key={idx} className="text-lg font-bold text-foreground mt-6 mb-3">
-          {block.text}
+          {inline(block.text)}
         </h3>
       );
     case "p":
       return (
         <p key={idx} className="text-foreground/85 leading-relaxed mb-4">
-          {block.text}
+          {inline(block.text)}
         </p>
       );
     case "ul":
@@ -63,7 +66,7 @@ function renderBlock(block: Block, idx: number) {
           {block.items.map((it, i) => (
             <li key={i} className="flex items-start gap-3 text-foreground/85">
               <span className="text-primary mt-1.5 shrink-0">▸</span>
-              <span>{it}</span>
+              <span>{inline(it)}</span>
             </li>
           ))}
         </ul>
@@ -74,7 +77,7 @@ function renderBlock(block: Block, idx: number) {
           {block.items.map((it, i) => (
             <li key={i} className="flex items-start gap-3 text-foreground/85">
               <span className="text-primary font-bold shrink-0 min-w-[24px]">{i + 1}.</span>
-              <span>{it}</span>
+              <span>{inline(it)}</span>
             </li>
           ))}
         </ol>
@@ -85,7 +88,7 @@ function renderBlock(block: Block, idx: number) {
           key={idx}
           className="rounded-2xl border border-primary/30 bg-primary/5 px-5 py-4 my-6 text-foreground/90 text-sm leading-relaxed space-y-2"
         >
-          {block.text.split("\n\n").map((para, i) => <p key={i}>{para}</p>)}
+          {block.text.split("\n\n").map((para, i) => <p key={i}>{inline(para)}</p>)}
         </div>
       );
     case "table":
@@ -96,7 +99,7 @@ function renderBlock(block: Block, idx: number) {
               <tr>
                 {block.headers.map((h, i) => (
                   <th key={i} className="text-left px-4 py-3 font-bold text-foreground">
-                    {h}
+                    {inline(h)}
                   </th>
                 ))}
               </tr>
@@ -106,7 +109,7 @@ function renderBlock(block: Block, idx: number) {
                 <tr key={i} className="border-t border-border">
                   {row.map((cell, j) => (
                     <td key={j} className="px-4 py-3 text-foreground/85">
-                      {cell}
+                      {inline(cell)}
                     </td>
                   ))}
                 </tr>
@@ -156,6 +159,8 @@ function renderBlock(block: Block, idx: number) {
       return <BorderQueueWidget key={idx} />;
     case "borderChecker":
       return <BorderVehicleChecker key={idx} />;
+    case "shoppingEnquiry":
+      return <ShoppingEnquiry key={idx} />;
   }
 }
 
@@ -212,8 +217,8 @@ export default function BlogArticlePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Seo
-        titleRu={`${article.title} | Блог ComfortLine`}
-        titleEn={`${article.titleEn ?? article.title} | ComfortLine Blog`}
+        titleRu={article.seoTitle ?? `${article.title} | Блог ComfortLine`}
+        titleEn={article.seoTitleEn ?? `${article.titleEn ?? article.title} | ComfortLine Blog`}
         descRu={article.description}
         descEn={article.descriptionEn ?? article.description}
         pathRu={`${BLOG_BASE_RU}/${article.slug}`}

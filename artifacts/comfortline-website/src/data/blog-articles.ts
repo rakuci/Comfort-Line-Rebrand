@@ -3,8 +3,9 @@
 // can render it in React AND prerender the full text into the static HTML.
 
 import { BORDER_BY_CAR_BODY_RU, BORDER_BY_CAR_BODY_EN } from "./blog-border-by-car-2026";
+import { SHOPPING_BODY_RU, SHOPPING_BODY_EN } from "./blog-eu-belarus-shopping";
 
-export type Block =
+export type Block = (
   | { type: "p"; text: string }
   | { type: "h2"; text: string; id?: string }
   | { type: "h3"; text: string }
@@ -16,13 +17,16 @@ export type Block =
   | { type: "img"; src: string; alt: string; caption?: string }
   | { type: "liveQueue" }
   | { type: "borderChecker" }
+  | { type: "shoppingEnquiry" }
   | { type: "editorial-correction"; heading: string; text: string }
-  | { type: "info-notice"; text: string };
+  | { type: "info-notice"; text: string }) & { markdown?: boolean };
 
 export interface Article {
   slug: string;
   slugEn?: string;
   titleEn?: string;
+  seoTitle?: string;
+  seoTitleEn?: string;
   descriptionEn?: string;
   ogSlug: string;
   title: string;
@@ -47,6 +51,28 @@ export const BLOG_BASE_RU = "/блог";
 export const BLOG_BASE_EN = "/blog";
 
 export const ARTICLES: Article[] = [
+  {
+    slug: "eu-belarus-shopping-by-car",
+    slugEn: "eu-belarus-shopping-by-car",
+    ogSlug: "blog-eu-belarus-shopping-by-car",
+    title: "Из ЕС в Беларусь на автомобиле: покупки, граница и параметры вашей поездки",
+    titleEn: "Driving from the EU to Belarus: shopping, border checks and your travel details",
+    seoTitle: "Что можно везти из ЕС в Беларусь на машине — ComfortLine",
+    seoTitleEn: "EU to Belarus by Car: Customs & Travel Guide — ComfortLine",
+    description: "Покупки из ЕС в Беларусь на автомобиле: стоимость, вес, частые поездки, ограничения Польши, Литвы и Латвии. Официальные источники и персональный запрос.",
+    descriptionEn: "Driving from the EU to Belarus: purchases, luggage allowances, frequent trips and vehicle checks for Poland, Lithuania and Latvia. Official sources and enquiry.",
+    intro: "Три отдельных проверки перед поездкой: документы пассажиров, вывоз автомобиля и покупок из ЕС, ввоз вещей в Беларусь. Материал подготовлен 31 октября 2026 года; анкета помогает составить запрос, но не выдаёт разрешений.",
+    introEn: "Three separate checks before travelling: passenger documents, exporting the vehicle and purchases from the EU, and bringing goods into Belarus. Prepared on 31 October 2026; the enquiry builder does not issue permission.",
+    dateISO: "2026-10-31",
+    readingMin: 18,
+    category: "Таможня",
+    categoryEn: "Customs",
+    tags: ["Беларусь", "ЕС", "покупки", "таможня", "автомобиль"],
+    disclaimerBanner: true,
+    body: SHOPPING_BODY_RU,
+    bodyEn: SHOPPING_BODY_EN,
+    related: ["как-въехать-в-беларусь-на-автомобиле-2026", "граница-беларусь-литва", "какой-кпп-выбрать"],
+  },
   {
     slug: "как-въехать-в-беларусь-на-автомобиле-2026",
     slugEn: "driving-to-belarus-by-car-2026-rules-checker",
@@ -106,7 +132,7 @@ export const ARTICLES: Article[] = [
     ],
     body: BORDER_BY_CAR_BODY_RU,
     bodyEn: BORDER_BY_CAR_BODY_EN,
-    related: ["виза-свободный-въезд-в-беларусь-2026", "что-нельзя-ввозить-в-ес", "какой-кпп-выбрать", "граница-беларусь-польша"],
+    related: ["eu-belarus-shopping-by-car", "виза-свободный-въезд-в-беларусь-2026", "что-нельзя-ввозить-в-ес", "какой-кпп-выбрать", "граница-беларусь-польша"],
     ctaRoute: { label: "Трансфер в Европу с водителем", labelEn: "Chauffeured transfer to Europe", path: "/трансфер-в-европу" },
   },
 
@@ -1037,7 +1063,7 @@ export const ARTICLES: Article[] = [
         text: "Information verified: 30 July 2026. Next editorial review: 30 January 2027.\n\nRules may have changed since this date. Before travelling, open the official sources above and verify the current requirements.",
       },
     ],
-    related: ["граница-беларусь-литва", "какой-кпп-выбрать", "граница-беларусь-польша"],
+    related: ["eu-belarus-shopping-by-car", "граница-беларусь-литва", "какой-кпп-выбрать", "граница-беларусь-польша"],
     ctaRoute: { label: "Заказать трансфер в Литву, Польшу или Латвию", labelEn: "Book a transfer to Lithuania, Poland or Latvia", path: "/трансфер-минск-вильнюс-аэропорт" },
   },
 

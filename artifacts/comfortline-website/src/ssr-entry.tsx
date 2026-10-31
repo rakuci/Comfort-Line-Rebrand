@@ -21,6 +21,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/context/language-context";
+import { ShoppingEnquiryProvider } from "@/context/shopping-enquiry-context";
 
 import LandingPage from "@/pages/landing";
 import PrivacyPolicyPage from "@/pages/privacy-policy";
@@ -211,7 +212,9 @@ export function SsrApp({ path }: { path: string }) {
         <TooltipProvider>
           <WouterRouter base="" hook={makeStaticLocationHook(path)}>
             <LanguageProvider>
-              <SsrRouter />
+              <ShoppingEnquiryProvider>
+                <SsrRouter />
+              </ShoppingEnquiryProvider>
             </LanguageProvider>
           </WouterRouter>
         </TooltipProvider>

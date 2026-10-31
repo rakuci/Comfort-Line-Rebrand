@@ -11,6 +11,7 @@ export const VISA_SLUG = "виза-свободный-въезд-в-белару
 // Preserve publication identity, not the order articles happen to appear in.
 // [RU slug, EN slug, social-image identity, original publication date]
 export const ARTICLE_IDENTITIES = [
+  ["eu-belarus-shopping-by-car", "eu-belarus-shopping-by-car", "blog-eu-belarus-shopping-by-car", "2026-10-31"],
   [GUIDE_SLUG, "driving-to-belarus-by-car-2026-rules-checker", "blog-v-belarus-na-avtomobile-2026", "2026-10-16"],
   ["граница-беларусь-литва", "belarus-lithuania-border-crossing-guide", "blog-granitsa-belarus-litva", "2026-04-15"],
   ["стоимость-трансфер-минск-варшава", "minsk-warsaw-transfer-price-2026", "blog-stoimost-transfer-minsk-varshava", "2026-04-10"],

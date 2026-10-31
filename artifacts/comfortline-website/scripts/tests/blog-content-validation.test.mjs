@@ -90,6 +90,13 @@ const validHtml = `<!doctype html><html lang="en"><head>
 <tbody><tr><td>30 days</td></tr></tbody></table>
 <a href="/blog/example">Source</a></article></div></body></html>`;
 test("complete localized rendered HTML passes", () => validateRenderedBlogDocument(validHtml, fixture, "en"));
+test("Markdown emphasis and inline sources render as text and real links, not raw Markdown", () => {
+  const article = structuredClone(fixture);
+  article.bodyEn[0] = { type: "p", text: "**English** [content](https://example.org/official)", markdown: true };
+  const html = validHtml.replace("<p>English content</p>", '<p><strong>English</strong> <a href="https://example.org/official">content</a></p>');
+  validateRenderedBlogDocument(html, article, "en");
+  assert.throws(() => validateRenderedBlogDocument(html.replace('href="https://example.org/official"', 'href="https://example.org/wrong"'), article, "en"), /lost inline source/);
+});
 test("a decorated link card retains its exact label and description", () => {
   const article = structuredClone(fixture);
   article.bodyEn[2].description = "Separate source note";

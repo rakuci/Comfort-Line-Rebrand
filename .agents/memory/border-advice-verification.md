@@ -20,6 +20,12 @@ New publication dates on customs portals do not guarantee that linked legislatio
 
 **How to apply:** Use the customs page for national guidance, but independently open the current consolidation from the EUR-Lex act landing page before stating what EU law permits.
 
+Native-language and English agency notices may not contain the same updates. Do not assume an older translated notice is the agency's latest guidance.
+
+**Why:** The Lithuanian-language BY-plate notice updated in January 2025 addressed later vehicle-use conditions, while the older English notice left a past January deadline ambiguous.
+
+**How to apply:** Compare substantive text and update dates in both languages when a deadline appears unresolved. Identify the specific version inspected and do not retroactively describe older articles as rechecked.
+
 The site owner says passengers report €60 as common actual border practice on journeys from Lithuania or Latvia to Belarus and wants an explicit practical recommendation to try not to carry more than €60 per person. Preserve this distinction from the absence of a fixed €60 cap in EU law; do not erase passenger experience or present it as verified uniform customs policy.
 
 **Why:** The user explicitly asked to include the passenger-reported practical restriction alongside the legal explanation.
