@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import sharp from "sharp";
 import { collectAllRoutes } from "./route-manifest.mjs";
+import { layoutOgText } from "./lib/og-text-layout.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist", "public");
@@ -47,8 +47,8 @@ export function textFor(route, lang) {
 }
 
 export function svgFor({ title, subtitle }, phoneDisplay) {
-  const safeTitle = escapeXml(title);
-  const safeSubtitle = escapeXml(subtitle);
+  const layout = layoutOgText({ title, subtitle });
+  const textBlock = (block, fill, weight) => `<text fill="${fill}" font-family="Arial, Helvetica, sans-serif" font-weight="${weight}" font-size="${block.fontSize}">${block.lines.map((line) => `<tspan x="${line.x}" y="${line.y}">${escapeXml(line.text)}</tspan>`).join("")}</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
     <defs>
       <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -66,12 +66,8 @@ export function svgFor({ title, subtitle }, phoneDisplay) {
     <g transform="translate(80, 100)">
       <text x="0" y="0" fill="${GOLD}" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28" letter-spacing="6">COMFORTLINE</text>
     </g>
-    <g transform="translate(80, 290)">
-      <text x="0" y="0" fill="${FG}" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="60">${safeTitle}</text>
-    </g>
-    <g transform="translate(80, 360)">
-      <text x="0" y="0" fill="${MUTED}" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="30">${safeSubtitle}</text>
-    </g>
+    ${textBlock(layout.title, FG, 800)}
+    ${textBlock(layout.subtitle, MUTED, 400)}
     <g transform="translate(80, 540)">
       <text x="0" y="0" fill="${FG}" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="24">comfortline.by</text>
       <text x="350" y="0" fill="${MUTED}" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="24">${escapeXml(phoneDisplay)}</text>
@@ -96,6 +92,7 @@ export function planOgImages(routes) {
 }
 
 async function main() {
+  const { default: sharp } = await import("sharp");
   const { BUSINESS } = await import("../src/seo/seo-config.ts");
   if (!fs.existsSync(DIST)) {
     console.error("[og] dist/public not found, run vite build first");

@@ -80,7 +80,9 @@ test("real share generator plans correct paths and locale-specific text without 
   for (const image of images) {
     const svg = svgFor(image, "test");
     assert.ok(svg.includes('width="1200" height="630"'));
-    assert.ok(svg.includes(image.title.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;")));
+    const titleText = [...svg.matchAll(/<tspan[^>]*>(.*?)<\/tspan>/g)]
+      .map(([, text]) => text).join(" ");
+    assert.ok(titleText.includes(image.title.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;")));
   }
 });
 for (const [name, mutate, expected] of [
