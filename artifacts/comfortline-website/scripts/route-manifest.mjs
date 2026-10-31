@@ -224,11 +224,13 @@ function extractRouteFromPageSource(src) {
   const taxiServiceBlock = extractObjectLiteral(src, /taxiServiceJsonLd\(\s*/);
   const fromNameField = langField(taxiServiceBlock, "fromName");
   const toNameField = langField(taxiServiceBlock, "toName");
+  // The Europe overview uses an inline bilingual H1, not content.ru/en.title.
+  const inlineHeading = /<h1\b[^>]*>\s*\{isRu\s*\?\s*"([^"]+)"\s*:\s*"([^"]+)"\s*\}/.exec(src);
 
   return {
-    h1Ru: field(ruBlock, "title") || stripComfortLineSuffix(titleRu),
+    h1Ru: field(ruBlock, "title") || inlineHeading?.[1] || stripComfortLineSuffix(titleRu),
     introRu: field(ruBlock, "subtitle") || field(ruBlock, "seoIntro") || descRu,
-    h1En: field(enBlock, "title") || stripComfortLineSuffix(titleEn),
+    h1En: field(enBlock, "title") || inlineHeading?.[2] || stripComfortLineSuffix(titleEn),
     introEn: field(enBlock, "subtitle") || field(enBlock, "seoIntro") || descEn,
     titleRu,
     titleEn,

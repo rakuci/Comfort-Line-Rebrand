@@ -8,6 +8,7 @@ import { JSDOM } from "jsdom";
 import { collectAllRoutes, SITE_URL, DEFAULT_OG_IMAGE } from "./route-manifest.mjs";
 import { createDataLoader } from "./lib/load-blog-data.mjs";
 import { validateRenderedBlogPages } from "./lib/blog-content-validation.mjs";
+import { renderRouteMarkup, validateRenderedRouteDocument } from "./lib/route-content-validation.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -78,24 +79,17 @@ async function createSsrModuleLoader() {
     appType: "custom",
     logLevel: "warn",
   });
-  const { SsrApp } = await vite.ssrLoadModule("/src/ssr-entry.tsx");
-  return { vite, SsrApp };
-}
-
-/**
- * Render the real page markup for a given path via wouter's actual route
- * matching. Returns null (instead of throwing) if rendering fails, so the
- * caller can fall back to the synthetic summary block for that one route
- * without failing the whole build.
- */
-function renderRouteMarkup(SsrApp, routePath) {
   try {
-    return renderToStaticMarkup(createElement(SsrApp, { path: routePath }));
-  } catch (err) {
-    console.warn(`[prerender] SSR render failed for "${routePath}": ${err?.message || err}`);
-    return null;
+    const { SsrApp } = await vite.ssrLoadModule("/src/ssr-entry.tsx");
+    return { vite, SsrApp };
+  } catch (error) {
+    await vite.close();
+    throw error;
   }
 }
+
+const renderMarkup = (SsrApp, routePath) =>
+  renderRouteMarkup(SsrApp, routePath, (App, path) => renderToStaticMarkup(createElement(App, { path })));
 
 // ============================================================================
 // HTML generation
@@ -115,11 +109,8 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
   const title = isRu ? route.titleRu : route.titleEn;
   const desc = isRu ? route.descRu : route.descEn;
   const h1 = isRu ? route.h1Ru : route.h1En;
-  const intro = isRu ? route.introRu : route.introEn;
   const localPath = isRu ? route.pathRu : route.pathEn;
-  const altPath = isRu ? route.pathEn : route.pathRu;
   const canonicalUrl = SITE_URL + encodeURI(localPath);
-  const altUrl = SITE_URL + encodeURI(altPath);
   const ogLocale = isRu ? "ru_RU" : "en_US";
   const ogLocaleAlt = isRu ? "en_US" : "ru_RU";
   // og-images.mjs generates a locale-specific /og/<ogSlug>-<lang>.jpg for
@@ -391,53 +382,27 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
   }
   html = html.replace("</head>", `${extraJsonLd}\n  </head>`);
 
-  // Real, visible, in-flow pre-hydration body content (not an off-screen
-  // teaser) so crawlers and users on slow/no-JS connections get an actual H1,
-  // body copy, FAQ answers, and internal links in the initial HTML response.
-  // The client app replaces this markup the moment React mounts.
-  const faqEntries = isRu ? route.faqRu : route.faqEn;
-  const homeHref = isRu ? "/" : "/en";
-  const faqHref = isRu ? "/faq" : "/en/faq";
-  const blogHref = isRu ? "/блог" : "/blog";
-  const homeLabel = isRu ? "Главная" : "Home";
-  const faqLabel = "FAQ";
-  const blogLabel = isRu ? "Блог" : "Blog";
-  const altLabel = isRu ? "English version" : "Русская версия";
-  const faqHeading = isRu ? "Частые вопросы" : "Frequently Asked Questions";
-  const navLabel = isRu ? "Основная навигация" : "Main navigation";
-
-  const faqHtml =
-    faqEntries && faqEntries.length > 0
-      ? `<section><h2>${escapeHtml(faqHeading)}</h2>${faqEntries
-          .map((e) => `<h3>${escapeHtml(e.question)}</h3><p>${escapeHtml(e.answer)}</p>`)
-          .join("")}</section>`
-      : "";
-
-  // Prefer the real, SSR-rendered route markup (actual React page component
-  // output via src/ssr-entry.tsx). Only fall back to a hand-built summary
-  // block — still real, visible, in-flow content with an H1/intro/FAQ/nav,
-  // just not the full page — if SSR rendering failed for this one route.
-  const fallbackBlock = `<header><h1>${escapeHtml(h1)}</h1></header><main><p>${escapeHtml(intro)}</p>${faqHtml}<nav aria-label="${escapeHtml(navLabel)}"><a href="${homeHref}">${escapeHtml(homeLabel)}</a> · <a href="${faqHref}">${escapeHtml(faqLabel)}</a> · <a href="${blogHref}">${escapeHtml(blogLabel)}</a> · <a href="${altUrl}" hreflang="${isRu ? "en" : "ru"}">${escapeHtml(altLabel)}</a></nav></main>`;
-  const rootInner = ssrMarkup ?? fallbackBlock;
-  html = html.replace('<div id="root"></div>', `<div id="root">${rootInner}</div>`);
+  // Only actual route component output can enter the production document.
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${ssrMarkup}</div>`);
 
   return html;
 }
 
-function emit(routePath, html) {
+function emit(routePath, html, dist = DIST) {
   const [pathname] = routePath.split("?");
   const folderRel = decodeURIComponent(pathname).replace(/^\//, "");
-  const folder = path.join(DIST, folderRel);
+  const folder = path.join(dist, folderRel);
   fs.mkdirSync(folder, { recursive: true });
   fs.writeFileSync(path.join(folder, "index.html"), html, "utf8");
-  return path.relative(DIST, path.join(folder, "index.html"));
+  return path.relative(dist, path.join(folder, "index.html"));
 }
 
-async function main() {
-  const templatePath = path.join(DIST, "index.html");
+// Injectable loader/output directory keep failure tests isolated and offline;
+// the CLI always uses the real Vite SSR entry and production output directory.
+export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLoader } = {}) {
+  const templatePath = path.join(dist, "index.html");
   if (!fs.existsSync(templatePath)) {
-    console.error(`[prerender] template not found: ${templatePath}`);
-    process.exit(1);
+    throw new Error(`[prerender] template not found: ${templatePath}`);
   }
   const template = fs.readFileSync(templatePath, "utf8");
   if (!template.includes('<div id="root"></div>')) {
@@ -446,40 +411,43 @@ async function main() {
 
   const { allRoutes, manualRoutes, autoRoutes, vehicleRoutes, blogIndexRoute, blogArticleRoutes } = collectAllRoutes();
 
-  installJsdomGlobals();
-  const { vite, SsrApp } = await createSsrModuleLoader();
-
-  let ssrFailures = 0;
+  const dom = installJsdomGlobals();
+  let vite;
   const written = [];
-  for (const route of allRoutes) {
-    const markupRu = renderRouteMarkup(SsrApp, route.pathRu);
-    const markupEn = renderRouteMarkup(SsrApp, route.pathEn);
-    if (!markupRu) ssrFailures++;
-    if (!markupEn) ssrFailures++;
-    written.push(emit(route.pathRu, buildHtml(template, route, "ru", blogIndexRoute, markupRu)));
-    written.push(emit(route.pathEn, buildHtml(template, route, "en", blogIndexRoute, markupEn)));
+  const checkedRoutes = new Set([...autoRoutes, ...vehicleRoutes]);
+  try {
+    const loader = await loadSsrModule();
+    vite = loader.vite;
+    for (const route of allRoutes) {
+      for (const lang of ["ru", "en"]) {
+        const routePath = lang === "ru" ? route.pathRu : route.pathEn;
+        const html = buildHtml(template, route, lang, blogIndexRoute, renderMarkup(loader.SsrApp, routePath));
+        if (checkedRoutes.has(route)) validateRenderedRouteDocument(html, route, lang);
+        written.push(emit(routePath, html, dist));
+      }
+    }
+  } finally {
+    await vite?.close();
+    dom.window.close();
   }
-
-  await vite.close();
+  console.log(`[prerender] offline route regression checks passed for ${checkedRoutes.size * 2} localized pages.`);
 
   // Never send a blog summary fallback, stale metadata, or lost translated
   // content on to IndexNow/publishing as though prerendering had succeeded.
   const { ARTICLES } = createDataLoader()("blog-articles");
-  const validatedBlogPages = validateRenderedBlogPages(ARTICLES, DIST);
+  const validatedBlogPages = validateRenderedBlogPages(ARTICLES, dist);
   console.log(`[prerender] offline blog regression checks passed for ${validatedBlogPages} localized pages.`);
 
   console.log(
     `[prerender] wrote ${written.length} files for ${allRoutes.length} routes (${manualRoutes.length} manual, ${autoRoutes.length} auto, ${vehicleRoutes.length} vehicle, ${1 + blogArticleRoutes.length} blog):`,
   );
   for (const f of written) console.log(`  - ${f}`);
-  if (ssrFailures > 0) {
-    console.warn(`[prerender] ${ssrFailures}/${written.length} pages fell back to the synthetic summary block (SSR render threw for that route).`);
-  } else {
-    console.log(`[prerender] all ${written.length} pages were rendered via real SSR (src/ssr-entry.tsx).`);
-  }
+  console.log(`[prerender] all ${written.length} pages were rendered via real SSR (src/ssr-entry.tsx).`);
 }
 
-main().catch((err) => {
-  console.error("[prerender] fatal error:", err);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  prerender().catch((err) => {
+    console.error("[prerender] fatal error:", err);
+    process.exit(1);
+  });
+}
