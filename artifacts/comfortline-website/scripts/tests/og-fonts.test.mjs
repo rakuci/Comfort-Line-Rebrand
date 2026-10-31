@@ -88,6 +88,110 @@ test("isolated fontconfig selects the vendored files for both weights", (t) => {
     Object.keys(OG_FONT_HASHES).sort(), "no host fonts may enter the font set");
 });
 
+// Copy, never symlink, the production entrypoint and its local dependencies:
+// every destructive fixture edit and every possible output stays in tmp.
+function generatorFixture(t) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "og-font-failure-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  for (const file of [
+    "scripts/og-images.mjs",
+    "scripts/route-manifest.mjs",
+    "scripts/lib/og-fonts.mjs",
+    "scripts/lib/og-text-layout.mjs",
+    "scripts/fonts",
+  ]) {
+    const target = path.join(dir, file);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.cpSync(path.join(root, file), target, { recursive: true });
+  }
+
+  // A healthy-bundle control proves this trap is reachable. Broken bundles
+  // must fail before sharp's module body (and thus fontconfig) can initialize.
+  const sharpDir = path.join(dir, "node_modules/sharp");
+  fs.mkdirSync(sharpDir, { recursive: true });
+  fs.writeFileSync(path.join(sharpDir, "package.json"),
+    JSON.stringify({ type: "module", exports: "./index.mjs" }));
+  fs.writeFileSync(path.join(sharpDir, "index.mjs"), `
+    import fs from "node:fs";
+    fs.writeFileSync(new URL("../../renderer-loaded", import.meta.url), "loaded");
+    throw new Error("TEST_RENDERER_REACHED");
+  `);
+  const output = path.join(dir, "dist/public");
+  fs.mkdirSync(output, { recursive: true });
+  fs.writeFileSync(path.join(output, "keep.txt"), "unrelated build output");
+  const run = () => spawnSync(process.execPath, ["scripts/og-images.mjs"], {
+    cwd: dir, encoding: "utf8", timeout: 30_000,
+    env: {
+      ...process.env,
+      HOME: dir, XDG_CACHE_HOME: path.join(dir, "cache"),
+      // Even a valid inherited configuration must not bypass bundle checks.
+      FONTCONFIG_FILE: OG_FONT_CONFIG, FONTCONFIG_PATH: OG_FONT_DIR,
+    },
+  });
+  return { dir, output, run, rendererMarker: path.join(dir, "renderer-loaded") };
+}
+
+function outputSnapshot(dir) {
+  return fs.readdirSync(dir, { recursive: true }).sort().map((file) => {
+    const target = path.join(dir, file);
+    return [file, fs.statSync(target).isDirectory() ? null : fs.readFileSync(target).toString("hex")];
+  });
+}
+
+test("healthy fixture reaches the renderer trap through the real generator entrypoint", (t) => {
+  const fixture = generatorFixture(t);
+  const before = outputSnapshot(fixture.output);
+  const result = fixture.run();
+  assert.ifError(result.error);
+  assert.equal(result.signal, null);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /\[og\] failed: Error: TEST_RENDERER_REACHED/);
+  assert.ok(fs.existsSync(fixture.rendererMarker), "renderer trap must actually execute");
+  assert.deepEqual(outputSnapshot(fixture.output), before);
+});
+
+for (const name of [...Object.keys(OG_FONT_HASHES), "fonts.conf"]) {
+  const failures = name === "fonts.conf" ? ["missing"] : ["missing", "modified"];
+  for (const failure of failures) {
+    for (const existingImages of [false, true]) {
+      test(`${failure} ${name} stops generation before rendering (${existingImages ? "existing" : "clean"} images)`, (t) => {
+        const fixture = generatorFixture(t);
+        if (existingImages) {
+          fs.mkdirSync(path.join(fixture.output, "og"));
+          fs.writeFileSync(path.join(fixture.output, "og/existing-ru.jpg"), "existing preview bytes");
+        }
+        const before = outputSnapshot(fixture.output);
+        const target = path.join(fixture.dir, "scripts/fonts", name);
+        if (failure === "missing") {
+          fs.unlinkSync(target);
+        } else {
+          const bytes = fs.readFileSync(target);
+          bytes[bytes.length - 1] ^= 1;
+          fs.writeFileSync(target, bytes);
+        }
+
+        const result = fixture.run();
+        assert.ifError(result.error);
+        assert.equal(result.signal, null, "must exit normally, not time out or crash");
+        assert.equal(result.status, 1, result.stderr);
+        assert.match(result.stderr, /\[og\] failed:/, "generator reports the failure");
+        assert.ok(result.stderr.includes(name), "diagnostic names the broken bundle file");
+        if (failure === "missing") {
+          assert.match(result.stderr, /ENOENT.*no such file or directory/);
+          assert.ok(result.stderr.includes(target), "diagnostic identifies the missing file's location");
+        } else {
+          assert.ok(result.stderr.includes(`OG font checksum mismatch: ${name}`),
+            "diagnostic identifies the checksum failure");
+        }
+        assert.equal(fs.existsSync(fixture.rendererMarker), false, "sharp must not load");
+        assert.equal(result.stdout, "", "must not log generated share images");
+        assert.deepEqual(outputSnapshot(fixture.output), before,
+          "must neither create images/directories nor overwrite existing output");
+      });
+    }
+  }
+}
+
 test("fresh render processes with empty caches override inherited font settings identically", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "og-fonts-"));
   const script = `
