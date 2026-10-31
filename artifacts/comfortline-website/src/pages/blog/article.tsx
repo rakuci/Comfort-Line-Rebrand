@@ -172,6 +172,7 @@ export default function BlogArticlePage() {
   if (!article) return <NotFound />;
 
   const enSlug = article.slugEn ?? encodeURI(article.slug);
+  const ogImage = `${SITE_URL}/og/${article.ogSlug}-${lang}.jpg`;
   const url = isRu
     ? SITE_URL + BLOG_BASE_RU + "/" + encodeURI(article.slug)
     : SITE_URL + BLOG_BASE_EN + "/" + enSlug;
@@ -193,7 +194,7 @@ export default function BlogArticlePage() {
       name: BUSINESS.name,
       logo: { "@type": "ImageObject", url: BUSINESS.logo },
     },
-    image: `${SITE_URL}/og/${article.ogSlug}.jpg`,
+    image: ogImage,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     inLanguage: isRu ? "ru" : "en",
     keywords: article.tags.join(", "),
@@ -219,7 +220,7 @@ export default function BlogArticlePage() {
         pathEn={`${BLOG_BASE_EN}/${enSlug}`}
         keywordsRu={article.tags.join(", ")}
         keywordsEn={article.tags.join(", ")}
-        ogImage={`${SITE_URL}/og/${article.ogSlug}.jpg`}
+        ogImage={ogImage}
         ogType="article"
         breadcrumbsRu={[
           { name: "Главная", path: "/" },

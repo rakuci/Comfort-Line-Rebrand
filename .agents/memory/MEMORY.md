@@ -9,3 +9,4 @@
 - [Fleet page structured data](fleet-page-structured-data.md) — model quote-only fleet pages as services, not Vehicle products that trigger merchant-result price requirements.
 - [SSR browser detection](ssr-browser-detection.md) — jsdom makes libraries detect a browser; avoid browser cache timers in the build-only rendering environment.
 - [Border advice verification](border-advice-verification.md) — a dated official exception alongside a past deadline must not be treated as current permission without clarification.
+- [Prerender and client SEO](prerender-client-seo.md) — static-output checks cannot prove metadata stays correct after hydration; exercise mounted effects and navigation too.

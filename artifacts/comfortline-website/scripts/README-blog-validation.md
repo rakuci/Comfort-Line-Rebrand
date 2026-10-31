@@ -79,6 +79,13 @@ pnpm run check:blog:discovery:generated
 ```
 
 Missing built files fail; there is no silent skip or default-image fallback.
+The generated check also runs `pnpm run check:blog:client`: a jsdom integration
+test mounts the real blog pages, language provider and SEO effects (with
+unrelated layout/widgets stubbed). It checks every RU/EN blog URL before and
+after hydration, then keeps the client mounted through article navigation and
+language changes. OG, secure OG, Twitter and Article schema images must match
+existing generated files; stale Article schemas must not survive navigation.
+This test needs fresh built output but does not use a browser or network.
 This command reads `dist/public/sitemap.xml` as well as the source sitemap.
 To prepare fresh output **without IndexNow or other network submission**:
 

@@ -269,9 +269,11 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
         { "@type": "ListItem", position: 3, name: h1, item: canonicalUrl },
       ],
     };
+    // Share ownership with useSeo so hydration replaces these page-specific
+    // schemas instead of leaving a stale Article image after client navigation.
     extraJsonLd = `
-    <script type="application/ld+json">${JSON.stringify(articleJsonLd)}</script>
-    <script type="application/ld+json">${JSON.stringify(breadcrumbJsonLd)}</script>`;
+    <script type="application/ld+json" data-seo="1">${JSON.stringify(articleJsonLd)}</script>
+    <script type="application/ld+json" data-seo="1">${JSON.stringify(breadcrumbJsonLd)}</script>`;
   } else if (route === blogIndexRoute) {
     const breadcrumbJsonLd = {
       "@context": "https://schema.org",
@@ -282,7 +284,7 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup) {
       ],
     };
     extraJsonLd = `
-    <script type="application/ld+json">${JSON.stringify(breadcrumbJsonLd)}</script>`;
+    <script type="application/ld+json" data-seo="1">${JSON.stringify(breadcrumbJsonLd)}</script>`;
   } else {
     // Only real transfer/service pages (route.pageType === "service", or
     // vehicle pages handled separately below) get a service JSON-LD block.

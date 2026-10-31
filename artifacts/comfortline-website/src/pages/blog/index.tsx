@@ -37,7 +37,7 @@ export default function BlogIndexPage() {
         pathEn={BLOG_BASE_EN}
         keywordsRu="блог комфортлайн, гайд по границе, трансфер советы, как пересечь границу беларусь литва, минск варшава цена"
         keywordsEn="comfortline blog, border crossing guide, transfer tips, minsk transfers"
-        ogImage={`${SITE_URL}/og/blog-index.jpg`}
+        ogImage={`${SITE_URL}/og/blog-index-${lang}.jpg`}
         breadcrumbsRu={[
           { name: "Главная", path: "/" },
           { name: "Блог", path: BLOG_BASE_RU },

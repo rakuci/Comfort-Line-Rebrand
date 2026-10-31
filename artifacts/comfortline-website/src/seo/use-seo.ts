@@ -79,7 +79,10 @@ export function useSeo(data: SeoData) {
     upsertMeta("property", "og:type", data.ogType || "website");
     upsertMeta("property", "og:site_name", "ComfortLine");
     upsertMeta("property", "og:locale", data.lang === "ru" ? "ru_RU" : "en_US");
-    if (data.ogImage) upsertMeta("property", "og:image", data.ogImage);
+    if (data.ogImage) {
+      upsertMeta("property", "og:image", data.ogImage);
+      upsertMeta("property", "og:image:secure_url", data.ogImage);
+    }
 
     upsertMeta("name", "twitter:card", "summary_large_image");
     upsertMeta("name", "twitter:title", data.title);
