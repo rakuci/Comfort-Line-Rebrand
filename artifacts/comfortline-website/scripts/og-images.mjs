@@ -100,8 +100,6 @@ async function main() {
     console.error("[og] dist/public not found, run vite build first");
     process.exit(1);
   }
-  fs.mkdirSync(OG_DIR, { recursive: true });
-
   const { allRoutes } = collectAllRoutes();
 
   // Multiple manifest entries can share the same ogSlug only by mistake;
@@ -109,13 +107,39 @@ async function main() {
   // Each route gets a RU and an EN image (/og/<slug>-ru.jpg, /og/<slug>-en.jpg)
   // built from that language's own fields, so English pages never advertise
   // a Russian-language social preview.
+  // Stage on the same filesystem so publishing uses directory renames, never
+  // a file-by-file copy that could expose a partially rendered set.
+  const temporaryDir = fs.mkdtempSync(path.join(DIST, ".og-stage-"));
+  const stagedDir = path.join(temporaryDir, "next");
+  const previousDir = path.join(temporaryDir, "previous");
+  let published = false;
   let count = 0;
-  for (const image of planOgImages(allRoutes)) {
-    const svg = svgFor(image, BUSINESS.phoneDisplay);
-    const outPath = path.join(DIST, image.imagePath);
-    await sharp(Buffer.from(svg)).jpeg({ quality: 90, mozjpeg: true }).toFile(outPath);
-    console.log(`[og] ${image.imagePath}`);
-    count++;
+  try {
+    fs.mkdirSync(stagedDir);
+    for (const image of planOgImages(allRoutes)) {
+      const svg = svgFor(image, BUSINESS.phoneDisplay);
+      const outPath = path.join(stagedDir, path.basename(image.imagePath));
+      await sharp(Buffer.from(svg)).jpeg({ quality: 90, mozjpeg: true }).toFile(outPath);
+      console.log(`[og] staged ${image.imagePath}`);
+      count++;
+    }
+
+    if (fs.existsSync(OG_DIR)) fs.renameSync(OG_DIR, previousDir);
+    try {
+      fs.renameSync(stagedDir, OG_DIR);
+      published = true;
+    } catch (error) {
+      if (fs.existsSync(previousDir)) fs.renameSync(previousDir, OG_DIR);
+      throw error;
+    }
+  } finally {
+    // If even restoring the old directory fails, retain its bytes for recovery
+    // rather than deleting the only remaining copy during cleanup.
+    if (published || !fs.existsSync(previousDir)) {
+      fs.rmSync(temporaryDir, { recursive: true, force: true });
+    } else {
+      console.error(`[og] previous images retained for recovery at ${previousDir}`);
+    }
   }
   console.log(`[og] generated ${count} OG images in dist/public/og/`);
 }
