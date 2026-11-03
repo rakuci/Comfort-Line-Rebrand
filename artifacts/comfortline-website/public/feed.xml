@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
      xmlns:atom="http://www.w3.org/2005/Atom"
-     xmlns:content="http://purl.org/rss/1.0/modules/content/"
-     xmlns:yandex="http://news.yandex.ru">
+     xmlns:dcterms="http://purl.org/dc/terms/">
   <channel>
     <title>ComfortLine — блог о трансферах из Беларуси</title>
-    <link>https://comfortline.by/блог/</link>
+    <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3</link>
     <atom:link href="https://comfortline.by/feed.xml" rel="self" type="application/rss+xml" />
     <description>Гайды, лайфхаки и аналитика о трансферах из Минска в аэропорты ЕС, прохождении границы Беларусь–Литва и поездках по Европе. Опыт водителей ComfortLine с 2015 года.</description>
     <language>ru</language>
     <copyright>© ComfortLine</copyright>
-    <lastBuildDate>Sun, 03 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 00:00:00 GMT</lastBuildDate>
     <ttl>1440</ttl>
     <image>
       <url>https://comfortline.by/favicon-512.png</url>
@@ -19,58 +18,153 @@
     </image>
 
     <item>
-      <title>Как пересечь границу Беларусь — Литва в 2026: время, документы, КПП</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BB%D0%B8%D1%82%D0%B2%D0%B0/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BB%D0%B8%D1%82%D0%B2%D0%B0/</guid>
-      <pubDate>Wed, 15 Apr 2026 09:00:00 +0000</pubDate>
+      <title>Из ЕС в Беларусь на автомобиле: покупки, граница и параметры вашей поездки</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/eu-belarus-shopping-by-car</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/eu-belarus-shopping-by-car</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-31T00:00:00Z</dcterms:modified>
+      <category>Таможня</category>
+      <description>Покупки из ЕС в Беларусь на автомобиле: стоимость, вес, частые поездки, ограничения Польши, Литвы и Латвии. Официальные источники и персональный запрос.</description>
+    </item>
+
+    <item>
+      <title>Въезд в Беларусь на авто: правила 2026</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B2%D1%8A%D0%B5%D1%85%D0%B0%D1%82%D1%8C-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B5-2026</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B2%D1%8A%D0%B5%D1%85%D0%B0%D1%82%D1%8C-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B5-2026</guid>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-17T00:00:00Z</dcterms:modified>
+      <category>Граница</category>
+      <description>В Беларусь на авто: датированная сверка источников, санкции, безвиз и риски возврата на BY-номерах. Предварительная анкета с явно указанными пробелами проверки.</description>
+    </item>
+
+    <item>
+      <title>Наличные в Беларусь: есть ли лимит €60?</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B2%D1%8B%D0%B2%D0%BE%D0%B7-60-%D0%B5%D0%B2%D1%80%D0%BE-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%B8%D0%B7-%D0%BB%D0%B8%D1%82%D0%B2%D1%8B-%D0%BB%D0%B0%D1%82%D0%B2%D0%B8%D0%B8</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B2%D1%8B%D0%B2%D0%BE%D0%B7-60-%D0%B5%D0%B2%D1%80%D0%BE-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%B8%D0%B7-%D0%BB%D0%B8%D1%82%D0%B2%D1%8B-%D0%BB%D0%B0%D1%82%D0%B2%D0%B8%D0%B8</guid>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-17T00:00:00Z</dcterms:modified>
+      <category>Граница</category>
+      <description>Санкции ЕС на банкноты, исключение для личных нужд, разъяснения таможни Литвы и Латвии и отдельный порог декларирования €10 000.</description>
+    </item>
+
+    <item>
+      <title>Безвизовый въезд в Беларусь: гайд</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B2%D0%B8%D0%B7%D0%B0-%D1%81%D0%B2%D0%BE%D0%B1%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9-%D0%B2%D1%8A%D0%B5%D0%B7%D0%B4-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-2026</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B2%D0%B8%D0%B7%D0%B0-%D1%81%D0%B2%D0%BE%D0%B1%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9-%D0%B2%D1%8A%D0%B5%D0%B7%D0%B4-%D0%B2-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-2026</guid>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-16T00:00:00Z</dcterms:modified>
+      <category>Въезд в Беларусь</category>
+      <description>Кто может въехать в Беларусь без визы в 2026 году, через какие КПП, какие документы нужны — и почему частный трансфер это самый удобный способ добраться.</description>
+    </item>
+
+    <item>
+      <title>Граница Беларусь–Польша: КПП и документы</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BF%D0%BE%D0%BB%D1%8C%D1%88%D0%B0</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BF%D0%BE%D0%BB%D1%8C%D1%88%D0%B0</guid>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-16T00:00:00Z</dcterms:modified>
+      <category>Граница</category>
+      <description>Гайд по пересечению границы Беларусь–Польша в 2026: рабочие КПП (Брест–Тересполь, Домачево, Брузги), документы, время ожидания, лайфхаки от водителей.</description>
+    </item>
+
+    <item>
+      <title>Граница Беларусь — Литва: КПП и документы</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BB%D0%B8%D1%82%D0%B2%D0%B0</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C-%D0%BB%D0%B8%D1%82%D0%B2%D0%B0</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-16T00:00:00Z</dcterms:modified>
       <category>Граница</category>
       <description>Подробный гайд по границе Беларусь–Литва в 2026: какие КПП работают, сколько стоят очереди, какие документы нужны для въезда в ЕС, советы водителей ComfortLine.</description>
     </item>
 
     <item>
-      <title>Сколько стоит трансфер Минск — Варшава в 2026</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D1%82%D0%BE%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D1%8C-%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D1%82%D0%BE%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D1%8C-%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0/</guid>
-      <pubDate>Fri, 10 Apr 2026 09:00:00 +0000</pubDate>
-      <category>Цены</category>
-      <description>Из чего складывается цена трансфера Минск–Варшава: расстояние, класс авто, очереди на границе, доплаты. Сравнение комфорт- и бизнес-класса, реальные кейсы.</description>
-    </item>
-
-    <item>
-      <title>Что нельзя ввозить из Беларуси в ЕС в 2026: полный список</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%87%D1%82%D0%BE-%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F-%D0%B2%D0%B2%D0%BE%D0%B7%D0%B8%D1%82%D1%8C-%D0%B2-%D0%B5%D1%81/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%87%D1%82%D0%BE-%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F-%D0%B2%D0%B2%D0%BE%D0%B7%D0%B8%D1%82%D1%8C-%D0%B2-%D0%B5%D1%81/</guid>
-      <pubDate>Sun, 05 Apr 2026 09:00:00 +0000</pubDate>
-      <category>Документы</category>
-      <description>Актуальный на 2026 год список товаров, запрещённых к ввозу из Беларуси в ЕС: санкционные позиции, лимиты на еду и валюту, наличные, табак, алкоголь.</description>
-    </item>
-
-    <item>
-      <title>Каменный Лог vs Котловка vs Бенякони — какой КПП выбрать в 2026</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA%D0%BE%D0%B9-%D0%BA%D0%BF%D0%BF-%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D1%82%D1%8C/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA%D0%BE%D0%B9-%D0%BA%D0%BF%D0%BF-%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D1%82%D1%8C/</guid>
-      <pubDate>Sat, 28 Mar 2026 09:00:00 +0000</pubDate>
+      <title>КПП Литвы: Каменный Лог и Бенякони</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA%D0%BE%D0%B9-%D0%BA%D0%BF%D0%BF-%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D1%82%D1%8C</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA%D0%BE%D0%B9-%D0%BA%D0%BF%D0%BF-%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D1%82%D1%8C</guid>
+      <pubDate>Sat, 28 Mar 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-10-16T00:00:00Z</dcterms:modified>
       <category>Граница</category>
-      <description>Сравнение литовских КПП Каменный Лог, Котловка и Бенякони в 2026: время прохождения, инфраструктура, плюсы и минусы каждого пункта пропуска.</description>
+      <description>Сравнение КПП Каменный Лог и Бенякони для поездок в Литву в 2026. Котловка закрыта и не является запасным вариантом. Проверяйте работу КПП перед выездом.</description>
     </item>
 
     <item>
-      <title>Трансфер с детьми из Минска в аэропорт: чек-лист для родителей</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D1%81-%D0%B4%D0%B5%D1%82%D1%8C%D0%BC%D0%B8/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D1%81-%D0%B4%D0%B5%D1%82%D1%8C%D0%BC%D0%B8/</guid>
-      <pubDate>Fri, 20 Mar 2026 09:00:00 +0000</pubDate>
-      <category>Семья</category>
+      <title>Цена трансфера Минск — Варшава</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D1%82%D0%BE%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D1%8C-%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D1%82%D0%BE%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D1%8C-%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0</guid>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-08-04T00:00:00Z</dcterms:modified>
+      <category>Цены</category>
+      <description>Сколько стоит индивидуальный трансфер Минск — Варшава: цены на такси по запросу, что влияет на расчёт, что входит в стоимость и как заказать.</description>
+    </item>
+
+    <item>
+      <title>Что нельзя ввозить из Беларуси в ЕС</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%87%D1%82%D0%BE-%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F-%D0%B2%D0%B2%D0%BE%D0%B7%D0%B8%D1%82%D1%8C-%D0%B2-%D0%B5%D1%81</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%87%D1%82%D0%BE-%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F-%D0%B2%D0%B2%D0%BE%D0%B7%D0%B8%D1%82%D1%8C-%D0%B2-%D0%B5%D1%81</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-07-30T00:00:00Z</dcterms:modified>
+      <category>Таможня</category>
+      <description>Актуальные правила ввоза из Беларуси в Литву, Польшу и Латвию: санкционные запреты, алкоголь, табак, топливо, покупки и официальные источники.</description>
+    </item>
+
+    <item>
+      <title>Советские мозаики Минска: пеший маршрут</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D0%BC%D0%BE%D0%B7%D0%B0%D0%B8%D0%BA%D0%B8-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA%D0%B0</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%81%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D0%BC%D0%BE%D0%B7%D0%B0%D0%B8%D0%BA%D0%B8-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA%D0%B0</guid>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-07-05T00:00:00Z</dcterms:modified>
+      <category>Минск</category>
+      <description>Где искать лучшие советские мозаики Минска: Восток-1, «Октябрьская» и Дом кино — фото и маршрут.</description>
+    </item>
+
+    <item>
+      <title>Автобус или трансфер: Минск — Варшава</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D0%B2%D1%82%D0%BE%D0%B1%D1%83%D1%81-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0-%D0%BC%D0%BE%D0%B4%D0%BB%D0%B8%D0%BD-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D0%B2%D1%82%D0%BE%D0%B1%D1%83%D1%81-%D0%BC%D0%B8%D0%BD%D1%81%D0%BA-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D0%B0-%D0%BC%D0%BE%D0%B4%D0%BB%D0%B8%D0%BD-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-06-01T00:00:00Z</dcterms:modified>
+      <category>Советы</category>
+      <description>Расписание и цены автобусов и маршруток Минск — Варшава (аэропорты Модлин WMI и Шопен WAW) и Минск — Вильнюс в 2026.</description>
+    </item>
+
+    <item>
+      <title>Аэропорт Варшавы WAW: гайд</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D1%8B-%D0%B2%D0%B0%D0%B2</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82-%D0%B2%D0%B0%D1%80%D1%88%D0%B0%D0%B2%D1%8B-%D0%B2%D0%B0%D0%B2</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-05-20T00:00:00Z</dcterms:modified>
+      <category>Аэропорт</category>
+      <description>Всё об аэропорте Варшавы Фредерик Шопен (WAW) для путешественников из Беларуси: терминалы, регистрация, транзит, где встречают водители.</description>
+    </item>
+
+    <item>
+      <title>Аэропорт Риги RIX: гайд для пассажиров</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82-%D1%80%D0%B8%D0%B3%D0%B8-rix</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82-%D1%80%D0%B8%D0%B3%D0%B8-rix</guid>
+      <pubDate>Tue, 28 Apr 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-04-28T00:00:00Z</dcterms:modified>
+      <category>Аэропорт</category>
+      <description>Всё об аэропорте Риги (RIX) для путешественников из Беларуси: терминал, авиакомпании, зона встречи, парковка, советы по трансферу Минск–Рига.</description>
+    </item>
+
+    <item>
+      <title>Трансфер с детьми из Минска: чек-лист</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D1%81-%D0%B4%D0%B5%D1%82%D1%8C%D0%BC%D0%B8</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%B5%D1%80-%D1%81-%D0%B4%D0%B5%D1%82%D1%8C%D0%BC%D0%B8</guid>
+      <pubDate>Fri, 20 Mar 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-03-20T00:00:00Z</dcterms:modified>
+      <category>С детьми</category>
       <description>Чек-лист для трансфера с детьми из Минска в аэропорты Европы: документы, кресла, питание в дороге, советы по границе. Опыт водителей ComfortLine.</description>
     </item>
 
     <item>
-      <title>Как добраться из Минска в аэропорт Вильнюса (VNO) в 2026</title>
-      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D0%B4%D0%BE-%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82%D0%B0-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81%D0%B0/</link>
-      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D0%B4%D0%BE-%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82%D0%B0-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81%D0%B0/</guid>
-      <pubDate>Sun, 15 Mar 2026 09:00:00 +0000</pubDate>
-      <category>Аэропорты</category>
+      <title>Минск — аэропорт Вильнюса: как добраться</title>
+      <link>https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D0%B4%D0%BE-%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82%D0%B0-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81%D0%B0</link>
+      <guid isPermaLink="true">https://comfortline.by/%D0%B1%D0%BB%D0%BE%D0%B3/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D0%B4%D0%BE-%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82%D0%B0-%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8E%D1%81%D0%B0</guid>
+      <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+      <dcterms:modified>2026-03-15T00:00:00Z</dcterms:modified>
+      <category>Аэропорт</category>
       <description>Все способы добраться из Минска в аэропорт Вильнюса (VNO) в 2026: трансфер, такси, автобус, личное авто. Сравнение цены, времени и удобства.</description>
     </item>
-
   </channel>
 </rss>

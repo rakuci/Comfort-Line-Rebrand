@@ -1071,11 +1071,11 @@ export const ARTICLES: Article[] = [
     slug: "какой-кпп-выбрать",
     slugEn: "which-belarus-border-crossing-to-choose",
     titleEn: "Belarus Border Crossings: Kamenny Log",
-    descriptionEn: "Comparing Belarus–Lithuania border checkpoints in 2026: average wait times, working hours, truck restrictions and which crossing is best for car transfers.",
+    descriptionEn: "Compare Kamenny Log and Benyakoni for Belarus–Lithuania travel in 2026. Kotlovka is closed, not a backup crossing. Check operating status before departure.",
     ogSlug: "blog-kakoy-kpp-vybrat",
     title: "КПП Литвы: Каменный Лог и Бенякони",
     description:
-      "Сравнение литовских КПП Каменный Лог, Котловка и Бенякони в 2026: время прохождения, инфраструктура, плюсы и минусы каждого пункта пропуска.",
+      "Сравнение КПП Каменный Лог и Бенякони для поездок в Литву в 2026. Котловка закрыта и не является запасным вариантом. Проверяйте работу КПП перед выездом.",
     intro:
       "Для поездки из Минска в Литву сравнивайте Каменный Лог и Бенякони, предварительно проверив их работу. Котловка закрыта и не является запасным вариантом. Ниже — особенности маршрутов и ориентиры по ожиданию, а не гарантия времени прохождения.",
     dateISO: "2026-03-28",

@@ -1,5 +1,19 @@
 # Offline bilingual blog checks
 
+## RSS feed
+
+`pnpm run feed:blog` regenerates `public/feed.xml` from the real article data.
+The existing Russian feed includes every published article, ordered by latest
+editorial date (publication date and slug break ties). Titles, summaries and
+categories use the Russian page fields, and links/GUIDs use canonical URLs
+without trailing slashes. `pubDate` preserves publication; `dcterms:modified`
+records the latest editorial date. `lastBuildDate` is the latest editorial date,
+not the build clock. The build generates the feed before validation and bundling.
+
+`pnpm run check:blog:feed` runs offline XML/parity mutation tests and compares
+the checked-in feed with current source data **without repairing it**. It needs
+no build output, server or network. This also runs in `check:blog:discovery`.
+
 Run from `artifacts/comfortline-website`:
 
 - `pnpm run check:blog:source` — checks actual TypeScript article data, policy
