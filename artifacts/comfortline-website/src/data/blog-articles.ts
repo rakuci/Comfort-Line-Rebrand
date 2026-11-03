@@ -42,7 +42,7 @@ export interface Article {
   body: Block[];
   bodyEn?: Block[];
   related: string[];
-  ctaRoute?: { label: string; labelEn?: string; path: string };
+  ctaRoute?: { label: string; labelEn?: string; path: string; pathEn: string };
   disclaimerBanner?: boolean;
   citation?: string[];
 }
@@ -133,7 +133,7 @@ export const ARTICLES: Article[] = [
     body: BORDER_BY_CAR_BODY_RU,
     bodyEn: BORDER_BY_CAR_BODY_EN,
     related: ["eu-belarus-shopping-by-car", "виза-свободный-въезд-в-беларусь-2026", "что-нельзя-ввозить-в-ес", "какой-кпп-выбрать", "граница-беларусь-польша"],
-    ctaRoute: { label: "Трансфер в Европу с водителем", labelEn: "Chauffeured transfer to Europe", path: "/трансфер-в-европу" },
+    ctaRoute: { label: "Трансфер в Европу с водителем", labelEn: "Chauffeured transfer to Europe", path: "/трансфер-в-европу", pathEn: "/europe-transfer" },
   },
 
   {
@@ -322,7 +322,7 @@ export const ARTICLES: Article[] = [
       { type: "info-notice", text: "Entry requirements and customs allowances may change without notice. Always check official sources before travelling." },
     ],
     related: ["какой-кпп-выбрать", "что-нельзя-ввозить-в-ес", "как-добраться-до-аэропорта-вильнюса"],
-    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт" },
+    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт", pathEn: "/minsk-vilnius-airport" },
   },
 
   {
@@ -504,6 +504,7 @@ export const ARTICLES: Article[] = [
       label: "Индивидуальный трансфер Минск — Варшава",
       labelEn: "Private Minsk–Warsaw transfer",
       path: "/трансфер-варшава",
+      pathEn: "/warsaw-transfer",
     },
   },
 
@@ -1064,7 +1065,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["eu-belarus-shopping-by-car", "граница-беларусь-литва", "какой-кпп-выбрать", "граница-беларусь-польша"],
-    ctaRoute: { label: "Заказать трансфер в Литву, Польшу или Латвию", labelEn: "Book a transfer to Lithuania, Poland or Latvia", path: "/трансфер-минск-вильнюс-аэропорт" },
+    ctaRoute: { label: "Заказать трансфер в Литву, Польшу или Латвию", labelEn: "Book a transfer to Lithuania, Poland or Latvia", path: "/трансфер-минск-вильнюс-аэропорт", pathEn: "/minsk-vilnius-airport" },
   },
 
   {
@@ -1218,7 +1219,7 @@ export const ARTICLES: Article[] = [
       { type: "info-notice", text: "Queue data and checkpoint status may change at any time. Always check before travelling." },
     ],
     related: ["граница-беларусь-литва", "как-добраться-до-аэропорта-вильнюса"],
-    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт" },
+    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт", pathEn: "/minsk-vilnius-airport" },
   },
 
   {
@@ -1350,7 +1351,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["граница-беларусь-литва", "стоимость-трансфер-минск-варшава"],
-    ctaRoute: { label: "Заказать минивэн с детским креслом", labelEn: "Book a minivan with child seat", path: "/трансфер-хендай-палисад" },
+    ctaRoute: { label: "Заказать минивэн с детским креслом", labelEn: "Book a minivan with child seat", path: "/трансфер-хендай-палисад", pathEn: "/hyundai-palisade-transfer" },
   },
 
   {
@@ -1442,7 +1443,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["граница-беларусь-литва", "какой-кпп-выбрать", "трансфер-с-детьми"],
-    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт" },
+    ctaRoute: { label: "Заказать трансфер Минск — Вильнюс (VNO)", labelEn: "Book Minsk–Vilnius (VNO) transfer", path: "/трансфер-минск-вильнюс-аэропорт", pathEn: "/minsk-vilnius-airport" },
   },
 
   {
@@ -1554,7 +1555,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["стоимость-трансфер-минск-варшава", "граница-беларусь-польша", "что-нельзя-ввозить-в-ес"],
-    ctaRoute: { label: "Заказать трансфер Минск — Варшава (WAW)", labelEn: "Book Minsk–Warsaw (WAW) transfer", path: "/трансфер-минск-варшава-шопен" },
+    ctaRoute: { label: "Заказать трансфер Минск — Варшава (WAW)", labelEn: "Book Minsk–Warsaw (WAW) transfer", path: "/трансфер-минск-варшава-шопен", pathEn: "/minsk-warsaw-airport" },
   },
 
   {
@@ -1736,7 +1737,7 @@ export const ARTICLES: Article[] = [
       { type: "info-notice", text: "Entry requirements and customs allowances may change without notice. Always check official sources before travelling." },
     ],
     related: ["стоимость-трансфер-минск-варшава", "что-нельзя-ввозить-в-ес", "аэропорт-варшавы-вав"],
-    ctaRoute: { label: "Заказать трансфер Минск — Варшава", labelEn: "Book Minsk–Warsaw transfer", path: "/трансфер-минск-варшава-шопен" },
+    ctaRoute: { label: "Заказать трансфер Минск — Варшава", labelEn: "Book Minsk–Warsaw transfer", path: "/трансфер-минск-варшава-шопен", pathEn: "/minsk-warsaw-airport" },
   },
 
   {
@@ -1858,7 +1859,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["граница-беларусь-польша", "что-нельзя-ввозить-в-ес", "как-добраться-до-аэропорта-вильнюса"],
-    ctaRoute: { label: "Заказать трансфер Минск — Рига (RIX)", labelEn: "Book Minsk–Riga (RIX) transfer", path: "/трансфер-минск-рига-аэропорт" },
+    ctaRoute: { label: "Заказать трансфер Минск — Рига (RIX)", labelEn: "Book Minsk–Riga (RIX) transfer", path: "/трансфер-минск-рига-аэропорт", pathEn: "/minsk-riga-airport" },
   },
 
   {
@@ -2239,7 +2240,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["стоимость-трансфер-минск-варшава", "аэропорт-варшавы-вав", "как-добраться-до-аэропорта-вильнюса"],
-    ctaRoute: { label: "Рассчитать стоимость трансфера в аэропорт", labelEn: "Get a transfer quote to the airport", path: "/трансфер-минск-варшава-модлин" },
+    ctaRoute: { label: "Рассчитать стоимость трансфера в аэропорт", labelEn: "Get a transfer quote to the airport", path: "/трансфер-минск-варшава-модлин", pathEn: "/minsk-warsaw-modlin-airport" },
   },
   {
     slug: "виза-свободный-въезд-в-беларусь-2026",
@@ -2744,7 +2745,7 @@ export const ARTICLES: Article[] = [
       { type: "info-notice", text: "Visa-free entry rules, permitted stay durations and eligible country lists may change. Check the official Belarusian MFA website before travelling." },
     ],
     related: ["граница-беларусь-литва", "аэропорт-варшавы-вав", "как-добраться-до-аэропорта-вильнюса"],
-    ctaRoute: { label: "Забронировать трансфер из Европы в Беларусь", labelEn: "Book a transfer from Europe to Belarus", path: "/трансфер-минск-вильнюс-аэропорт" },
+    ctaRoute: { label: "Забронировать трансфер из Европы в Беларусь", labelEn: "Book a transfer from Europe to Belarus", path: "/трансфер-минск-вильнюс-аэропорт", pathEn: "/minsk-vilnius-airport" },
   },
   {
     slug: "вывоз-60-евро-в-беларусь-из-литвы-латвии",
@@ -2980,7 +2981,7 @@ export const ARTICLES: Article[] = [
       { type: "info-notice", text: "Sources inspected by the editorial team on 16 October 2026. This is not a law's adoption date or customs approval for your journey. A current official Lithuanian €60 allowance remains unverified; before departure, confirm your amount and purpose with customs and check EUR-Lex for the latest legislation." },
     ],
     related: ["граница-беларусь-литва", "какой-кпп-выбрать", "виза-свободный-въезд-в-беларусь-2026"],
-    ctaRoute: { label: "Забронировать трансфер в Литву или Латвию", labelEn: "Book a transfer to Lithuania or Latvia", path: "/трансфер-в-литву" },
+    ctaRoute: { label: "Забронировать трансфер в Литву или Латвию", labelEn: "Book a transfer to Lithuania or Latvia", path: "/трансфер-в-литву", pathEn: "/lithuania-transfer" },
   },
   {
     slug: "советские-мозаики-минска",
@@ -3177,7 +3178,7 @@ export const ARTICLES: Article[] = [
       },
     ],
     related: ["как-добраться-до-аэропорта-вильнюса", "аэропорт-варшавы-вав"],
-    ctaRoute: { label: "Заказать трансфер и экскурсию по Минску", labelEn: "Book a Minsk transfer and city tour", path: "/трансфер-по-минску" },
+    ctaRoute: { label: "Заказать трансфер и экскурсию по Минску", labelEn: "Book a Minsk transfer and city tour", path: "/трансфер-по-минску", pathEn: "/minsk-city-transfer" },
   },
 ];
 

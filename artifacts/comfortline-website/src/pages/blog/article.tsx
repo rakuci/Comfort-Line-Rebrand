@@ -310,7 +310,7 @@ export default function BlogArticlePage() {
                   : "Our manager will contact you shortly with an exact price."}
               </p>
               <a
-                href={article.ctaRoute.path}
+                href={isRu ? article.ctaRoute.path : article.ctaRoute.pathEn}
                 className="inline-block px-8 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
               >
                 {isRu ? article.ctaRoute.label : (article.ctaRoute.labelEn ?? article.ctaRoute.label)}

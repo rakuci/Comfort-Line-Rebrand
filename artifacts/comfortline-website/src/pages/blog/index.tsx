@@ -82,7 +82,7 @@ export default function BlogIndexPage() {
             >
               <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
                 <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
-                  {a.category}
+                  {isRu ? a.category : (a.categoryEn ?? a.category)}
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" /> {new Date(a.dateISO).toLocaleDateString(isRu ? "ru-RU" : "en-US", { day: "numeric", month: "short", year: "numeric" })}
