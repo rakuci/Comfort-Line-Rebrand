@@ -22,6 +22,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/context/language-context";
 import { ShoppingEnquiryProvider } from "@/context/shopping-enquiry-context";
+import { SeoRenderContext, type SeoData } from "@/seo/use-seo";
 
 import LandingPage from "@/pages/landing";
 import PrivacyPolicyPage from "@/pages/privacy-policy";
@@ -205,8 +206,9 @@ function makeStaticLocationHook(path: string) {
   };
 }
 
-export function SsrApp({ path }: { path: string }) {
+export function SsrApp({ path, onSeo }: { path: string; onSeo?: (data: SeoData) => void }) {
   return (
+    <SeoRenderContext.Provider value={onSeo ?? null}>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
@@ -220,5 +222,6 @@ export function SsrApp({ path }: { path: string }) {
         </TooltipProvider>
       </QueryClientProvider>
     </ThemeProvider>
+    </SeoRenderContext.Provider>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 
 export interface AlternateLink {
   hreflang: string;
@@ -20,6 +20,10 @@ export interface SeoData {
 }
 
 const SEO_FLAG = "data-seo";
+
+// Build-only collector: prerender uses the exact same page data as the client.
+// A per-render provider keeps ownership isolated instead of using global state.
+export const SeoRenderContext = createContext<((data: SeoData) => void) | null>(null);
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
   const selector = `meta[${attr}="${key}"]`;
@@ -47,6 +51,8 @@ function clearTagged(selector: string) {
 }
 
 export function useSeo(data: SeoData) {
+  const collect = useContext(SeoRenderContext);
+  collect?.(data);
   const altKey = data.alternates.map((a) => `${a.hreflang}|${a.href}`).join(",");
   const jsonKey = data.jsonLd ? JSON.stringify(data.jsonLd) : "";
 

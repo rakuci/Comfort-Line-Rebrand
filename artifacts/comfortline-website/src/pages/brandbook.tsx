@@ -518,7 +518,6 @@ export default function BrandbookPage() {
         descEn="Internal ComfortLine brandbook — for the team and partners."
         pathRu="/brandbook"
         pathEn="/brandbook"
-        noBusinessJsonLd
         noindex
       />
       <Navbar />

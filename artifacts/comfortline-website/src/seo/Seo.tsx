@@ -1,7 +1,7 @@
 import { useLang } from "@/context/language-context";
 import { useSeo } from "./use-seo";
 import { SITE_URL, DEFAULT_OG_IMAGE } from "./seo-config";
-import { localBusinessJsonLd, breadcrumbJsonLd, type BreadcrumbItem } from "./jsonld";
+import { breadcrumbJsonLd, type BreadcrumbItem } from "./jsonld";
 
 interface SeoProps {
   titleRu: string;
@@ -17,7 +17,6 @@ interface SeoProps {
   jsonLd?: object | object[];
   breadcrumbsRu?: BreadcrumbItem[];
   breadcrumbsEn?: BreadcrumbItem[];
-  noBusinessJsonLd?: boolean;
   noindex?: boolean;
 }
 
@@ -51,7 +50,8 @@ export function Seo(props: SeoProps) {
   const keywords = seoIsRu ? props.keywordsRu : props.keywordsEn;
 
   const allJsonLd: object[] = [];
-  if (!props.noBusinessJsonLd) allJsonLd.push(localBusinessJsonLd(lang));
+  // Site identity (#business, #organization, WebSite) belongs to index.html.
+  // Route-owned schemas reference those IDs, never redefine them.
 
   const breadcrumbs = isRu ? props.breadcrumbsRu : props.breadcrumbsEn;
   if (breadcrumbs && breadcrumbs.length > 0) {

@@ -89,8 +89,16 @@ async function createSsrModuleLoader() {
   }
 }
 
-const renderMarkup = (SsrApp, routePath) =>
-  renderRouteMarkup(SsrApp, routePath, (App, path) => renderToStaticMarkup(createElement(App, { path })));
+const renderPage = (SsrApp, routePath) => {
+  let seo;
+  const markup = renderRouteMarkup(SsrApp, routePath, (App, path) =>
+    renderToStaticMarkup(createElement(App, { path, onSeo: (data) => {
+      if (seo) throw new Error(`Multiple SEO owners for "${routePath}"`);
+      seo = data;
+    } })));
+  if (!seo) throw new Error(`[prerender] Missing SEO owner for "${routePath}"`);
+  return { markup, seo };
+};
 
 // ============================================================================
 // HTML generation
@@ -105,11 +113,10 @@ function escapeHtml(s) {
     .replace(/'/g, "&#39;");
 }
 
-function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup, dist = DIST) {
+function buildHtml(template, route, lang, page, dist = DIST) {
   const isRu = lang === "ru";
   const title = isRu ? route.titleRu : route.titleEn;
   const desc = isRu ? route.descRu : route.descEn;
-  const h1 = isRu ? route.h1Ru : route.h1En;
   const localPath = isRu ? route.pathRu : route.pathEn;
   const canonicalUrl = SITE_URL + encodeURI(localPath);
   const ogLocale = isRu ? "ru_RU" : "en_US";
@@ -233,160 +240,31 @@ function buildHtml(template, route, lang, blogIndexRoute, ssrMarkup, dist = DIST
     hreflang,
   );
 
-  let extraJsonLd = "";
   if (route.isArticle) {
-    const articleJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: h1,
-      description: desc,
-      image: { "@type": "ImageObject", url: ogImage, width: 1200, height: 630 },
-      url: canonicalUrl,
-      mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
-      author: { "@type": "Organization", name: "ComfortLine", url: SITE_URL, "@id": `${SITE_URL}#organization` },
-      publisher: { "@type": "Organization", "@id": `${SITE_URL}#organization`, name: "ComfortLine", logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.svg` } },
-      datePublished: route.datePublished,
-      dateModified: route.dateModified,
-      articleSection: isRu ? route.section : route.sectionEn || route.section,
-      keywords: route.keywords,
-      inLanguage: lang,
-      isAccessibleForFree: true,
-    };
+    const schemas = Array.isArray(page.seo.jsonLd) ? page.seo.jsonLd : [page.seo.jsonLd];
+    const articleSchema = schemas.find((schema) => schema?.["@type"] === "Article");
     const articleMetaInjection = `
     <meta name="keywords" content="${escapeHtml(route.keywords)}" />
     <meta property="article:published_time" content="${route.datePublished}" />
     <meta property="article:modified_time" content="${route.dateModified}" />
-    <meta property="article:author" content="ComfortLine" />
+    <meta property="article:author" content="${escapeHtml(articleSchema.author.name)}" />
     <meta property="article:publisher" content="${SITE_URL}" />
     <meta property="article:section" content="${escapeHtml(isRu ? route.section : route.sectionEn || route.section)}" />
     ${route.keywords.split(",").map((k) => `<meta property="article:tag" content="${escapeHtml(k.trim())}" />`).join("\n    ")}`;
     html = html.replace(`<meta property="og:type" content="${ogType}" />`, `<meta property="og:type" content="${ogType}" />${articleMetaInjection}`);
-    const breadcrumbJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: isRu ? "Главная" : "Home", item: SITE_URL + "/" },
-        { "@type": "ListItem", position: 2, name: isRu ? "Блог" : "Blog", item: SITE_URL + encodeURI(isRu ? "/блог" : "/blog") },
-        { "@type": "ListItem", position: 3, name: h1, item: canonicalUrl },
-      ],
-    };
-    // Share ownership with useSeo so hydration replaces these page-specific
-    // schemas instead of leaving a stale Article image after client navigation.
-    extraJsonLd = `
-    <script type="application/ld+json" data-seo="1">${JSON.stringify(articleJsonLd)}</script>
-    <script type="application/ld+json" data-seo="1">${JSON.stringify(breadcrumbJsonLd)}</script>`;
-  } else if (route === blogIndexRoute) {
-    const breadcrumbJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: isRu ? "Главная" : "Home", item: SITE_URL + "/" },
-        { "@type": "ListItem", position: 2, name: isRu ? "Блог" : "Blog", item: canonicalUrl },
-      ],
-    };
-    extraJsonLd = `
-    <script type="application/ld+json" data-seo="1">${JSON.stringify(breadcrumbJsonLd)}</script>`;
-  } else {
-    // Only real transfer/service pages (route.pageType === "service", or
-    // vehicle pages handled separately below) get a service JSON-LD block.
-    // Country hub pages, home, FAQ, and legal pages get no fabricated
-    // TaxiService entity — that matches what each page's own React source
-    // actually renders client-side (Seo.tsx only adds a page-specific
-    // jsonLd prop for real route/vehicle pages).
-    let mainJsonLd = null;
-    if (route.isVehicle) {
-      const vehicleClass = isRu ? route.vehicleClassRu : route.vehicleClassEn || route.vehicleClassRu;
-      const vehicleOffer = {
-        "@type": "Offer",
-        url: canonicalUrl,
-        availability: "https://schema.org/InStock",
-        priceCurrency: "BYN",
-        seller: { "@id": `${SITE_URL}#business` },
-      };
-      mainJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Service",
-        serviceType: isRu ? "Индивидуальный трансфер" : "Private transfer",
-        name: h1,
-        description: desc,
-        image: route.vehicleImage ? SITE_URL + route.vehicleImage : undefined,
-        url: canonicalUrl,
-        provider: { "@id": `${SITE_URL}#business` },
-        offers: vehicleOffer,
-        additionalProperty: [
-          route.vehicleSeats
-            ? {
-                "@type": "PropertyValue",
-                name: isRu ? "Количество мест" : "Seating capacity",
-                value: route.vehicleSeats,
-              }
-            : null,
-          route.vehicleYear
-            ? {
-                "@type": "PropertyValue",
-                name: isRu ? "Год выпуска" : "Model year",
-                value: route.vehicleYear,
-              }
-            : null,
-          vehicleClass
-            ? {
-                "@type": "PropertyValue",
-                name: isRu ? "Класс автомобиля" : "Vehicle class",
-                value: vehicleClass,
-              }
-            : null,
-        ].filter(Boolean),
-      };
-    } else if (route.pageType === "service") {
-      // Real route/airport/themed transfer pages: use the exact fromName/
-      // toName the page itself defines (route-manifest.mjs extracts these
-      // from the page source) instead of guessing the destination from the URL.
-      const fromName = (isRu ? route.fromNameRu : route.fromNameEn) || (isRu ? "Минск" : "Minsk");
-      const routeToName = (isRu ? route.toNameRu : route.toNameEn) || h1;
-      mainJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "TaxiService",
-        name: title,
-        description: desc,
-        url: canonicalUrl,
-        provider: { "@id": `${SITE_URL}#business` },
-        areaServed: [
-          { "@type": "Place", name: fromName },
-          { "@type": "Place", name: routeToName },
-        ],
-        inLanguage: lang,
-      };
-    }
-    // Country hub pages ("country"), home, FAQ, and legal pages: no
-    // fabricated service entity, only breadcrumb (+ FAQPage below when
-    // applicable) — matching what those pages actually render client-side.
-    const breadcrumbJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: isRu ? "Главная" : "Home", item: SITE_URL + "/" },
-        { "@type": "ListItem", position: 2, name: title, item: canonicalUrl },
-      ],
-    };
-    const scripts = [...(mainJsonLd ? [mainJsonLd] : []), breadcrumbJsonLd];
-    const faqEntries = isRu ? route.faqRu : route.faqEn;
-    if (faqEntries && faqEntries.length > 0) {
-      scripts.push({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqEntries.map((e) => ({
-          "@type": "Question",
-          name: e.question,
-          acceptedAnswer: { "@type": "Answer", text: e.answer },
-        })),
-      });
-    }
-    extraJsonLd = "\n" + scripts.map((s) => `    <script type="application/ld+json">${JSON.stringify(s)}</script>`).join("\n");
   }
+  // All route data comes from the page's real Seo/useSeo render. Only tagged
+  // scripts are replaced by the client; untagged shell identity stays intact.
+  const schemas = page.seo.jsonLd
+    ? (Array.isArray(page.seo.jsonLd) ? page.seo.jsonLd : [page.seo.jsonLd])
+    : [];
+  const extraJsonLd = schemas.map((schema) =>
+    `\n    <script type="application/ld+json" data-seo="1">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>`
+  ).join("");
   html = html.replace("</head>", `${extraJsonLd}\n  </head>`);
 
   // Only actual route component output can enter the production document.
-  html = html.replace('<div id="root"></div>', () => `<div id="root">${ssrMarkup}</div>`);
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${page.markup}</div>`);
 
   return html;
 }
@@ -412,7 +290,7 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
     throw new Error("The HTML template is already prerendered or has no empty #root. Run a fresh Vite build before prerendering; reusing homepage output would copy its metadata/content into other routes.");
   }
 
-  const { allRoutes, manualRoutes, autoRoutes, vehicleRoutes, blogIndexRoute, blogArticleRoutes } = collectAllRoutes();
+  const { allRoutes, manualRoutes, autoRoutes, vehicleRoutes, blogArticleRoutes } = collectAllRoutes();
 
   const dom = installJsdomGlobals();
   let vite;
@@ -424,7 +302,8 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
     for (const route of allRoutes) {
       for (const lang of ["ru", "en"]) {
         const routePath = lang === "ru" ? route.pathRu : route.pathEn;
-        const html = buildHtml(template, route, lang, blogIndexRoute, renderMarkup(loader.SsrApp, routePath), dist);
+        const page = renderPage(loader.SsrApp, routePath);
+        const html = buildHtml(template, route, lang, page, dist);
         if (checkedRoutes.has(route)) validateRenderedRouteDocument(html, route, lang);
         written.push(emit(routePath, html, dist));
       }

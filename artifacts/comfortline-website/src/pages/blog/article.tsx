@@ -187,6 +187,9 @@ export default function BlogArticlePage() {
     "@type": "Article",
     headline: isRu ? article.title : (article.titleEn ?? article.title),
     description: isRu ? article.description : (article.descriptionEn ?? article.description),
+    url,
+    articleSection: isRu ? article.category : (article.categoryEn ?? article.category),
+    isAccessibleForFree: true,
     datePublished: article.dateISO,
     dateModified: article.dateModified ?? article.dateISO,
     author: {

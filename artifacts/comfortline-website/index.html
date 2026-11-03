@@ -134,12 +134,9 @@
       ]
     }
     </script>
-    <!-- Static #business node (RU, matches the default <html lang="ru"> below) so crawlers
-         that don't execute JS still resolve the WebSite publisher / Organization / TaxiService
-         provider @id references below. src/seo/Seo.tsx (localBusinessJsonLd) re-emits a
-         localised copy of this same @id client-side once JS runs; browsers keep only the
-         client-rendered version (use-seo.ts removes/replaces all ld+json on mount), so there
-         is no duplicate-node conflict in a real browser or in Search Console's rendered view. -->
+    <!-- Persistent business identity, shared by every language and route.
+         This is the sole definition of #business. Page schemas reference its
+         @id; useSeo replaces only tagged route schemas, never this shell node. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

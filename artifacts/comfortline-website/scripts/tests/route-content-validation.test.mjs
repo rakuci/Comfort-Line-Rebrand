@@ -85,8 +85,9 @@ for (const lang of ["ru", "en"]) {
         import { prerender } from ${JSON.stringify(new URL("../prerender.mjs", import.meta.url).href)};
         import { collectAllRoutes } from ${JSON.stringify(new URL("../route-manifest.mjs", import.meta.url).href)};
         const routes = collectAllRoutes().allRoutes;
-        function SsrApp({ path }) {
+        function SsrApp({ path, onSeo }) {
           if (path === ${JSON.stringify(target)}) throw new Error("injected component failure");
+          onSeo({ jsonLd: [] });
           const route = routes.find(r => r.pathRu === path || r.pathEn === path);
           return h("main", null, h("h1", null, route[path === route.pathRu ? "h1Ru" : "h1En"]),
             h("p", null, route[path === route.pathRu ? "introRu" : "introEn"]),
