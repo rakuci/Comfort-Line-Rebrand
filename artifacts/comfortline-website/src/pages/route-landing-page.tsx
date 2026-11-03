@@ -11,6 +11,7 @@ import { Seo } from "@/seo/Seo";
 import { taxiServiceJsonLd, faqJsonLd } from "@/seo/jsonld";
 import { SITE_URL } from "@/seo/seo-config";
 import { getHomeSectionHref } from "@/lib/lang-urls";
+import { galleryImageProps } from "@/lib/gallery-images";
 
 export interface LandmarkPhoto {
   src: string;
@@ -313,13 +314,12 @@ export function RouteLandingPage({ data }: Props) {
                   className="relative aspect-[4/3] sm:aspect-[3/2] rounded-2xl overflow-hidden border border-border bg-muted"
                 >
                   <img
-                    src={photo.src}
+                    {...galleryImageProps(photo.src)}
                     alt={photo.caption}
                     width={800}
                     height={533}
                     loading="lazy"
                     decoding="async"
-                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
                     className="w-full h-full object-cover object-center"
                     onError={(e) => {
                       const el = e.currentTarget;

@@ -12,3 +12,4 @@
 - [Prerender and client SEO](prerender-client-seo.md) — static-output checks cannot prove metadata stays correct after hydration; exercise mounted effects and navigation too.
 - [Share-preview font choice](share-preview-font-choice.md) — preserve the established preview appearance when revisiting build-only font choices.
 - [Light-surface accent text](light-surface-accent-text.md) — preserve decorative brand colors; evaluate text shades against the actual surface, not the global theme.
+- [Generated assets at dev startup](generated-assets-startup.md) — invoke required asset generation explicitly; pnpm lifecycle-hook behavior depends on configuration.
