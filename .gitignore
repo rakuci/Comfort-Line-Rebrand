@@ -47,3 +47,8 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Reproducible destination image variants (generated before dev/build).
+/artifacts/comfortline-website/public/img/**/*-400.webp
+/artifacts/comfortline-website/public/img/**/*-800.webp
+/artifacts/comfortline-website/public/img/**/*-1200.webp
