@@ -124,8 +124,13 @@ export function applyBrandScheme(schemeId: string): void {
   const scheme = BRAND_SCHEMES.find((s) => s.id === schemeId);
   if (!scheme) return;
   const [g1, g2, g3, g4] = deriveGradientStops(scheme.primary);
+  // Keep the original accent for fills and decoration; use a darker shade
+  // for small text on fixed light surfaces (including the booking widget).
+  const { h, s, l } = parseHsl(scheme.primary);
+  const primaryOnLight = `${h} ${s}% ${Math.min(l, 32)}%`;
   const css = `:root, .dark, .light {
     --primary: ${scheme.primary} !important;
+    --primary-on-light: ${primaryOnLight} !important;
     --primary-foreground: ${scheme.primaryForeground} !important;
     --ring: ${scheme.ring} !important;
     --sidebar-primary: ${scheme.primary} !important;

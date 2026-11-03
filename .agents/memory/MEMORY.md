@@ -11,3 +11,4 @@
 - [Border advice verification](border-advice-verification.md) — a dated official exception alongside a past deadline must not be treated as current permission without clarification.
 - [Prerender and client SEO](prerender-client-seo.md) — static-output checks cannot prove metadata stays correct after hydration; exercise mounted effects and navigation too.
 - [Share-preview font choice](share-preview-font-choice.md) — preserve the established preview appearance when revisiting build-only font choices.
+- [Light-surface accent text](light-surface-accent-text.md) — preserve decorative brand colors; evaluate text shades against the actual surface, not the global theme.

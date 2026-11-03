@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { X, ArrowRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,7 @@ import { useLocation } from "wouter";
 import { gtagEvent } from "@/lib/gtag";
 import { analyticsPage, trackEvent } from "@/lib/analytics";
 import { PhoneInput } from "@/components/ui/PhoneInput";
+import { useModalFocus } from "@/hooks/use-modal-focus";
 
 type VehicleClass = "any" | "comfort" | "business" | "premium";
 
@@ -74,6 +75,8 @@ export function BookingModal({
   const [, navigate] = useLocation();
   const m = t.modal;
   const b = t.booking;
+  const titleId = useId();
+  const dialogRef = useModalFocus(open, onClose);
 
   const defaultPax: PassengerState = { adults: 1, children: 0, babies: 0, pets: 0, suitcases: 1, vehicleClass: "any" };
 
@@ -201,12 +204,17 @@ export function BookingModal({
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div
+              role="dialog"
+              ref={dialogRef}
+              tabIndex={-1}
+              aria-modal="true"
+              aria-labelledby={titleId}
               className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl pointer-events-auto max-h-[90dvh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
-                <h2 className="text-xl font-bold text-gray-900">{m.title}</h2>
+                <h2 id={titleId} className="text-xl font-bold text-gray-900">{m.title}</h2>
                 <button type="button" onClick={onClose} aria-label="Close"
                   className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
                   <X className="h-4 w-4" />
@@ -340,8 +348,8 @@ export function BookingModal({
                     <div className="relative mt-0.5 shrink-0">
                       <input type="checkbox" checked={agreed}
                         onChange={e => setAgreed(e.target.checked)}
-                        className="sr-only" required />
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                        className="sr-only peer" required />
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-900 ${
                         agreed ? "bg-primary border-primary" : "border-gray-300 group-hover:border-primary/50"
                       }`}>
                         {agreed && (

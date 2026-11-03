@@ -153,6 +153,7 @@ export function PhoneInput({ onChange, onBlur, error, placeholder, required, res
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search country…"
+                aria-label="Search country"
                 className="flex-1 text-xs text-gray-700 placeholder-gray-400 outline-none bg-transparent"
               />
             </div>

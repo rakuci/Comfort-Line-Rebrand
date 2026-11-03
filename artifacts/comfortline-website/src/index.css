@@ -20,6 +20,7 @@
   --color-popover-border: hsl(var(--popover-border));
 
   --color-primary: hsl(var(--primary));
+  --color-primary-on-light: hsl(var(--primary-on-light));
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-primary-border: var(--primary-border);
 
@@ -97,13 +98,15 @@
   --popover-border: 220 13% 89%;
 
   --primary: 37 55% 48%;
+  /* Text on fixed white/light surfaces, independently of decorative accents. */
+  --primary-on-light: 37 32% 32%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 13% 95%;
   --secondary-foreground: 220 15% 10%;
 
   --muted: 220 13% 95%;
-  --muted-foreground: 220 10% 46%;
+  --muted-foreground: 220 10% 43%;
 
   --accent: 220 13% 95%;
   --accent-foreground: 220 15% 10%;

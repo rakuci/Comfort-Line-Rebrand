@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { X, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,6 +6,7 @@ import { useLang } from "@/context/language-context";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { PhoneInput } from "@/components/ui/PhoneInput";
+import { useModalFocus } from "@/hooks/use-modal-focus";
 
 interface ContactModalProps {
   open: boolean;
@@ -59,6 +60,8 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
   const [, navigate] = useLocation();
   const lang = t.lang as "ru" | "en";
   const c = copy[lang];
+  const titleId = useId();
+  const dialogRef = useModalFocus(open, onClose);
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -75,18 +78,6 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
     setPhoneError(""); setAgreed(false);
     setPhoneResetKey(k => k + 1);
   }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open, onClose]);
 
   function validatePhone(value: string): string {
     const digits = value.replace(/\D/g, "");
@@ -150,6 +141,11 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div
+              role="dialog"
+              ref={dialogRef}
+              tabIndex={-1}
+              aria-modal="true"
+              aria-labelledby={titleId}
               className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl pointer-events-auto max-h-[90dvh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
@@ -160,7 +156,7 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
                     <MessageSquare className="h-4 w-4 text-primary" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900 leading-tight">{c.title}</h2>
+                    <h2 id={titleId} className="text-lg font-bold text-gray-900 leading-tight">{c.title}</h2>
                     <p className="text-xs text-gray-500 mt-0.5">{c.subtitle}</p>
                   </div>
                 </div>
@@ -198,8 +194,8 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
                   <div className="relative mt-0.5 shrink-0">
                     <input type="checkbox" checked={agreed}
                       onChange={e => setAgreed(e.target.checked)}
-                      className="sr-only" required />
-                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                      className="sr-only peer" required />
+                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-900 ${
                       agreed ? "bg-primary border-primary" : "border-gray-300 group-hover:border-primary/50"
                     }`}>
                       {agreed && (

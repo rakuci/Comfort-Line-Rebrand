@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { ArrowLeftRight, ChevronDown, X, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/language-context";
@@ -46,9 +46,9 @@ function Counter({ label, note, value, onChange, min = 0, max = 8 }: {
   );
 }
 
-const floatingLabel = "absolute left-0 top-1 text-[10px] font-semibold text-primary uppercase tracking-wider pointer-events-none select-none";
-const restingLabel  = "absolute left-0 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none select-none transition-all duration-150";
-const inputBase     = "absolute inset-0 pt-4 md:pt-5 pb-1 px-0 w-full bg-transparent outline-none border-0 text-sm font-medium text-gray-900 placeholder-transparent";
+const floatingLabel = "absolute left-0 top-1 text-[10px] font-semibold text-primary-on-light uppercase tracking-wider pointer-events-none select-none";
+const restingLabel  = "absolute left-0 top-1/2 -translate-y-1/2 text-sm text-gray-600 pointer-events-none select-none transition-all duration-150";
+const inputBase     = "absolute inset-0 pt-4 md:pt-5 pb-1 px-0 w-full bg-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 border-0 text-sm font-medium text-gray-900 placeholder-transparent";
 
 function FieldShell({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
@@ -60,6 +60,7 @@ function FieldShell({ children, className = "" }: { children: React.ReactNode; c
 
 export function BookingWidget() {
   const { t } = useLang();
+  const fieldId = useId();
   const b = t.booking;
 
   const [from, setFrom] = useState("");
@@ -245,7 +246,7 @@ export function BookingWidget() {
                 onChange={e => setFrom(e.target.value)}
                 onFocus={() => setFromFocus(true)}
                 placeholder=" " className={`${inputBase} peer`} />
-              <label className={from ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
+              <label className={from ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary-on-light peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
                 {b.from}
               </label>
             </FieldShell>
@@ -271,7 +272,7 @@ export function BookingWidget() {
                 onChange={e => setTo(e.target.value)}
                 onFocus={() => setToFocus(true)}
                 placeholder=" " className={`${inputBase} peer`} />
-              <label className={to ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
+              <label className={to ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary-on-light peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
                 {b.to}
               </label>
             </FieldShell>
@@ -324,11 +325,11 @@ export function BookingWidget() {
         <div className="flex-1 relative min-w-0" ref={fromRef}>
           <div className="flex items-center gap-3 px-5 py-4 h-full">
             <FieldShell className="flex-1">
-              <input type="text" value={from}
+              <input id={`${fieldId}-from-desktop`} type="text" value={from}
                 onChange={e => setFrom(e.target.value)}
                 onFocus={() => setFromFocus(true)}
                 placeholder=" " className={`${inputBase} peer`} />
-              <label className={from ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
+              <label htmlFor={`${fieldId}-from-desktop`} className={from ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary-on-light peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
                 {b.from}
               </label>
             </FieldShell>
@@ -352,11 +353,11 @@ export function BookingWidget() {
         <div className="flex-1 relative min-w-0" ref={toRef}>
           <div className="flex items-center px-5 py-4 h-full">
             <FieldShell>
-              <input type="text" value={to}
+              <input id={`${fieldId}-to-desktop`} type="text" value={to}
                 onChange={e => setTo(e.target.value)}
                 onFocus={() => setToFocus(true)}
                 placeholder=" " className={`${inputBase} peer`} />
-              <label className={to ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
+              <label htmlFor={`${fieldId}-to-desktop`} className={to ? floatingLabel : `${restingLabel} peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-primary-on-light peer-focus:font-semibold peer-focus:uppercase peer-focus:tracking-wider`}>
                 {b.to}
               </label>
             </FieldShell>
