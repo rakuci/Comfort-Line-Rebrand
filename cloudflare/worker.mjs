@@ -129,6 +129,8 @@ async function handleForm(request, env, kind) {
   const rows = [
     [ru ? "Откуда" : "From", from],
     [ru ? "Куда" : "To", to],
+    ...(data.routeName ? [[ru ? "Маршрут / предложение" : "Route offer", field(data.routeName)]] : []),
+    ...(data.planName ? [[ru ? "Выбранный вариант" : "Selected plan", field(data.planName)]] : []),
     [ru ? "Дата" : "Date", field(data.date)],
     [ru ? "Взрослые" : "Adults", field(data.adults == null ? 1 : data.adults)],
     [ru ? "Дети (2–12 лет)" : "Children (2–12)", field(data.children == null ? 0 : data.children)],
