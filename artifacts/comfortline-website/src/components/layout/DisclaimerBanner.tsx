@@ -98,7 +98,7 @@ export function DisclaimerBanner({ officialSourcesHref = "#official-sources" }: 
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-800">
+    <div data-regulatory-disclaimer="true" className="bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-800">
       <div className="container mx-auto px-4 md:px-6 max-w-3xl py-3">
         <div className="flex items-start gap-2.5">
           <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
