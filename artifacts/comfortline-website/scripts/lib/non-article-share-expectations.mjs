@@ -63,7 +63,8 @@ export function collectNonArticleShareExpectations() {
   const expected = [];
   const excluded = new Set(["landing.tsx", "faq.tsx", "terms.tsx", "privacy-policy.tsx",
     "brandbook.tsx", "thank-you.tsx", "not-found.tsx", "route-landing-page.tsx",
-    "country-transfer-page.tsx", "vehicle-page.tsx"]);
+    "country-transfer-page.tsx", "vehicle-page.tsx",
+    "belarus-city-routes.tsx", "belarus-city-routes-index.tsx"]);
   for (const file of readdirSync(pages).filter((f) => f.endsWith(".tsx") && !excluded.has(f))) {
     const page = readPage(file);
     const data = page.variables.data;
@@ -86,6 +87,25 @@ export function collectNonArticleShareExpectations() {
       intro: fleet.vehicleContent[slug]?.[lang]?.desc,
     })));
   }
+  // The route pages are described in static curated JSON rather than
+  // one TSX component per direction. Inspect that source independently.
+  const cityMeta = JSON.parse(readFileSync(resolve(pages, "../data/belarus-city-route-pages.json"), "utf8"));
+  for (const route of cityMeta) {
+    expected.push(expectation("belarus-city-route-pages.json", route,
+      route.pathEn.slice(1), (lang, suffix) => ({
+        title: route["h1" + suffix],
+        intro: route["intro" + suffix],
+      })));
+  }
+  expected.push(expectation("belarus-city-routes-index.tsx", {
+    pathRu: "/трансферы-по-городам-беларуси",
+    pathEn: "/belarus-city-transfers",
+  }, "belarus-city-transfers", (lang) => ({
+    title: lang === "ru" ? "Трансферы между городами Беларуси и Европы"
+      : "Private transfers between Belarusian cities and Europe",
+    intro: lang === "ru" ? "Выберите конкретное направление, чтобы узнать об адресах подачи, возможностях поездки и достопримечательностях города назначения."
+      : "Choose a direction to review pickup options, route-specific considerations and authentic landmarks in the destination city.",
+  })));
   const blog = readPage("blog/index.tsx");
   // Stable public index identities; do not derive them from the manifest.
   expected.push(expectation("blog/index.tsx", { pathRu: "/блог", pathEn: "/blog" }, "blog-index", (lang) => {
