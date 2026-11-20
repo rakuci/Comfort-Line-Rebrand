@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, PhoneCall, Clock, MapPin, CheckCircle2 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { useLang } from "@/context/language-context";
 import { GlobalBookingModal } from "@/components/sections/GlobalBookingModal";
 import { Seo } from "@/seo/Seo";
@@ -58,8 +57,8 @@ export interface CountryPageData {
   ru: CountryContent;
   en: CountryContent;
   seo: CountrySeo;
-  /** Show the regulatory disclaimer banner and an official-sources anchor section */
-  disclaimerBanner?: boolean;
+  /** Show official border and customs information within the page, without a warning banner. */
+  showOfficialSources?: boolean;
 }
 
 interface Props {
@@ -101,7 +100,6 @@ export function CountryTransferPage({ data }: Props) {
         ]}
       />
       <Navbar />
-      {data.disclaimerBanner && <DisclaimerBanner />}
 
       {/* Hero */}
       <div className="pt-28 pb-14 border-b border-border/40 relative overflow-hidden">
@@ -221,8 +219,8 @@ export function CountryTransferPage({ data }: Props) {
           </div>
         </motion.section>
 
-        {/* Official sources — only shown when disclaimerBanner is set */}
-        {data.disclaimerBanner && (
+        {/* Helpful official sources, independent of warning banners */}
+        {data.showOfficialSources && (
           <motion.section id="official-sources" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl font-bold text-foreground mb-3 scroll-mt-28">
               {isRu ? "Официальные источники" : "Official Sources"}
