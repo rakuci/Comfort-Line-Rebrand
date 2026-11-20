@@ -176,7 +176,7 @@ export default function BelarusCityRoutePage() {
   const t = city(meta.to);
   const p = pair(meta.pairKey);
   const data: RoutePageData = {
-    disclaimerBanner: true,
+    showOfficialSources: true,
     relatedRoutes: related(meta),
     ru: contentRu(meta, f, t, p),
     en: contentEn(meta, f, t, p),
