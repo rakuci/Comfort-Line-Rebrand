@@ -1,6 +1,6 @@
 import { useState, useEffect, useId } from "react";
 import { createPortal } from "react-dom";
-import { X, ArrowRight, ChevronDown } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/language-context";
 import { useToast } from "@/hooks/use-toast";
@@ -66,7 +66,6 @@ export function BookingModal({
   prefilledPax,
   routeName,
   planName,
-  planPrice,
   prefilledFrom = "",
   prefilledTo = "",
 }: BookingModalProps) {
@@ -246,35 +245,6 @@ export function BookingModal({
               </div>
 
               <div className="px-6 py-5 space-y-5">
-
-                {/* Route / plan summary (shown when coming from Pricing or Fleet with context) */}
-                {routeName && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary text-sm font-semibold px-3 py-1.5 rounded-full">
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0" />
-                      {routeName}
-                    </span>
-                    {planName && (
-                      <span className="bg-gray-100 text-gray-700 text-sm font-medium px-3 py-1.5 rounded-full">
-                        {planName}
-                      </span>
-                    )}
-                    {planPrice && (
-                      <span className="border border-gray-200 text-gray-500 text-sm px-3 py-1.5 rounded-full">
-                        {planPrice}
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* From → To when no preset route but custom entered */}
-                {!routeName && (prefilledFrom || prefilledTo) && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {prefilledFrom && <span className="font-bold text-gray-900">{prefilledFrom}</span>}
-                    {prefilledFrom && prefilledTo && <ArrowRight className="h-4 w-4 text-primary shrink-0" />}
-                    {prefilledTo && <span className="font-bold text-gray-900">{prefilledTo}</span>}
-                  </div>
-                )}
 
                 {/* Route selection must be available even if the modal opens directly. */}
                   <div className="space-y-2">
