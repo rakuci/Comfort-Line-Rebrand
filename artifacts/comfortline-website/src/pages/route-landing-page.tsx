@@ -16,6 +16,11 @@ import { galleryImageProps } from "@/lib/gallery-images";
 export interface LandmarkPhoto {
   src: string;
   caption: string;
+  /** Required when using third-party CC-licensed imagery. */
+  sourceUrl?: string;
+  credit?: string;
+  license?: string;
+  licenseUrl?: string;
 }
 
 export interface FaqEntry {
@@ -73,6 +78,7 @@ export interface RoutePageData {
   seo: RouteSeo;
   /** Show the regulatory disclaimer banner and an official-sources anchor section */
   disclaimerBanner?: boolean;
+  relatedRoutes?: { ru: string; en: string; pathRu: string; pathEn: string }[];
 }
 
 interface Props {
@@ -126,7 +132,7 @@ const RELATED_ROUTES: Record<string, { ru: string; en: string; pathRu: string; p
 export function RouteLandingPage({ data }: Props) {
   const { lang } = useLang();
   const c = data[lang];
-  const relatedRoutes = RELATED_ROUTES[data.seo.pathRu] || [];
+  const relatedRoutes = data.relatedRoutes || RELATED_ROUTES[data.seo.pathRu] || [];
   const isRu = lang === "ru";
   const seoTitle = isRu ? data.seo.titleRu : data.seo.titleEn;
   const seoDesc = isRu ? data.seo.descRu : data.seo.descEn;
@@ -344,8 +350,24 @@ export function RouteLandingPage({ data }: Props) {
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
 
-                  <figcaption className="absolute bottom-3 left-3 right-3 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-black/60 text-white/90 backdrop-blur-sm">
-                    {photo.caption}
+                  <figcaption className="absolute bottom-3 left-3 right-3 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-black/70 text-white/95 backdrop-blur-sm">
+                    <span className="block">{photo.caption}</span>
+                    {photo.sourceUrl && (
+                      <span className="mt-1 block text-[10px] font-normal text-white/80">
+                        <a href={photo.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                          {photo.credit || "Wikimedia Commons"}
+                        </a>
+                        {photo.license && (
+                          <>
+                            {" · "}
+                            <a href={photo.licenseUrl || photo.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                              {photo.license}
+                            </a>
+                          </>
+                        )}
+                        {" · Wikimedia Commons"}
+                      </span>
+                    )}
                   </figcaption>
                 </figure>
               ))}
