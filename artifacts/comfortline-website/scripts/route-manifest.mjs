@@ -157,6 +157,8 @@ function slugFromPath(p) {
 
 const TEMPLATE_FILES = new Set([
   "route-landing-page.tsx",
+  "belarus-city-routes.tsx",
+  "belarus-city-routes-index.tsx",
   "country-transfer-page.tsx",
   "vehicle-page.tsx",
   "not-found.tsx",
@@ -289,6 +291,31 @@ function collectAutoRoutes() {
     out.push({ ogSlug: slugFromPath(extracted.pathEn), ...extracted });
   }
   return out;
+}
+
+// Bilingual city routes are kept as human-curated JSON so that the metadata,
+// prerendered document, and rendered booking route always refer to the same city.
+function collectBelarusCityRoutes() {
+  const entries = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "data", "belarus-city-route-pages.json"), "utf8"));
+  const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "data", "belarus-city-route-catalog.json"), "utf8"));
+  return entries.map((entry) => ({
+    ogSlug: slugFromPath(entry.pathEn),
+    pageType: "service",
+    pathRu: entry.pathRu,
+    pathEn: entry.pathEn,
+    titleRu: entry.titleRu,
+    titleEn: entry.titleEn,
+    descRu: entry.descRu,
+    descEn: entry.descEn,
+    h1Ru: entry.h1Ru,
+    h1En: entry.h1En,
+    introRu: entry.introRu,
+    introEn: entry.introEn,
+    fromNameRu: catalog.cities[entry.from].ru,
+    fromNameEn: catalog.cities[entry.from].ru,
+    toNameRu: catalog.cities[entry.to].ru,
+    toNameEn: catalog.cities[entry.to].ru,
+  }));
 }
 
 // ----------------------------------------------------------------------------
@@ -468,6 +495,20 @@ function collectBlogRoutes() {
 
 const manualRoutes = [
   {
+    ogSlug: "belarus-city-transfers",
+    pageType: "other",
+    pathRu: "/трансферы-по-городам-беларуси",
+    pathEn: "/belarus-city-transfers",
+    titleRu: "Трансферы по городам Беларуси и Европы | ComfortLine",
+    titleEn: "Belarus City Transfers from Europe | ComfortLine",
+    descRu: "Индивидуальные трансферы между Гродно, Брестом, Витебском, Гомелем, Могилёвом, Лидой, Барановичами и городами ЕС. Маршруты в обе стороны.",
+    descEn: "Private transfers between major Belarusian cities and Vilnius, Warsaw or Riga. Explore both directions, pickup details and destination landmarks.",
+    h1Ru: "Трансферы между городами Беларуси и Европы",
+    h1En: "Private transfers between Belarusian cities and Europe",
+    introRu: "Выберите конкретное направление, чтобы узнать об адресах подачи, возможностях поездки и достопримечательностях города назначения.",
+    introEn: "Choose a direction to review pickup options, route-specific considerations and authentic landmarks in the destination city.",
+  },
+  {
     ogSlug: "home",
     pageType: "home",
     pathRu: "/",
@@ -576,7 +617,7 @@ export function validateRouteMetadata(routes) {
  * guaranteed to cover every route referenced elsewhere in the build.
  */
 export function collectAllRoutes() {
-  const autoRoutes = collectAutoRoutes();
+  const autoRoutes = [...collectAutoRoutes(), ...collectBelarusCityRoutes()];
   const vehicleRoutes = collectVehicleRoutes();
   const { blogIndexRoute, blogArticleRoutes } = collectBlogRoutes();
 
