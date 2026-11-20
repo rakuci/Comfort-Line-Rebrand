@@ -1,0 +1,71 @@
+name: Smoke-test Cloudflare preview
+
+on:
+  push:
+    branches: [cloudflare-migration]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-preview-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check staging URL routes and API status
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base = "https://comfortline.comfortline-site.workers.dev";
+          const tests = [
+            { path: "/", expect: 200, content: "text/html" },
+            { path: "/en", expect: 200, content: "text/html" },
+            { path: "/blog", expect: 200, content: "text/html" },
+            { path: "/minsk-vilnius-airport", expect: 200, content: "text/html" },
+            { path: "/robots.txt", expect: 200, content: "text/plain" },
+            { path: "/sitemap.xml", expect: 200, content: "xml" },
+            { path: "/api/healthz", expect: 200, content: "application/json" },
+            { path: "/api/instagram/posts", expect: 200, content: "application/json" },
+            { path: "/___missing_route_preview_check___", expect: 404, content: "text/html" },
+          ];
+          let failures = 0;
+          for (const t of tests) {
+            try {
+              const response = await fetch(base + t.path, {
+                redirect: "manual",
+                signal: AbortSignal.timeout(15000),
+              });
+              const data = await response.text();
+              const type = response.headers.get("content-type") || "";
+              const statusOk = response.status === t.expect;
+              const typeOk = type.toLowerCase().includes(t.content);
+              let bodyOk = true;
+              if (t.path === "/api/healthz") {
+                try { bodyOk = JSON.parse(data).status === "ok"; }
+                catch { bodyOk = false; }
+              }
+              if (t.path === "/api/instagram/posts") {
+                try { bodyOk = Array.isArray(JSON.parse(data).posts); }
+                catch { bodyOk = false; }
+              }
+              if (t.path === "/sitemap.xml") bodyOk = data.includes("<url") || data.includes("<sitemap");
+              if (t.path === "/robots.txt") bodyOk = data.toLowerCase().includes("user-agent");
+              if (t.path === "/___missing_route_preview_check___")
+                bodyOk = response.headers.get("x-robots-tag")?.includes("noindex") ?? false;
+              const ok = statusOk && typeOk && bodyOk;
+              console.log((ok ? "PASS" : "FAIL") + " " + t.path + " status=" +
+                response.status + " type=" + JSON.stringify(type) +
+                " bodyCheck=" + bodyOk + " location=" + (response.headers.get("location") || "-"));
+              if (!ok) {
+                failures++;
+                console.log("Body preview: " + data.slice(0, 500).replace(/\s+/g, " "));
+              }
+            } catch (err) {
+              failures++;
+              console.log("FAIL " + t.path + " network_error=" + String(err));
+            }
+          }
+          console.log("Preview smoke check: " + (tests.length - failures) + "/" + tests.length + " passed");
+          if (failures) process.exitCode = 1;
+          NODE
