@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { createDataLoader } from "../lib/load-blog-data.mjs";
 
 const load = createDataLoader();
@@ -8,8 +8,12 @@ const { buildShoppingEnquiry: build, parseShoppingNumber: number, ENQUIRY_FIELDS
 const { ARTICLES } = load("blog-articles");
 const article = ARTICLES.find((a) => a.slug === "eu-belarus-shopping-by-car");
 
-test("both complete supplied articles retain all text, five tables and every source URL", () => {
-  const source = readFileSync(new URL("../../../../attached_assets/comfortline-replit-content-ru-en_1793430129314.md", import.meta.url), "utf8");
+const originalSourceFixture = new URL("../../../../attached_assets/comfortline-replit-content-ru-en_1793430129314.md", import.meta.url);
+// The original source attachment lives only in the Replit workspace, not in GitHub.
+// Do not fabricate it; run this content-provenance assertion when the exact fixture is supplied.
+test("both complete supplied articles retain all text, five tables and every source URL",
+  { skip: !existsSync(originalSourceFixture) ? "Original Replit-only content fixture not available in GitHub checkout" : false }, () => {
+  const source = readFileSync(originalSourceFixture, "utf8");
   const ru = source.split("# Russian article — publication content")[1].split("# English article — publication content")[0];
   const en = source.split("# English article — publication content")[1];
   for (const [lang, supplied] of [["ru", ru], ["en", en]]) {
