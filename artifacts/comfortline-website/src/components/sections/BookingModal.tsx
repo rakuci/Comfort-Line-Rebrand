@@ -81,6 +81,11 @@ export function BookingModal({
   const defaultPax: PassengerState = { adults: 1, children: 0, babies: 0, pets: 0, suitcases: 1, vehicleClass: "any" };
 
   const [date, setDate] = useState(prefilledDate);
+  // A booking may be opened from the hero without first selecting a route.
+  // Keep these editable so we never submit an empty origin/destination.
+  const [fromInput, setFromInput] = useState(prefilledFrom);
+  const [toInput, setToInput] = useState(prefilledTo);
+  const [routeError, setRouteError] = useState("");
   const [pax, setPax] = useState<PassengerState>(prefilledPax ?? defaultPax);
   const [paxOpen, setPaxOpen] = useState(false);
 
@@ -110,6 +115,9 @@ export function BookingModal({
       context: routeName ? "route" : planName ? "plan" : "general",
     });
     setDate(prefilledDate);
+    setFromInput(prefilledFrom);
+    setToInput(prefilledTo);
+    setRouteError("");
     setPax(prefilledPax ?? defaultPax);
     setPaxOpen(false);
     setName(""); setEmail(""); setPhone(""); setPhoneError(""); setComment(""); setAgreed(false);
@@ -137,6 +145,12 @@ export function BookingModal({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!agreed) return;
+    const origin = fromInput.trim();
+    const destination = toInput.trim();
+    if (!origin || !destination) {
+      setRouteError(t.lang === "ru" ? "Укажите пункт отправления и назначения" : "Enter both pickup and destination");
+      return;
+    }
     const err = validatePhone(phone);
     if (err) { setPhoneError(err); return; }
     setSubmitting(true);
@@ -145,8 +159,9 @@ export function BookingModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: routeName ?? prefilledFrom,
-          to: planName ?? prefilledTo,
+          from: origin,
+          to: destination,
+          routeName, planName,
           date,
           adults: pax.adults, children: pax.children, babies: pax.babies,
           pets: pax.pets, suitcases: pax.suitcases, vehicleClass: pax.vehicleClass,
@@ -167,10 +182,17 @@ export function BookingModal({
         onClose();
         navigate("/thank-you");
       } else {
-        toast({ title: "Error", description: "Failed to send request. Please try again.", variant: "destructive" });
+        const result = await res.json().catch(() => ({}));
+        const emailIssue = result?.error === "email_not_configured" || result?.error === "email_delivery_failed";
+        const description = emailIssue
+          ? (t.lang === "ru" ? "Не удалось отправить письмо. Попробуйте связаться с нами по телефону." : "Email delivery is unavailable. Please contact us by phone.")
+          : (t.lang === "ru" ? "Не удалось отправить заявку. Проверьте данные и попробуйте ещё раз." : "Could not send booking. Check your details and try again.");
+        toast({ title: t.lang === "ru" ? "Ошибка" : "Error", description, variant: "destructive" });
       }
     } catch {
-      toast({ title: "Error", description: "Failed to send request. Please try again.", variant: "destructive" });
+      toast({ title: t.lang === "ru" ? "Ошибка" : "Error",
+        description: t.lang === "ru" ? "Ошибка сети. Проверьте соединение." : "Network error. Check your connection.",
+        variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
@@ -316,6 +338,24 @@ export function BookingModal({
 
                 {/* Contact form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-base font-bold text-gray-900">{t.lang === "ru" ? "Маршрут" : "Your route"}</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <label className="block">
+                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.from}</span>
+                        <input type="text" name="from" data-testid="booking-modal-from" autoComplete="off"
+                          value={fromInput} onChange={e => { setFromInput(e.target.value); setRouteError(""); }}
+                          required maxLength={200} placeholder={b.from} className={inputCls} />
+                      </label>
+                      <label className="block">
+                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.to}</span>
+                        <input type="text" name="to" data-testid="booking-modal-to" autoComplete="off"
+                          value={toInput} onChange={e => { setToInput(e.target.value); setRouteError(""); }}
+                          required maxLength={200} placeholder={b.to} className={inputCls} />
+                      </label>
+                    </div>
+                    {routeError && <p role="alert" className="text-xs text-red-600">{routeError}</p>}
+                  </div>
                   <div>
                     <h3 className="text-base font-bold text-gray-900 mb-1">{m.contactHeading}</h3>
                     <p className="text-sm text-gray-500">{m.contactSubtext}</p>
