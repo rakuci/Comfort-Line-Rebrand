@@ -4,7 +4,6 @@ import type { LucideIcon } from "lucide-react";
 import { CheckCircle2, PhoneCall, ArrowRight, Car, Info, Clock, ChevronDown, HelpCircle } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { useLang } from "@/context/language-context";
 import { GlobalBookingModal } from "@/components/sections/GlobalBookingModal";
 import { Seo } from "@/seo/Seo";
@@ -76,8 +75,8 @@ export interface RoutePageData {
   ru: RouteContent;
   en: RouteContent;
   seo: RouteSeo;
-  /** Show the regulatory disclaimer banner and an official-sources anchor section */
-  disclaimerBanner?: boolean;
+  /** Display helpful official border and customs sources in the body, without a banner. */
+  showOfficialSources?: boolean;
   relatedRoutes?: { ru: string; en: string; pathRu: string; pathEn: string }[];
 }
 
@@ -191,7 +190,6 @@ export function RouteLandingPage({ data }: Props) {
         ]}
       />
       <Navbar />
-      {data.disclaimerBanner && <DisclaimerBanner />}
       {/* hidden h-tag bait for crawlers — already have h1 below; this just confirms breadcrumb name */}
       <span className="sr-only">{breadcrumbName}</span>
 
@@ -415,8 +413,8 @@ export function RouteLandingPage({ data }: Props) {
           </motion.section>
         )}
 
-        {/* Official sources — only shown when disclaimerBanner is set */}
-        {data.disclaimerBanner && (
+        {/* Helpful sources remain available without the regulatory warning banner. */}
+        {data.showOfficialSources && (
           <motion.section id="official-sources" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl font-bold text-foreground mb-3 scroll-mt-28">
               {isRu ? "Официальные источники" : "Official Sources"}
