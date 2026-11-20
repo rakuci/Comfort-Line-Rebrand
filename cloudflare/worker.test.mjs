@@ -48,6 +48,7 @@ test("booking data is HTML-escaped and sent through Resend", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         from: "Minsk", to: "Warsaw", lang: "en", phone: "+1000000",
+        routeName: "Minsk → Warsaw transfer", planName: "Business van",
         email: "customer@example.com", name: "<script>alert(1)</script>",
       }),
     }), { RESEND_API_KEY: "test-secret" });
@@ -55,6 +56,8 @@ test("booking data is HTML-escaped and sent through Resend", async () => {
     assert.deepEqual(await response.json(), { ok: true });
     assert.equal(sent.to[0], "info@comfortline.by");
     assert.equal(sent.reply_to, "customer@example.com");
+    assert.ok(sent.html.includes("Minsk → Warsaw transfer"));
+    assert.ok(sent.html.includes("Business van"));
     assert.ok(sent.html.includes("&lt;script&gt;"));
     assert.ok(!sent.html.includes("<script>"));
   } finally {
