@@ -15,7 +15,7 @@ const TAP_THRESHOLD = 5;
 const TAP_WINDOW_MS = 3000;
 
 export function Footer() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const f = t.footer;
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -118,6 +118,12 @@ export function Footer() {
               {f.serviceLinks.map((link, i) => (
                 <li key={i}><a href={link.href} className="hover:text-primary transition-colors">{link.label}</a></li>
               ))}
+              <li>
+                <a href={lang === "ru" ? "/трансферы-по-городам-беларуси" : "/belarus-city-transfers"}
+                   className="hover:text-primary transition-colors font-semibold">
+                  {lang === "ru" ? "Города Беларуси ↔ Европа" : "Belarus cities ↔ Europe"}
+                </a>
+              </li>
             </ul>
           </div>
 
