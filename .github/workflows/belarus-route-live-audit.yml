@@ -91,3 +91,60 @@ jobs:
           console.log("Published city route checks failed: " + failures);
           if (failures) process.exitCode = 1;
           NODE
+
+      - name: Verify the warning is absent on every published non-blog URL
+        run: |
+          node --input-type=module <<'NODE'
+          import { collectAllRoutes } from './artifacts/comfortline-website/scripts/route-manifest.mjs';
+          const origin = 'https://comfortline.by';
+          const warning = (html) =>
+            html.includes('data-regulatory-disclaimer="true"') ||
+            html.includes('ComfortLine — частный перевозчик, а не таможенный') ||
+            html.includes('ComfortLine is a private transport company, not a customs');
+          const read = async (path) => {
+            const response = await fetch(origin + encodeURI(path), {
+              signal: AbortSignal.timeout(12000),
+              headers: { 'Cache-Control': 'no-cache' },
+            });
+            const html = await response.text();
+            return { response, html };
+          };
+          // Do not count an older Cloudflare production deployment as the new release.
+          let currentRelease = false;
+          for (let n = 0; n < 20; n++) {
+            try {
+              const { response, html } = await read('/faq');
+              if (response.status === 200 && !warning(html) && html.includes('Частые вопросы')) {
+                currentRelease = true;
+                console.log('Updated FAQ release verified');
+                break;
+              }
+              console.log('Waiting for updated Cloudflare release: attempt ' + (n + 1));
+            } catch (error) {
+              console.log('Retry: ' + String(error));
+            }
+            await new Promise((resolve) => setTimeout(resolve, 8000));
+          }
+          if (!currentRelease) throw new Error('Updated FAQ not yet published on Cloudflare');
+
+          const routes = collectAllRoutes().allRoutes.filter((r) => !r.isArticle);
+          const paths = [...new Set(routes.flatMap((r) => [r.pathRu, r.pathEn]))];
+          const failures = [];
+          let checked = 0;
+          for (let i = 0; i < paths.length; i += 8) {
+            await Promise.all(paths.slice(i, i + 8).map(async (path) => {
+              try {
+                const { response, html } = await read(path);
+                const ok = response.status === 200 && html.includes('<title>') && !warning(html);
+                if (!ok) failures.push(path + ' status=' + response.status + ' banner=' + warning(html));
+                checked++;
+              } catch (error) {
+                failures.push(path + ' ' + String(error));
+              }
+            }));
+          }
+          console.log('Published non-blog pages checked: ' + checked + '/' + paths.length);
+          console.log('Unexpected warning banners: ' + failures.length);
+          failures.slice(0, 20).forEach((failure) => console.error('FAIL ' + failure));
+          if (failures.length) process.exitCode = 1;
+          NODE
