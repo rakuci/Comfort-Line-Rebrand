@@ -1,0 +1,288 @@
+{
+  "copyrightNote": "Each photograph is linked to its original Wikimedia Commons file and its licence; the photographer is credited on the page. Images are externally hosted.",
+  "cities": {
+    "vilnius": {
+      "ru": "Вильнюс",
+      "en": "Vilnius",
+      "ruFrom": "Вильнюса",
+      "ruTo": "Вильнюс",
+      "pickupRu": "Старый город, вокзалы, аэропорт VNO и согласованный адрес",
+      "pickupEn": "Old Town, railway and bus stations, VNO Airport or another agreed address",
+      "landmarkRu": "Ворота Зари (Острая Брама)",
+      "landmarkEn": "Gate of Dawn",
+      "historyRu": "Исторические Ворота Зари — памятник Вильнюса, связанный с культурным наследием Великого княжества Литовского и соседних земель.",
+      "historyEn": "The Gate of Dawn reflects Vilnius's historic ties with the former Grand Duchy of Lithuania and the wider region.",
+      "photo": {
+        "file": "Gate of Dawn Vilnius Lithuania.jpg",
+        "author": "Wikimedia Commons contributor",
+        "license": "CC0 1.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Gate_of_Dawn_Vilnius_Lithuania.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Gate%20of%20Dawn%20Vilnius%20Lithuania.jpg?width=960"
+      }
+    },
+    "grodno": {
+      "ru": "Гродно",
+      "en": "Grodno",
+      "ruFrom": "Гродно",
+      "ruTo": "Гродно",
+      "pickupRu": "исторический центр, вокзал, отели, университеты и адреса в районах города",
+      "pickupEn": "historic centre, railway station, hotels, universities and residential addresses",
+      "landmarkRu": "Старый и Новый замки над Неманом",
+      "landmarkEn": "Old and New Castles above the Neman",
+      "historyRu": "Замки Гродно напоминают о городе правителей Великого княжества Литовского и польско-литовской Речи Посполитой — естественной исторической связи с Вильнюсом.",
+      "historyEn": "Grodno's castles recall the rulers of the Grand Duchy of Lithuania and the Polish-Lithuanian Commonwealth, linking the city historically with Vilnius.",
+      "photo": {
+        "file": "Belarus-Hrodna-New and Old Castles-1.jpg",
+        "author": "Alex Zelenko",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Belarus-Hrodna-New_and_Old_Castles-1.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Belarus-Hrodna-New%20and%20Old%20Castles-1.jpg?width=960"
+      }
+    },
+    "warsaw": {
+      "ru": "Варшава",
+      "en": "Warsaw",
+      "ruFrom": "Варшавы",
+      "ruTo": "Варшаву",
+      "pickupRu": "центр, вокзалы, отели, аэропорты Шопена (WAW) и Модлин (WMI) по отдельному согласованию",
+      "pickupEn": "city centre, railway stations, hotels, Chopin (WAW) and Modlin (WMI) airports by prior arrangement",
+      "landmarkRu": "Королевский замок в Старом городе",
+      "landmarkEn": "Royal Castle in Warsaw Old Town",
+      "historyRu": "Королевский замок — яркий ориентир Варшавы и важное место истории польско-литовской Речи Посполитой.",
+      "historyEn": "Warsaw's Royal Castle is a major landmark associated with the history of the Polish-Lithuanian Commonwealth.",
+      "photo": {
+        "file": "Royal Castle, 2026, Warsaw, Poland.jpg",
+        "author": "Igor123121",
+        "license": "CC BY 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Royal_Castle%2C_2026%2C_Warsaw%2C_Poland.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Royal%20Castle%2C%202026%2C%20Warsaw%2C%20Poland.jpg?width=960"
+      }
+    },
+    "brest": {
+      "ru": "Брест",
+      "en": "Brest",
+      "ruFrom": "Бреста",
+      "ruTo": "Брест",
+      "pickupRu": "Брест-Центральный, улица Советская, гостиницы и адреса в пределах города",
+      "pickupEn": "Brest-Central railway station, Sovetskaya Street, hotels and city addresses",
+      "landmarkRu": "Брест-Центральный — исторический вокзал",
+      "landmarkEn": "Brest-Central historic railway station",
+      "historyRu": "Брестский вокзал подчёркивает значение города как транспортных ворот между Беларусью и Польшей и исторического железнодорожного узла.",
+      "historyEn": "The Brest-Central station reflects the city's longstanding role as a rail gateway between Belarus and Poland.",
+      "photo": {
+        "file": "2021.11.13 Brest Central Railway Station Belarus.jpg",
+        "author": "Tess Mattew",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:2021.11.13_Brest_Central_Railway_Station_Belarus.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2021.11.13%20Brest%20Central%20Railway%20Station%20Belarus.jpg?width=960"
+      }
+    },
+    "riga": {
+      "ru": "Рига",
+      "en": "Riga",
+      "ruFrom": "Риги",
+      "ruTo": "Ригу",
+      "pickupRu": "Старый город, вокзал, автовокзал, аэропорт RIX или частный адрес",
+      "pickupEn": "Old Town, railway and coach stations, RIX Airport or a private address",
+      "landmarkRu": "Дом Черноголовых на Ратушной площади",
+      "landmarkEn": "House of the Blackheads at Town Hall Square",
+      "historyRu": "Дом Черноголовых рассказывает о торговой истории Риги и связях Балтийского региона по Западной Двине.",
+      "historyEn": "The House of the Blackheads evokes Riga's merchant heritage and the broader trade connections of the Daugava basin.",
+      "photo": {
+        "file": "House of the Blackheads in Riga.jpg",
+        "author": "Geogrfr3ak",
+        "license": "CC0 1.0",
+        "source": "https://commons.wikimedia.org/wiki/File:House_of_the_Blackheads_in_Riga.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/House%20of%20the%20Blackheads%20in%20Riga.jpg?width=960"
+      }
+    },
+    "vitebsk": {
+      "ru": "Витебск",
+      "en": "Vitebsk",
+      "ruFrom": "Витебска",
+      "ruTo": "Витебск",
+      "pickupRu": "площадь Свободы, ратуша, вокзал, отели и другие городские адреса",
+      "pickupEn": "Freedom Square, city hall, railway station, hotels and other city addresses",
+      "landmarkRu": "Историческая ратуша Витебска",
+      "landmarkEn": "Historic Vitebsk City Hall",
+      "historyRu": "Витебская ратуша обозначает старый торговый центр города на Западной Двине — реке, соединяющей восток Беларуси с Латвией.",
+      "historyEn": "Vitebsk's historic town hall stands near the Daugava/Western Dvina, a river connecting eastern Belarus with Latvia.",
+      "photo": {
+        "file": "City hall in Vitebsk - 001.jpg",
+        "author": "Mikra72",
+        "license": "CC0 1.0",
+        "source": "https://commons.wikimedia.org/wiki/File:City_hall_in_Vitebsk_-_001.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20hall%20in%20Vitebsk%20-%20001.jpg?width=960"
+      }
+    },
+    "gomel": {
+      "ru": "Гомель",
+      "en": "Gomel",
+      "ruFrom": "Гомеля",
+      "ruTo": "Гомель",
+      "pickupRu": "дворцово-парковый ансамбль, вокзал, отели и районы по указанному адресу",
+      "pickupEn": "Palace and Park Ensemble, railway station, hotels and requested neighbourhoods",
+      "landmarkRu": "Дворец Румянцевых и Паскевичей",
+      "landmarkEn": "Rumyantsev–Paskevich Palace",
+      "historyRu": "Классический дворец на берегу Сожа — узнаваемый ориентир Гомеля, удобный для обозначения центрального района прибытия.",
+      "historyEn": "The classical palace overlooking the Sozh is a recognisable landmark in central Gomel and helps orient arrival arrangements.",
+      "photo": {
+        "file": "Палацава-паркавы ансамбаль - палац.JPG",
+        "author": "Gomel-11",
+        "license": "CC BY-SA 3.0",
+        "source": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D0%BB%D0%B0%D1%86%D0%B0%D0%B2%D0%B0-%D0%BF%D0%B0%D1%80%D0%BA%D0%B0%D0%B2%D1%8B_%D0%B0%D0%BD%D1%81%D0%B0%D0%BC%D0%B1%D0%B0%D0%BB%D1%8C_-_%D0%BF%D0%B0%D0%BB%D0%B0%D1%86.JPG",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%9F%D0%B0%D0%BB%D0%B0%D1%86%D0%B0%D0%B2%D0%B0-%D0%BF%D0%B0%D1%80%D0%BA%D0%B0%D0%B2%D1%8B%20%D0%B0%D0%BD%D1%81%D0%B0%D0%BC%D0%B1%D0%B0%D0%BB%D1%8C%20-%20%D0%BF%D0%B0%D0%BB%D0%B0%D1%86.JPG?width=960"
+      }
+    },
+    "mogilev": {
+      "ru": "Могилёв",
+      "en": "Mogilev",
+      "ruFrom": "Могилёва",
+      "ruTo": "Могилёв",
+      "pickupRu": "городская ратуша, центр, вокзал, гостиницы и частные адреса",
+      "pickupEn": "city hall, central streets, railway station, hotels and private addresses",
+      "landmarkRu": "Могилёвская ратуша",
+      "landmarkEn": "Mogilev City Hall",
+      "historyRu": "Могилёвская ратуша связана с городской традицией Магдебургского права эпохи Речи Посполитой; нынешнее здание восстановлено.",
+      "historyEn": "Mogilev City Hall recalls the city's Magdeburg-rights tradition during the Commonwealth era; today's building is reconstructed.",
+      "photo": {
+        "file": "Town hall, Mogilev, 2025.jpg",
+        "author": "Alena2026",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Town_hall%2C_Mogilev%2C_2025.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Town%20hall%2C%20Mogilev%2C%202025.jpg?width=960"
+      }
+    },
+    "lida": {
+      "ru": "Лида",
+      "en": "Lida",
+      "ruFrom": "Лиды",
+      "ruTo": "Лиду",
+      "pickupRu": "Лидский замок, железнодорожный вокзал, гостиницы и адреса поблизости",
+      "pickupEn": "Lida Castle, railway station, hotels and nearby addresses",
+      "landmarkRu": "Лидский замок эпохи Гедимина",
+      "landmarkEn": "Lida Castle, associated with Gediminas",
+      "historyRu": "Лидский замок XIV века связывает город с историей Великого княжества Литовского и делает маршрут из Вильнюса особенно узнаваемым.",
+      "historyEn": "Lida Castle, dating to the era of Grand Duke Gediminas, visibly connects the city with the history of Lithuania.",
+      "photo": {
+        "file": "LIDA CASTLE - BELARUS.jpg",
+        "author": "Jerrye and Roy Klotz",
+        "license": "CC BY-SA 3.0",
+        "source": "https://commons.wikimedia.org/wiki/File:LIDA_CASTLE_-_BELARUS.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/LIDA%20CASTLE%20-%20BELARUS.jpg?width=960"
+      }
+    },
+    "baranovichi": {
+      "ru": "Барановичи",
+      "en": "Baranovichi",
+      "ruFrom": "Барановичей",
+      "ruTo": "Барановичи",
+      "pickupRu": "станция Барановичи-Центральные, гостиницы и адреса в микрорайонах",
+      "pickupEn": "Baranovichi-Central railway station, hotels and residential neighbourhoods",
+      "landmarkRu": "Вокзал Барановичи-Центральные",
+      "landmarkEn": "Baranovichi-Central railway station",
+      "historyRu": "Железнодорожный узел Барановичей исторически связывал белорусские земли с направлениями на Варшаву и другие города региона.",
+      "historyEn": "Baranovichi's railway junction has long connected Belarusian towns with routes towards Warsaw and other regional centres.",
+      "photo": {
+        "file": "Train Station Baranavichy Central.jpg",
+        "author": "Raviaka Ruslan",
+        "license": "CC BY-SA 4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Train_Station_Baranavichy_Central.jpg",
+        "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Train%20Station%20Baranavichy%20Central.jpg?width=960"
+      }
+    }
+  },
+  "pairs": [
+    {
+      "a": "vilnius",
+      "b": "grodno",
+      "key": "vilnius-grodno",
+      "routeRu": "литовско-белорусское приграничье",
+      "routeEn": "the Lithuania–Belarus border corridor",
+      "reasonRu": "В Гродно удобно запланировать высадку в историческом центре, у замков над Неманом или по адресу родственников. Вильнюс и Гродно связывает история Великого княжества Литовского.",
+      "reasonEn": "In Grodno you can arrange drop-off in the historic centre, near the castles above the Neman or at a family address. Vilnius and Grodno share Grand Duchy of Lithuania heritage.",
+      "travellersRu": "Подходит для семейных визитов, поездок к университетам, в отели и для обратной дороги к аэропорту VNO.",
+      "travellersEn": "Suitable for family visits, university and hotel trips, and a return journey to VNO Airport.",
+      "borderRu": "Пункт пропуска Беларусь–Литва и возможность поездки подтверждаются после проверки актуальных ограничений для пассажиров и автомобиля.",
+      "borderEn": "The Belarus–Lithuania checkpoint and travel eligibility are confirmed after checking current passenger and vehicle restrictions."
+    },
+    {
+      "a": "warsaw",
+      "b": "brest",
+      "key": "warsaw-brest",
+      "routeRu": "направление Польша — Брест",
+      "routeEn": "the Poland–Brest corridor",
+      "reasonRu": "Брест — пограничный железнодорожный город: для встречи можно выбрать Брест-Центральный, центр или конкретный адрес. Историческое здание вокзала отражает связь транспортных путей с Польшей.",
+      "reasonEn": "Brest is a major border-region railway city: arrange pickup near Brest-Central, in the centre or at a specific address. The historic station illustrates its longstanding transport connection with Poland.",
+      "travellersRu": "Удобно для пересадок на поезд, семейных встреч, деловых визитов и пассажиров с несколькими чемоданами.",
+      "travellersEn": "Useful for railway connections, family meetings, business trips and passengers travelling with several suitcases.",
+      "borderRu": "Наличие соответствующего польско-белорусского автомобильного КПП, категории транспорта и документов проверяется до подтверждения заказа.",
+      "borderEn": "Availability of a suitable Poland–Belarus road checkpoint, vehicle category and travel documents is checked before confirmation."
+    },
+    {
+      "a": "riga",
+      "b": "vitebsk",
+      "key": "riga-vitebsk",
+      "routeRu": "направление Латвия — Витебская область",
+      "routeEn": "the Latvia–Vitebsk region corridor",
+      "reasonRu": "Витебск расположен на Западной Двине, которая ниже по течению становится Даугавой и проходит через Ригу. Этот географический контекст объясняет исторические связи городов.",
+      "reasonEn": "Vitebsk stands on the Western Dvina, which flows downstream as the Daugava through Riga. That river geography explains the cities' historic regional connections.",
+      "travellersRu": "Подходит для поездок к родственникам, в деловой центр Витебска и для выезда к аэропорту RIX по согласованному графику.",
+      "travellersEn": "Suitable for family visits, appointments in Vitebsk and planned departures to RIX Airport.",
+      "borderRu": "Доступность КПП Беларусь–Латвия проверяется отдельно; нельзя ориентироваться только на старые карты или типовые сроки поездки.",
+      "borderEn": "Belarus–Latvia checkpoint access must be checked separately; older maps or fixed journey-time estimates are not reliable."
+    },
+    {
+      "a": "warsaw",
+      "b": "gomel",
+      "key": "warsaw-gomel",
+      "routeRu": "дальний маршрут из Польши в юго-восточную Беларусь",
+      "routeEn": "a long-distance trip from Poland to southeastern Belarus",
+      "reasonRu": "Гомель — областной центр на Соже. Для длительного трансфера заранее согласуйте перерывы в пути, багаж и место высадки у вокзала, в центре или в одном из районов города.",
+      "reasonEn": "Gomel is a regional centre on the Sozh River. For this long journey agree on rest stops, luggage and drop-off at the station, in the centre or a residential district in advance.",
+      "travellersRu": "Особенно важны планирование времени на границе, остановки для детей и подтверждение комфортного автомобиля для длинной поездки.",
+      "travellersEn": "Allow time for border formalities, agree on breaks for children and confirm a comfortable vehicle suited to a long trip.",
+      "borderRu": "Маршрут и допустимый вариант пересечения границы подбираются персонально с учётом ограничений для гражданства и регистрации автомобиля.",
+      "borderEn": "The permissible border crossing is assessed case by case according to nationality, vehicle registration and current rules."
+    },
+    {
+      "a": "warsaw",
+      "b": "mogilev",
+      "key": "warsaw-mogilev",
+      "routeRu": "дальний маршрут Польша — Могилёвская область",
+      "routeEn": "the long-distance Poland–Mogilev region corridor",
+      "reasonRu": "Могилёв известен городской ратушей и историей магдебургского самоуправления. Для приезда можно выбрать центр, железнодорожный вокзал или любой согласованный адрес.",
+      "reasonEn": "Mogilev is known for its city hall and Magdeburg-rights urban history. Arrange arrival in the centre, at the railway station or any agreed address.",
+      "travellersRu": "При заказе длительной поездки укажите время обязательного прибытия, потребность в остановках, детских креслах и объём багажа.",
+      "travellersEn": "For a long-distance booking, specify any essential arrival time, rest stops, child seats and luggage requirements.",
+      "borderRu": "Точное время прибытия невозможно гарантировать из-за возможных очередей и формальностей на границе Польши и Беларуси.",
+      "borderEn": "An exact arrival time cannot be guaranteed because border checks and queues may vary."
+    },
+    {
+      "a": "vilnius",
+      "b": "lida",
+      "key": "vilnius-lida",
+      "routeRu": "маршрут между историческими городами Литвы и Беларуси",
+      "routeEn": "a route between historic Lithuanian and Belarusian towns",
+      "reasonRu": "Лидский замок связан с великим князем Гедимином и показывает общность исторического наследия Лиды и Вильнюса. Поездка возможна к замку, вокзалу или частному адресу.",
+      "reasonEn": "Lida Castle is associated with Grand Duke Gediminas and illustrates the shared heritage of Lida and Vilnius. Arrange a journey to the castle area, the station or a private address.",
+      "travellersRu": "Подходит для семейных поездок и поездок с багажом между Вильнюсом, аэропортом VNO и Лидой.",
+      "travellersEn": "Useful for family journeys and trips with luggage between Vilnius, VNO Airport and Lida.",
+      "borderRu": "Проверяем действующие правила на литовско-белорусской границе, доступные КПП и требования к документам.",
+      "borderEn": "Current Lithuania–Belarus border rules, available checkpoints and document requirements must be checked."
+    },
+    {
+      "a": "warsaw",
+      "b": "baranovichi",
+      "key": "warsaw-baranovichi",
+      "routeRu": "Польша — железнодорожный узел Барановичей",
+      "routeEn": "Poland to the Baranovichi railway hub",
+      "reasonRu": "Барановичи-Центральные — узнаваемый ориентир города; исторически через узел проходили сообщения в сторону Польши. При бронировании укажите, нужна ли подача к станции или по адресу.",
+      "reasonEn": "Baranovichi-Central is a recognisable local landmark, historically tied to rail links towards Poland. Specify whether you need station pickup or a door-to-door transfer.",
+      "travellersRu": "Подходит для поездок к родственникам, к железнодорожным соединениям и для междугородних поездок с багажом.",
+      "travellersEn": "Suited to family visits, railway connections and intercity trips with luggage.",
+      "borderRu": "Пограничный переход и время в пути уточняются до поездки; необходимо учесть очереди и действующие ограничения.",
+      "borderEn": "Confirm the crossing and travel plan before departure, allowing for queues and current restrictions."
+    }
+  ]
+}
