@@ -24,6 +24,9 @@ import { LanguageProvider } from "@/context/language-context";
 import { ShoppingEnquiryProvider } from "@/context/shopping-enquiry-context";
 import { SeoRenderContext, type SeoData } from "@/seo/use-seo";
 
+import cityRoutePages from "@/data/belarus-city-route-pages.json";
+import BelarusCityRoutePage from "@/pages/belarus-city-routes";
+import BelarusCityRoutesIndexPage from "@/pages/belarus-city-routes-index";
 import LandingPage from "@/pages/landing";
 import PrivacyPolicyPage from "@/pages/privacy-policy";
 import TermsPage from "@/pages/terms";
@@ -195,6 +198,12 @@ function SsrRouter() {
       <Route path="/minsk-druskininkai-transfer" component={MinskDruskininkaiTransferPage} />
       <Route path="/трансфер-минск-друскининкай" component={MinskDruskininkaiTransferPage} />
 
+      <Route path="/трансферы-по-городам-беларуси" component={BelarusCityRoutesIndexPage} />
+      <Route path="/belarus-city-transfers" component={BelarusCityRoutesIndexPage} />
+      {cityRoutePages.flatMap((route) => [
+        <Route key={route.pathRu} path={route.pathRu} component={BelarusCityRoutePage} />,
+        <Route key={route.pathEn} path={route.pathEn} component={BelarusCityRoutePage} />,
+      ])}
       <Route component={NotFound} />
     </Switch>
   );
