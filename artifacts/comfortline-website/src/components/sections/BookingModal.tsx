@@ -76,6 +76,8 @@ export function BookingModal({
   const m = t.modal;
   const b = t.booking;
   const titleId = useId();
+  const bookingFormId = useId();
+  const citySuggestionsId = useId();
   const dialogRef = useModalFocus(open, onClose);
 
   const defaultPax: PassengerState = { adults: 1, children: 0, babies: 0, pets: 0, suitcases: 1, vehicleClass: "any" };
@@ -274,6 +276,31 @@ export function BookingModal({
                   </div>
                 )}
 
+                {/* Route selection must be available even if the modal opens directly. */}
+                  <div className="space-y-2">
+                    <h3 className="text-base font-bold text-gray-900">{t.lang === "ru" ? "Маршрут" : "Your route"}</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <label className="block">
+                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.from}</span>
+                        <input type="text" name="from" data-testid="booking-modal-from" autoComplete="off"
+                          form={bookingFormId} list={citySuggestionsId}
+                          value={fromInput} onChange={e => { setFromInput(e.target.value); setRouteError(""); }}
+                          required maxLength={200} placeholder={b.from} className={inputCls} />
+                      </label>
+                      <label className="block">
+                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.to}</span>
+                        <input type="text" name="to" data-testid="booking-modal-to" autoComplete="off"
+                          form={bookingFormId} list={citySuggestionsId}
+                          value={toInput} onChange={e => { setToInput(e.target.value); setRouteError(""); }}
+                          required maxLength={200} placeholder={b.to} className={inputCls} />
+                      </label>
+                    </div>
+                    <datalist id={citySuggestionsId}>
+                      {b.popularDests.map(city => <option key={city} value={city} />)}
+                    </datalist>
+                    {routeError && <p role="alert" className="text-xs text-red-600">{routeError}</p>}
+                  </div>
+
                 {/* Date */}
                 <div>
                   <label htmlFor="booking-modal-date" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
@@ -337,25 +364,7 @@ export function BookingModal({
                 </div>
 
                 {/* Contact form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <h3 className="text-base font-bold text-gray-900">{t.lang === "ru" ? "Маршрут" : "Your route"}</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <label className="block">
-                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.from}</span>
-                        <input type="text" name="from" data-testid="booking-modal-from" autoComplete="off"
-                          value={fromInput} onChange={e => { setFromInput(e.target.value); setRouteError(""); }}
-                          required maxLength={200} placeholder={b.from} className={inputCls} />
-                      </label>
-                      <label className="block">
-                        <span className="block text-xs font-semibold text-gray-500 mb-1">{b.to}</span>
-                        <input type="text" name="to" data-testid="booking-modal-to" autoComplete="off"
-                          value={toInput} onChange={e => { setToInput(e.target.value); setRouteError(""); }}
-                          required maxLength={200} placeholder={b.to} className={inputCls} />
-                      </label>
-                    </div>
-                    {routeError && <p role="alert" className="text-xs text-red-600">{routeError}</p>}
-                  </div>
+                <form id={bookingFormId} onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <h3 className="text-base font-bold text-gray-900 mb-1">{m.contactHeading}</h3>
                     <p className="text-sm text-gray-500">{m.contactSubtext}</p>
