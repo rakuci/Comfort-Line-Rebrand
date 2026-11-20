@@ -305,6 +305,12 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
         const page = renderPage(loader.SsrApp, routePath);
         const html = buildHtml(template, route, lang, page, dist);
         if (checkedRoutes.has(route)) validateRenderedRouteDocument(html, route, lang);
+        // This prominent regulatory disclaimer is appropriate only inside
+        // editorial blog articles, never above commercial booking pages.
+        // Verify every actual prerendered URL (including route variants).
+        if (!route.isArticle && html.includes('data-regulatory-disclaimer="true"')) {
+          throw new Error(`[prerender] Blog-only warning banner on commercial page: ${routePath}`);
+        }
         written.push(emit(routePath, html, dist));
       }
     }
@@ -313,6 +319,7 @@ export async function prerender({ dist = DIST, loadSsrModule = createSsrModuleLo
     dom.window.close();
   }
   console.log(`[prerender] offline route regression checks passed for ${checkedRoutes.size * 2} localized pages.`);
+  console.log(`[prerender] blog-only warning verified for ${written.length} localized pages.`);
 
   // Never send a blog summary fallback, stale metadata, or lost translated
   // content on to IndexNow/publishing as though prerendering had succeeded.
