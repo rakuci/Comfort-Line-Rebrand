@@ -154,13 +154,46 @@ export function regenerateSitemap(sitemapXml, articles) {
   return header + keptBlocks.join("\n") + footer;
 }
 
+// Add exactly the route pairs actually registered in the client/SSR route table.
+// Keep older sitemap entries intact; this section is safe to rerun on every build.
+function regenerateCityRouteSitemap(xml, pages) {
+  const pairList = [
+    ...pages.map((page) => [page.pathRu, page.pathEn]),
+    ["/трансферы-по-городам-беларуси", "/belarus-city-transfers"],
+  ];
+  const urls = new Set(pairList.flat().map((p) => SITE_URL + encodeURI(p)));
+  const kept = xml.replace(/  <url>[\s\S]*?<\/url>\s*/g, (block) => {
+    const loc = /<loc>([^<]+)<\/loc>/.exec(block)?.[1];
+    return urls.has(loc) ? "" : block;
+  });
+  const blocks = pairList.flatMap(([pathRu, pathEn]) => {
+    const ru = SITE_URL + encodeURI(pathRu);
+    const en = SITE_URL + encodeURI(pathEn);
+    const entry = (url) =>
+      "  <url>\n" +
+      "    <loc>" + url + "</loc>\n" +
+      "    <lastmod>2026-11-21</lastmod>\n" +
+      "    <changefreq>monthly</changefreq>\n" +
+      "    <priority>0.7</priority>\n" +
+      "    <xhtml:link rel=\"alternate\" hreflang=\"ru\" href=\"" + ru + "\"/>\n" +
+      "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" + en + "\"/>\n" +
+      "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" + ru + "\"/>\n" +
+      "  </url>";
+    return [entry(ru), entry(en)];
+  });
+  if (!kept.includes("</urlset>")) throw new Error("Missing sitemap closing tag");
+  return kept.replace("</urlset>", "\n" + blocks.join("\n") + "\n</urlset>");
+}
+
 function main() {
   const src = fs.readFileSync(ARTICLES_SRC_PATH, "utf8");
   const articles = extractArticles(src);
   if (articles.length === 0) throw new Error("No articles parsed from blog-articles.ts");
 
   const sitemapXml = fs.readFileSync(SITEMAP_PATH, "utf8");
-  const updated = regenerateSitemap(sitemapXml, articles);
+  const blogUpdated = regenerateSitemap(sitemapXml, articles);
+  const cityPages = JSON.parse(fs.readFileSync(path.join(ROOT, "src/data/belarus-city-route-pages.json"), "utf8"));
+  const updated = regenerateCityRouteSitemap(blogUpdated, cityPages);
   fs.writeFileSync(SITEMAP_PATH, updated, "utf8");
 
   process.stdout.write(
