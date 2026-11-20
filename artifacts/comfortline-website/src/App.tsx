@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
+import cityRoutePages from "@/data/belarus-city-route-pages.json";
 
 function useNormalizedLocation(): [string, (to: string) => void] {
   const [loc, navigate] = useBrowserLocation();
@@ -15,6 +16,8 @@ import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/context/language-context";
 import { ShoppingEnquiryProvider } from "@/context/shopping-enquiry-context";
 
+const BelarusCityRoutePage = lazy(() => import("@/pages/belarus-city-routes"));
+const BelarusCityRoutesIndexPage = lazy(() => import("@/pages/belarus-city-routes-index"));
 const LandingPage                  = lazy(() => import("@/pages/landing"));
 const PrivacyPolicyPage            = lazy(() => import("@/pages/privacy-policy"));
 const TermsPage                    = lazy(() => import("@/pages/terms"));
@@ -185,6 +188,12 @@ function Router() {
         <Route path="/minsk-druskininkai-transfer" component={MinskDruskininkaiTransferPage} />
         <Route path="/трансфер-минск-друскининкай" component={MinskDruskininkaiTransferPage} />
 
+        <Route path="/трансферы-по-городам-беларуси" component={BelarusCityRoutesIndexPage} />
+        <Route path="/belarus-city-transfers" component={BelarusCityRoutesIndexPage} />
+        {cityRoutePages.flatMap((route) => [
+          <Route key={route.pathRu} path={route.pathRu} component={BelarusCityRoutePage} />,
+          <Route key={route.pathEn} path={route.pathEn} component={BelarusCityRoutePage} />,
+        ])}
         <Route path="/brandbook" component={BrandbookPage} />
         <Route path="/thank-you" component={ThankYouPage} />
         <Route component={NotFound} />
