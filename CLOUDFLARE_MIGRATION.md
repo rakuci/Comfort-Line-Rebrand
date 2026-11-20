@@ -76,3 +76,10 @@ Workers API enforces basic length and required-field checks and escapes HTML in 
 - This is a parallel Worker implementation of the existing Express endpoints. The legacy Express backend remains unchanged in the Replit project for rollback.
 - Cloudflare's per-isolate in-memory API caches are best-effort and not global. The border-queue service can be unavailable independently of the hosting migration.
 - Worker and build changes on cloudflare-migration do not change the current comfortline.by DNS.
+
+## Verification before Cloudflare staging deploy (2026-11-21)
+
+- GitHub Actions run 44821039432 completed successfully on cloudflare-migration, including Worker API tests and site prerender/SEO checks.
+- The source-text provenance assertion requiring a Replit-only attached_assets Markdown file is conditionally skipped when that original file is absent; other shopping-enquiry checks continue to run.
+- Cloudflare Worker settings show the Git repository connected and production branch cloudflare-migration. This documentation commit also triggers a fresh Git-backed staging build.
+- No DNS cutover is authorized yet. Confirm the staging deployment and functional email delivery before attaching the live domain.
