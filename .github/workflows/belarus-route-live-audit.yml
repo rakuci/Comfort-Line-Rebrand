@@ -1,0 +1,93 @@
+name: Verify published Belarus route pages
+
+on:
+  push:
+    branches: [cloudflare-migration]
+    paths: ['.github/workflows/belarus-route-live-audit.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-new-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Confirm Cloudflare deployment serves the new city pages and sitemap
+        run: |
+          node --input-type=module <<'NODE'
+          const base = "https://comfortline.by";
+          const cases = [
+            ["/vilnius-grodno-transfer", "Vilnius", "Grodno"],
+            ["/grodno-vilnius-transfer", "Grodno", "Vilnius"],
+            ["/warsaw-brest-transfer", "Warsaw", "Brest"],
+            ["/brest-warsaw-transfer", "Brest", "Warsaw"],
+            ["/riga-vitebsk-transfer", "Riga", "Vitebsk"],
+            ["/warsaw-gomel-transfer", "Warsaw", "Gomel"],
+            ["/warsaw-mogilev-transfer", "Warsaw", "Mogilev"],
+            ["/vilnius-lida-transfer", "Vilnius", "Lida"],
+            ["/warsaw-baranovichi-transfer", "Warsaw", "Baranovichi"],
+            ["/belarus-city-transfers", "Belarusian cities", "Europe"],
+          ];
+          const newestRoute = cases[0][0];
+          // The Cloudflare Git build can finish after GitHub Actions begins.
+          // Poll only this new route; never mask a permanent route failure.
+          let published = false;
+          for (let attempt = 0; attempt < 30; attempt++) {
+            try {
+              const r = await fetch(base + newestRoute, { signal: AbortSignal.timeout(12000), redirect: 'manual' });
+              const body = await r.text();
+              if (r.status === 200 && body.includes("Vilnius") && body.includes("Grodno")) {
+                published = true;
+                console.log("New Cloudflare release detected at attempt " + (attempt + 1));
+                break;
+              }
+              console.log("Waiting for new Cloudflare release, attempt " + (attempt + 1) + ", status " + r.status);
+            } catch (err) {
+              console.log("Retrying pending deployment: " + String(err));
+            }
+            await new Promise((resolve) => setTimeout(resolve, 9000));
+          }
+          if (!published) throw new Error("New city route is not published on " + base);
+
+          let failures = 0;
+          for (const [path, origin, destination] of cases) {
+            try {
+              const r = await fetch(base + path, { signal: AbortSignal.timeout(12000), redirect: 'manual' });
+              const body = await r.text();
+              const canonical = '<link rel="canonical" href="' + base + path + '"';
+              const ok = r.status === 200 &&
+                body.includes(origin) && body.includes(destination) &&
+                body.includes(canonical) && body.includes("commons.wikimedia.org") &&
+                body.includes("hreflang=");
+              console.log((ok ? "PASS" : "FAIL") + " " + path + " status=" + r.status +
+                " title=" + (/\<title\>(.*?)\<\/title\>/s.exec(body)?.[1] || "?"));
+              if (!ok) failures++;
+            } catch (err) {
+              console.log("FAIL " + path + " " + String(err));
+              failures++;
+            }
+          }
+          const sitemap = await fetch(base + "/sitemap.xml", { signal: AbortSignal.timeout(15000) });
+          const xml = await sitemap.text();
+          const paths = cases.map(([p]) => p);
+          for (const path of paths) {
+            const ok = sitemap.ok && xml.includes(base + path);
+            console.log((ok ? "PASS" : "FAIL") + " sitemap " + path);
+            if (!ok) failures++;
+          }
+          const ruPath = "/трансфер-вильнюс-гродно";
+          const russian = await fetch(base + ruPath, { signal: AbortSignal.timeout(12000) });
+          const ruBody = await russian.text();
+          const ruOk = russian.status === 200 && ruBody.includes("Трансфер Вильнюс — Гродно") &&
+            ruBody.includes('hreflang="en"');
+          console.log((ruOk ? "PASS" : "FAIL") + " Russian page " + ruPath);
+          if (!ruOk) failures++;
+          console.log("Published city route checks failed: " + failures);
+          if (failures) process.exitCode = 1;
+          NODE
