@@ -1,0 +1,52 @@
+name: Verify city landmark photographs
+
+on:
+  push:
+    branches: [cloudflare-migration]
+    paths:
+      - 'artifacts/comfortline-website/src/data/belarus-city-route-catalog.json'
+      - '.github/workflows/city-landmark-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-commons-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check Wikimedia photo URLs and attribution fields
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const data = JSON.parse(fs.readFileSync('artifacts/comfortline-website/src/data/belarus-city-route-catalog.json', 'utf8'));
+          let errors = 0;
+          for (const [city, details] of Object.entries(data.cities)) {
+            const p = details.photo;
+            const metaOk = p.author && p.license && p.source.startsWith('https://commons.wikimedia.org/wiki/File:');
+            try {
+              const response = await fetch(p.src, {
+                method: 'GET',
+                redirect: 'follow',
+                headers: { 'User-Agent': 'ComfortlineImageAudit/1.0 (info@comfortline.by)' },
+                signal: AbortSignal.timeout(15000),
+              });
+              const type = response.headers.get('content-type') || '';
+              const ok = !!metaOk && response.ok && type.startsWith('image/');
+              const buf = await response.arrayBuffer();
+              console.log((ok ? 'PASS' : 'FAIL') + ' ' + city + ' status=' + response.status +
+                ' contentType=' + type + ' bytes=' + buf.byteLength + ' URL=' + response.url);
+              if (!ok || buf.byteLength < 1000) errors++;
+            } catch (err) {
+              errors++;
+              console.log('FAIL ' + city + ' ' + String(err));
+            }
+          }
+          console.log('Photo check failures: ' + errors);
+          if (errors) process.exitCode = 1;
+          NODE
