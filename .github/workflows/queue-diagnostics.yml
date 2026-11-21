@@ -1,0 +1,50 @@
+name: Diagnose border queue upstream (read-only)
+on:
+  push:
+    branches: [cloudflare-migration]
+    paths:
+      - '.github/workflows/queue-diagnostics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Probe public upstream and existing Worker only
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const probes = [
+            ['comfortline live', 'https://comfortline.by/api/border-queue'],
+            ['comfortline force', 'https://comfortline.by/api/border-queue?force=true'],
+            ['jina old hash', 'https://r.jina.ai/https://mon.declarant.by/%23/zone'],
+            ['jina direct zone', 'https://r.jina.ai/https://mon.declarant.by/zone'],
+            ['official zone', 'https://mon.declarant.by/zone'],
+            ['official SPA route', 'https://mon.declarant.by/#/zone'],
+            ['official monitor root', 'https://mon.declarant.by/'],
+          ];
+          await Promise.all(probes.map(async ([name, url])=>{
+            const begin=Date.now();
+            try {
+              const res=await fetch(url,{signal:AbortSignal.timeout(18000),
+                headers:{'User-Agent':'ComfortLineQueueDiagnostics/1.0','Accept':'text/html,application/json,text/plain,*/*'},
+                redirect:'follow'});
+              const raw=await res.text();
+              const body=raw.slice(0,1200).replace(/[^\x20-\x7E\u0400-\u052F]/g,' ');
+              const info={probe:name,status:res.status,ms:Date.now()-begin,bytes:raw.length,
+                type:res.headers.get('content-type'),url:res.url,
+                hasRows:/tbody|Брест|Каменный Лог|Бенякони/.test(raw),
+                hasQueueHeader:/Название.*Легк|По состоянию на/.test(raw),
+                sample:body.slice(0,name.includes('live')||name.includes('force')?600:300)};
+              if(name==='official zone'||name==='official monitor root'){
+                info.scripts=[...raw.matchAll(/<script[^>]*src=["']([^"']+)["']/g)].slice(0,15).map(x=>x[1]);
+              }
+              console.log(JSON.stringify(info));
+            }catch(e){console.log(JSON.stringify({probe:name,error:String(e),ms:Date.now()-begin}))}
+          }));
+          NODE
