@@ -60,7 +60,8 @@ jobs:
           const js=await response.text();
           console.log(JSON.stringify({bundle:script,http:response.status,size:js.length}));
           const unique = new Set();
-          for(const match of js.matchAll(/.{0,95}(?:monitoring|statistics|countCar|countTruck|api\\/|\\/zone|api\\.declarant|btslogistic).{0,105}/gi)){
+          const re=new RegExp('.{0,95}(?:monitoring|statistics|countCar|countTruck|zone|declarant|api).{0,105}','gi');
+          for(const match of js.matchAll(re)){
             let cleaned=match[0].slice(0,210);
             if(!unique.has(cleaned)){unique.add(cleaned);if(unique.size<=70)console.log("BUNDLE "+cleaned);}
           }
