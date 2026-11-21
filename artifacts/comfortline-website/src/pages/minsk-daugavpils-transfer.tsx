@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Даугавпилс | Латвия | ComfortLine",
     titleEn: "Minsk to Daugavpils Transfer | Latvia | ComfortLine",
-    descRu: "Индивидуальный трансфер Минск — Даугавпилс. Маршрут и время уточняем по действующему КПП. Подача по адресу, цена по запросу.",
-    descEn: "Private Minsk–Daugavpils transfer. Checkpoint and travel time confirmed before departure. Door-to-door pickup, comfortable car, quote on request.",
+    descRu: "Индивидуальный трансфер Минск — Даугавпилс. Поездка между городами от 819,53 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Private Minsk–Daugavpils transfer. City-to-city fares from 819.53 BYN per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-даугавпилс",
     pathEn: "/minsk-daugavpils-transfer",
     breadcrumbRu: "Трансфер Минск–Даугавпилс",

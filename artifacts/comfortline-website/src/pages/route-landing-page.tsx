@@ -1,3 +1,4 @@
+import { routeFares, fareClasses } from "@/data/route-fares";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -133,6 +134,8 @@ export function RouteLandingPage({ data }: Props) {
   const c = data[lang];
   const relatedRoutes = data.relatedRoutes || RELATED_ROUTES[data.seo.pathRu] || [];
   const isRu = lang === "ru";
+  const fares = routeFares[data.seo.pathEn];
+  const format = (value: number) => value.toLocaleString(isRu ? "ru-BY" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const seoTitle = isRu ? data.seo.titleRu : data.seo.titleEn;
   const seoDesc = isRu ? data.seo.descRu : data.seo.descEn;
   const seoPath = isRu ? data.seo.pathRu : data.seo.pathEn;
@@ -141,27 +144,27 @@ export function RouteLandingPage({ data }: Props) {
     : (data.seo.breadcrumbEn || data.en.title);
   const serviceJsonLd = taxiServiceJsonLd({
     lang,
-    name: seoTitle.replace(" | ComfortLine", ""),
+    name: fares ? `${c.prefilledFrom} → ${c.prefilledTo}` : seoTitle.replace(" | ComfortLine", ""),
     description: seoDesc,
     url: SITE_URL + seoPath,
     fromName: data.seo.fromName || (isRu ? "Минск" : "Minsk"),
     toName: data.seo.toName || c.title,
-    priceFrom: data.seo.priceFrom,
-    priceCurrency: data.seo.priceCurrency,
+    priceFrom: fares?.outbound[0] ?? data.seo.priceFrom,
+    priceCurrency: fares ? "BYN" : data.seo.priceCurrency,
   });
   const allJsonLd: object[] = [serviceJsonLd];
-  if (data.seo.reverseFromName && data.seo.reverseToName) {
+  if (fares || (data.seo.reverseFromName && data.seo.reverseToName)) {
     allJsonLd.push(taxiServiceJsonLd({
       lang,
       name: isRu
-        ? `Трансфер ${data.seo.reverseFromName} — ${data.seo.reverseToName}`
-        : `${data.seo.reverseFromName} to ${data.seo.reverseToName} transfer`,
+        ? `Трансфер ${c.prefilledTo} — ${c.prefilledFrom}`
+        : `${c.prefilledTo} to ${c.prefilledFrom} transfer`,
       description: seoDesc,
       url: SITE_URL + seoPath,
-      fromName: data.seo.reverseFromName,
-      toName: data.seo.reverseToName,
-      priceFrom: data.seo.priceFrom,
-      priceCurrency: data.seo.priceCurrency,
+      fromName: data.seo.reverseFromName || c.prefilledTo,
+      toName: data.seo.reverseToName || c.prefilledFrom,
+      priceFrom: fares?.inbound[0] ?? data.seo.priceFrom,
+      priceCurrency: fares ? "BYN" : data.seo.priceCurrency,
     }));
   }
   if (c.faq && c.faq.length > 0) {
@@ -213,6 +216,33 @@ export function RouteLandingPage({ data }: Props) {
               </div>
             ))}
           </div>
+          {fares && (
+            <section className="mt-8 max-w-2xl">
+              <h2 className="text-xl font-semibold">{isRu ? "Стоимость поездки" : "Transfer fares"}</h2>
+              <table className="my-4 w-full text-left text-sm">
+                <caption className="pb-3 text-left text-muted-foreground">
+                  {isRu ? "Начальные цены в BYN за автомобиль в одну сторону" : "Starting fares in BYN per vehicle, one way"}
+                </caption>
+                <thead><tr>
+                  <th scope="col">{isRu ? "Класс" : "Vehicle class"}</th>
+                  <th scope="col">{c.prefilledFrom} → {c.prefilledTo}</th>
+                  <th scope="col">{c.prefilledTo} → {c.prefilledFrom}</th>
+                </tr></thead>
+                <tbody>{fareClasses[lang].map((label, i) => (
+                  <tr key={label} className="border-b border-border">
+                    <th scope="row" className="py-2 font-normal">{label}</th>
+                    {[fares.outbound, fares.inbound].map((direction, j) => (
+                      <td key={j} className="px-1 tabular-nums">{direction[i] !== undefined
+                        ? format(direction[i]) : (isRu ? "По запросу" : "On request")}</td>
+                    ))}
+                  </tr>
+                ))}</tbody>
+              </table>
+              <p className="text-sm text-muted-foreground">{isRu
+                ? "Все расчёты производятся только в белорусских рублях (BYN). Стоимость зависит от даты и времени, адресов, класса автомобиля, числа пассажиров, багажа и дополнительных остановок. Отправьте заявку — водитель согласует с вами окончательную сумму в BYN до выезда."
+                : "All payments are made in Belarusian rubles (BYN) only. The fare depends on the date and time, addresses, vehicle class, passengers, luggage and extra stops. Send a request and your driver will confirm the final amount in BYN with you before departure."}</p>
+            </section>
+          )}
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {

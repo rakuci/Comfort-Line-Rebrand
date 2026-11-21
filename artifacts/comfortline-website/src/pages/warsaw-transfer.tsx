@@ -28,7 +28,7 @@ const data: RoutePageData = {
       },
       {
         label: "Стоимость",
-        value: "По запросу",
+        value: "За автомобиль",
       },
     ],
 
@@ -74,33 +74,9 @@ const data: RoutePageData = {
       },
     ],
 
-     infoTitle: "Цены на такси Минск — Варшава по запросу",
+     infoTitle: "Условия поездки Минск — Варшава",
 
     infoRows: [
-      {
-        label: "Легковой Эконом",
-        value: "· до 3 пассажиров · до 2 чемоданов",
-      },
-      {
-        label: "Легковой Комфорт",
-        value: "· до 3 пассажиров · до 2 чемоданов",
-      },
-      {
-        label: "Легковой Бизнес",
-        value: "· до 3 пассажиров · до 2 чемоданов",
-      },
-      {
-        label: "Легковой VIP",
-        value: "· до 3 пассажиров · до 2 чемоданов",
-      },
-      {
-        label: "Минивэн Комфорт",
-        value: "· до 8 пассажиров · до 4 чемоданов",
-      },
-      {
-        label: "Минивэн Бизнес",
-        value: "· до 7 пассажиров · до 4 чемоданов",
-      },
       {
         label: "Цена и валюта расчёта",
         value:
@@ -256,7 +232,7 @@ const data: RoutePageData = {
       },
       {
         label: "Price",
-        value: "On request",
+        value: "Per vehicle",
       },
     ],
 
@@ -300,33 +276,9 @@ const data: RoutePageData = {
       },
     ],
 
-    infoTitle: "Private taxi prices from Minsk to Warsaw on request",
+    infoTitle: "Minsk to Warsaw booking details",
 
     infoRows: [
-      {
-        label: "Economy Sedan",
-        value: "Price on request · up to 3 passengers · 2 suitcases",
-      },
-      {
-        label: "Comfort Sedan",
-        value: "Price on request · up to 3 passengers · 2 suitcases",
-      },
-      {
-        label: "Business Sedan",
-        value: "Price on request · up to 3 passengers · 2 suitcases",
-      },
-      {
-        label: "VIP Sedan",
-        value: "Price on request · up to 3 passengers · 2 suitcases",
-      },
-      {
-        label: "Comfort Minivan",
-        value: "Price on request · up to 8 passengers · 4 suitcases",
-      },
-      {
-        label: "Business Minivan",
-        value: "Price on request · up to 7 passengers · 4 suitcases",
-      },
       {
         label: "Price and settlement currency",
         value:
@@ -459,10 +411,10 @@ const data: RoutePageData = {
        "Warsaw to Minsk & Return Transfer | ComfortLine",
 
     descRu:
-       "Трансфер Варшава — Минск и Минск — Варшава. Подача в центре, районах Śródmieście, Mokotów, Wola или у вокзалов. Цена по запросу.",
+       "Трансфер Варшава — Минск и Минск — Варшава. Поездка между городами от 1313,23 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
 
     descEn:
-       "Private Warsaw to Minsk and Minsk to Warsaw transfer. Pickup in central Warsaw, Śródmieście, Mokotów, Wola or at main stations. Door-to-door service.",
+       "Private Warsaw to Minsk and Minsk to Warsaw transfer. City-to-city fares from 1313.23 BYN per vehicle. Your driver confirms the final fare.",
 
     pathRu: "/трансфер-варшава",
     pathEn: "/warsaw-transfer",

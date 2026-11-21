@@ -48,7 +48,7 @@ Email: info@comfortline.by
     },
     {
       heading: "4. Стоимость и порядок оплаты",
-      body: `4.1. Стоимость услуги определяется индивидуально и согласовывается при заказе.
+      body: `4.1. Цены указаны в белорусских рублях (BYN). Все расчёты производятся только в BYN. По заявке клиента водитель согласует окончательную стоимость до выезда.
 
 4.2. Оплата может осуществляться:
 • наличными
@@ -145,7 +145,7 @@ The customer must provide accurate information:
     },
     {
       heading: "4. Payment",
-      body: `The price is agreed individually for each booking.
+      body: `Prices are quoted in Belarusian rubles (BYN). All payments are made in BYN only. Upon request, the driver confirms the final fare with the customer before departure.
 
 Payment options:
 • Cash

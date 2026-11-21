@@ -162,7 +162,7 @@ function regenerateCityRouteSitemap(xml, pages) {
     ["/трансферы-по-городам-беларуси", "/belarus-city-transfers"],
   ];
   const urls = new Set(pairList.flat().map((p) => SITE_URL + encodeURI(p)));
-  const kept = xml.replace(/  <url>[\s\S]*?<\/url>\s*/g, (block) => {
+  const kept = xml.replace(/<url>[\s\S]*?<\/url>/g, (block) => {
     const loc = /<loc>([^<]+)<\/loc>/.exec(block)?.[1];
     return urls.has(loc) ? "" : block;
   });
@@ -182,7 +182,7 @@ function regenerateCityRouteSitemap(xml, pages) {
     return [entry(ru), entry(en)];
   });
   if (!kept.includes("</urlset>")) throw new Error("Missing sitemap closing tag");
-  return kept.replace("</urlset>", "\n" + blocks.join("\n") + "\n</urlset>");
+  return kept.replace(/\s*<\/urlset>/, "\n" + blocks.join("\n") + "\n</urlset>");
 }
 
 function main() {

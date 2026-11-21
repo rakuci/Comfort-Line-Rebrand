@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Краков | Королевская столица Польши",
     titleEn: "Minsk to Kraków Transfer | Poland's Royal Capital",
-    descRu: "Прямой трансфер из Минска в Краков. ~750 км, 8–11 ч. Вавельский замок, Главная площадь, Величка. КПП выбираем по текущему режиму работы; стоимость по запросу.",
-    descEn: "Private Minsk–Kraków transfer to your address or KRK airport. Border checkpoint confirmed before travel. Comfortable car, fare on request.",
+    descRu: "Прямой трансфер из Минска в Краков. Из Минска от 2300,62 BYN, из Кракова от 1971,49 BYN за автомобиль.",
+    descEn: "Private Minsk–Kraków transfer to your address or KRK airport. From Minsk, fares start at 2300.62 BYN per car. From Kraków, fares start at 1971.49 BYN.",
     pathRu: "/трансфер-минск-краков",
     pathEn: "/minsk-krakow-transfer",
     breadcrumbRu: "Трансфер Минск–Краков",

@@ -155,8 +155,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Рига — Минск и обратно 24/7 | ComfortLine",
     titleEn: "Private Riga to Minsk & Return Transfer | ComfortLine",
-    descRu: "Трансфер Рига — Минск и Минск — Рига от двери до двери. Подача в центре, Старом городе, у вокзала, RIX или в Юрмале. Цена фиксируется заранее. Доступно 24/7.",
-    descEn: "Private Riga to Minsk and Minsk to Riga transfer. Pickup in central Riga, Old Town, at the stations, RIX Airport or Jūrmala. Door-to-door service. Book 24/7.",
+    descRu: "Трансфер Рига — Минск и Минск — Рига от двери до двери. Поездка между городами от 1148,66 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Private Riga to Minsk and Minsk to Riga transfer. City-to-city fares from 1148.66 BYN per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-рига",
     pathEn: "/riga-transfer",
     breadcrumbRu: "Трансфер в Ригу",
@@ -165,7 +165,6 @@ const data: RoutePageData = {
     toName: "Рига",
     reverseFromName: "Рига",
     reverseToName: "Минск",
-    priceCurrency: "EUR",
     keywordsRu: "трансфер минск рига, такси минск рига, трансфер рига минск, такси рига минск, индивидуальный трансфер рига минск, заказать трансфер из риги в минск, трансфер рига минск аэропорт RIX",
     keywordsEn: "minsk riga transfer, minsk to riga taxi, riga minsk transfer, riga to minsk transfer, riga to minsk taxi, private transfer riga minsk, rix airport to minsk transfer",
   },

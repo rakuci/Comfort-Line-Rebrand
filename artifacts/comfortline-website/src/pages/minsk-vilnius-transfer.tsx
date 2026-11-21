@@ -340,10 +340,10 @@ const data: RoutePageData = {
       "Private Vilnius to Minsk & Return Transfer | ComfortLine",
 
     descRu:
-      "Трансфер Вильнюс — Минск и Минск — Вильнюс от двери до двери. Подача в центре, Старом городе, у вокзала или VNO. Цена фиксируется заранее. Комфортные авто.",
+      "Трансфер Вильнюс — Минск и Минск — Вильнюс от двери до двери. Поездка между городами от 819,53 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
 
     descEn:
-      "Private Vilnius to Minsk and Minsk to Vilnius transfer. Pickup in central Vilnius, Old Town, at the stations or VNO Airport. Door-to-door, fixed quote.",
+      "Private Vilnius to Minsk and Minsk to Vilnius transfer. City-to-city fares from 819.53 BYN per vehicle. Your driver confirms the final fare.",
 
     pathRu: "/трансфер-минск-вильнюс",
     pathEn: "/minsk-vilnius-transfer",
@@ -356,7 +356,6 @@ const data: RoutePageData = {
     reverseFromName: "Вильнюс",
     reverseToName: "Минск",
 
-    priceCurrency: "EUR",
 
     keywordsRu:
       "трансфер минск вильнюс, такси минск вильнюс, трансфер вильнюс минск, такси вильнюс минск, индивидуальный трансфер вильнюс минск, заказать трансфер из вильнюса в минск, минск вильнюс трансфер цена",

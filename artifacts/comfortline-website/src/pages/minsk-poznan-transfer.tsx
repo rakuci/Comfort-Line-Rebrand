@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Познань | Старейший город Польши",
     titleEn: "Minsk to Poznań Transfer | Poland's Ancient Capital",
-    descRu: "Прямой трансфер из Минска в Познань. ~700 км, 7–10 ч. Старый рынок, Ратуша с козлами, Тумский собор. Граница Беларусь–Польша, фиксированная цена.",
-    descEn: "Direct transfer from Minsk to Poznań. ~700 km, 7–10 hrs. Old Market Square, Town Hall billy goats, Cathedral Island. Belarus–Poland border crossing, fixed.",
+    descRu: "Прямой трансфер из Минска в Познань. Поездка между городами от 2136,05 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Poznań. City-to-city fares from 2136.05 BYN per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-познань",
     pathEn: "/minsk-poznan-transfer",
     breadcrumbRu: "Трансфер Минск–Познань",

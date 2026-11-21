@@ -117,24 +117,17 @@ export interface ServiceJsonLdInput {
 }
 
 export function taxiServiceJsonLd(s: ServiceJsonLdInput) {
-  const currency = s.priceCurrency || "EUR";
-  const offer: Record<string, unknown> = {
+  const offer = typeof s.priceFrom === "number" ? {
     "@type": "Offer",
     url: s.url,
-    availability: "https://schema.org/InStock",
-    priceCurrency: currency,
     seller: { "@id": `${SITE_URL}#business` },
-  };
-  if (typeof s.priceFrom === "number") {
-    offer.price = s.priceFrom;
-    offer.priceSpecification = {
+    priceSpecification: {
       "@type": "PriceSpecification",
-      price: s.priceFrom,
-      priceCurrency: currency,
-      valueAddedTaxIncluded: true,
-      description: s.lang === "ru" ? "Цена от, фиксированная" : "From, fixed price",
-    };
-  }
+      minPrice: s.priceFrom,
+      priceCurrency: s.priceCurrency || "BYN",
+      description: s.lang === "ru" ? "Начальная цена за автомобиль в одну сторону" : "Starting fare per vehicle, one way",
+    },
+  } : undefined;
   return {
     "@context": "https://schema.org",
     "@type": "Service",

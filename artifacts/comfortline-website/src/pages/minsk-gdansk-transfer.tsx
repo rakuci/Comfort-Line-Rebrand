@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Гданьск | Польское побережье Балтики",
     titleEn: "Minsk to Gdańsk Transfer | Polish Baltic Coast | ComfortLine",
-    descRu: "Прямой трансфер из Минска в Гданьск. ~750 км, 8–11 ч. Длинный рынок, кран Журав, Сопот. Граница Беларусь–Польша, фиксированная цена.",
-    descEn: "Direct transfer from Minsk to Gdańsk. ~750 km, 8–11 hrs. Long Market, Żuraw crane, Sopot. Belarus–Poland border crossing, fixed price.",
+    descRu: "Прямой трансфер из Минска в Гданьск. Поездка между городами от 1971,49 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Gdańsk. City-to-city fares from 1971.49 BYN per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-гданьск",
     pathEn: "/minsk-gdansk-transfer",
     breadcrumbRu: "Трансфер Минск–Гданьск",

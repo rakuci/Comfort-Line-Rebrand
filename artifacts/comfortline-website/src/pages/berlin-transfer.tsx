@@ -116,8 +116,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Берлин | Прямая поездка в Германию",
     titleEn: "Minsk to Berlin Transfer | Direct Ride to Germany",
-    descRu: "Трансфер из Минска в Берлин — столицу Германии. ~1150 км, 14–16 ч через Варшаву или Познань.",
-    descEn: "Transfer from Minsk to Berlin, Germany. ~1,150 km, 14–16 hrs via Warsaw or Poznan. Fixed price, professional driver, two border crossings (BY–PL & PL–DE).",
+    descRu: "Трансфер из Минска в Берлин — столицу Германии. Поездка между городами от 2958,88 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Transfer from Minsk to Berlin, Germany. City-to-city fares from 2958.88 BYN per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-берлин",
     pathEn: "/berlin-transfer",
     breadcrumbRu: "Трансфер в Берлин",
