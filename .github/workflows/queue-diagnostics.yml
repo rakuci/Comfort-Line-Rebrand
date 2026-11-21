@@ -40,11 +40,28 @@ jobs:
                 type:res.headers.get('content-type'),url:res.url,
                 hasRows:/tbody|Брест|Каменный Лог|Бенякони/.test(raw),
                 hasQueueHeader:/Название.*Легк|По состоянию на/.test(raw),
-                sample:body.slice(0,name.includes('live')||name.includes('force')?600:300)};
+                sample:body.slice(0,name==='jina old hash'?1800:(name.includes('live')||name.includes('force')?600:300))};
               if(name==='official zone'||name==='official monitor root'){
                 info.scripts=[...raw.matchAll(/<script[^>]*src=["']([^"']+)["']/g)].slice(0,15).map(x=>x[1]);
               }
               console.log(JSON.stringify(info));
             }catch(e){console.log(JSON.stringify({probe:name,error:String(e),ms:Date.now()-begin}))}
           }));
+          NODE
+      - name: Inspect public Angular bundle for monitor aggregate endpoint paths
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base = 'https://mon.declarant.by/';
+          const html = await (await fetch(base, {signal:AbortSignal.timeout(15000)})).text();
+          const script = [...html.matchAll(/<script[^>]*src=["']([^"']*main\\.[^"']+\\.js)["']/g)][0]?.[1];
+          if(!script){ console.log("main JS not found"); process.exit(0); }
+          const response = await fetch(new URL(script,base), {signal:AbortSignal.timeout(20000)});
+          const js=await response.text();
+          console.log(JSON.stringify({bundle:script,http:response.status,size:js.length}));
+          const unique = new Set();
+          for(const match of js.matchAll(/.{0,95}(?:monitoring|statistics|countCar|countTruck|api\\/|\\/zone|api\\.declarant|btslogistic).{0,105}/gi)){
+            let cleaned=match[0].slice(0,210);
+            if(!unique.has(cleaned)){unique.add(cleaned);if(unique.size<=70)console.log("BUNDLE "+cleaned);}
+          }
           NODE
