@@ -73,3 +73,23 @@ jobs:
             }
           }
           NODE
+      - name: Inspect official public checkpoint summary only
+        run: |
+          node --input-type=module <<'NODE'
+          const u = 'https://belarusborder.by/info/checkpoint?token=bts47d5f-6420-4f74-8f78-42e8e4370cc4';
+          try {
+            const r=await fetch(u,{signal:AbortSignal.timeout(16000)});
+            const txt=await r.text();
+            let info={status:r.status,contentType:r.headers.get('content-type'),bytes:txt.length};
+            try {
+              const obj=JSON.parse(txt);
+              info.topKeys=Object.keys(obj);
+              const result=Array.isArray(obj.result)?obj.result:Array.isArray(obj)?obj:[];
+              info.rowCount=result.length;
+              info.firstThree=result.slice(0,3).map(o=>Object.fromEntries(Object.entries(o).filter(([k,v])=>/name|count|car|truck|bus|moto|priority|time|date|update|status/i.test(k)&&
+                (typeof v==='number'||typeof v==='string'&&v.length<80))));
+              info.firstRowKeys=result[0]?Object.keys(result[0]):[];
+            }catch(e){ info.preview=txt.slice(0,350); }
+            console.log('OFFICIAL '+JSON.stringify(info));
+          } catch(e) {console.log('OFFICIAL '+String(e)); process.exitCode=1;}
+          NODE
