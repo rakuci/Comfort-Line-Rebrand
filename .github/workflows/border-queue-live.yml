@@ -1,0 +1,56 @@
+name: Verify Cloudflare border queue live data
+on:
+  push:
+    branches: [cloudflare-migration]
+    paths:
+      - 'cloudflare/worker.mjs'
+      - 'cloudflare/worker.test.mjs'
+      - 'artifacts/comfortline-website/src/components/sections/BorderQueueWidget.tsx'
+      - '.github/workflows/border-queue-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  border-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify official public endpoint and live Cloudflare aggregate response
+        run: |
+          node --input-type=module <<'NODE'
+          const origin='https://comfortline.by/api/border-queue';
+          const upstream='https://belarusborder.by/info/checkpoint?token=bts47d5f-6420-4f74-8f78-42e8e4370cc4';
+          const read=async url=>{
+            const res=await fetch(url,{signal:AbortSignal.timeout(15000),
+              headers:{'Accept':'application/json','Cache-Control':'no-cache'}});
+            const body=await res.json().catch(()=>null);
+            return {status:res.status,body};
+          };
+          const official=await read(upstream);
+          const officialRows=official.body?.result;
+          if(official.status!==200 || !Array.isArray(officialRows) || officialRows.length<2)
+            throw new Error('Official checkpoint public summary is unavailable');
+          console.log('Official aggregate checkpoints: '+officialRows.length);
+          let ok=false;
+          for(let n=0;n<24;n++){
+            try {
+              const result=await read(origin+'?force=true');
+              const list=result.body?.checkpoints;
+              const valid=result.status===200 && !result.body?.error &&
+                Array.isArray(list) && list.length>=2 &&
+                list.every(c=>typeof c.name==='string' && c.name.length>0 &&
+                  Number.isSafeInteger(c.total) && c.total>=0 &&
+                  Number.isSafeInteger(c.cars) && Number.isSafeInteger(c.trucks));
+              if(valid) {
+                const count=list.reduce((sum,c)=>sum+c.total,0);
+                console.log('PASS live Cloudflare queue: '+list.length+' checkpoints, '+count+
+                  ' vehicles, fetchedAt='+result.body.fetchedAt+', stale='+result.body.stale);
+                ok=true;break;
+              }
+              console.log('Retry '+(n+1)+' status='+result.status+
+                ' rows='+(list?.length??0)+' error='+result.body?.error);
+            }catch(e){console.log('Retry '+(n+1)+': '+String(e).slice(0,160))}
+            await new Promise(resolve=>setTimeout(resolve,6000));
+          }
+          if(!ok) throw new Error('Cloudflare queue endpoint not returning valid data after deployment');
+          NODE
