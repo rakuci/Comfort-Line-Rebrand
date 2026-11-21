@@ -56,3 +56,8 @@ export const fareClasses = {
   ru: ["Эконом", "Комфорт", "Бизнес", "VIP", "Минивэн Комфорт", "Минивэн Бизнес"],
   en: ["Economy", "Comfort", "Business", "VIP", "Comfort minivan", "Business minivan"],
 };
+
+// Recover the whole-euro reference used when setting these BYN fares.
+export function referenceEuros(byn: number): number {
+  return Math.round(byn / 3.2913);
+}

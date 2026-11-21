@@ -1,4 +1,4 @@
-import { routeFares, fareClasses } from "@/data/route-fares";
+import { routeFares, fareClasses, referenceEuros } from "@/data/route-fares";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -221,7 +221,7 @@ export function RouteLandingPage({ data }: Props) {
               <h2 className="text-xl font-semibold">{isRu ? "Стоимость поездки" : "Transfer fares"}</h2>
               <table className="my-4 w-full text-left text-sm">
                 <caption className="pb-3 text-left text-muted-foreground">
-                  {isRu ? "Начальные цены в BYN за автомобиль в одну сторону" : "Starting fares in BYN per vehicle, one way"}
+                  {isRu ? "Ориентировочные цены в евро за автомобиль в одну сторону" : "Indicative starting fares in euros per vehicle, one way"}
                 </caption>
                 <thead><tr>
                   <th scope="col">{isRu ? "Класс" : "Vehicle class"}</th>
@@ -233,14 +233,17 @@ export function RouteLandingPage({ data }: Props) {
                     <th scope="row" className="py-2 font-normal">{label}</th>
                     {[fares.outbound, fares.inbound].map((direction, j) => (
                       <td key={j} className="px-1 tabular-nums">{direction[i] !== undefined
-                        ? format(direction[i]) : (isRu ? "По запросу" : "On request")}</td>
+                        ? <>
+                            <strong className="block">€{referenceEuros(direction[i])}</strong>
+                            <span className="block text-xs text-muted-foreground">{format(direction[i])} BYN</span>
+                          </> : (isRu ? "По запросу" : "On request")}</td>
                     ))}
                   </tr>
                 ))}</tbody>
               </table>
               <p className="text-sm text-muted-foreground">{isRu
-                ? "Все расчёты производятся только в белорусских рублях (BYN). Стоимость зависит от даты и времени, адресов, класса автомобиля, числа пассажиров, багажа и дополнительных остановок. Отправьте заявку — водитель согласует с вами окончательную сумму в BYN до выезда."
-                : "All payments are made in Belarusian rubles (BYN) only. The fare depends on the date and time, addresses, vehicle class, passengers, luggage and extra stops. Send a request and your driver will confirm the final amount in BYN with you before departure."}</p>
+                ? "Оплата только в белорусских рублях (BYN). По вашей заявке водитель подтвердит окончательную стоимость в BYN до выезда. Суммы в евро приведены для справки. Цена зависит от даты и времени, адресов, класса автомобиля, числа пассажиров, багажа и дополнительных остановок."
+                : "Payment is accepted only in Belarusian rubles (BYN). When you request a quote, your driver will confirm the final fare in BYN before departure. Euro amounts are for reference. The fare depends on the date and time, addresses, vehicle class, passengers, luggage and extra stops."}</p>
             </section>
           )}
           <div className="mt-8">
