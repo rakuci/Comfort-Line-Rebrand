@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import worker from "./worker.mjs";
+import worker, { parseOfficialQueue, fetchBorderQueue } from "./worker.mjs";
 
 const url = "https://comfortline.example";
 
@@ -88,4 +88,39 @@ test("invalid booking payload is rejected", async () => {
     body: JSON.stringify({ from: "Minsk" }),
   }), { RESEND_API_KEY: "test" });
   assert.equal(response.status, 400);
+});
+
+test("public checkpoint summary produces accurate aggregate totals", () => {
+  const data = { result: [
+    { name: "Брест", countCar: 3, countTruck: 0, countBus: 1, countMotorcycle: 0, countAll: 4, countPriority: 0 },
+    { name: "Каменный Лог", countCar: 0, countTruck: 248, countBus: 0, countMotorcycle: 0, countAll: 248, countPriority: 25 },
+  ] };
+  const parsed = parseOfficialQueue(data);
+  assert.equal(parsed.updatedAt, null);
+  assert.deepEqual(parsed.checkpoints[0], {
+    name: "Брест", cars: 3, trucks: 0, buses: 1, moto: 0, total: 4, priority: 0,
+  });
+  assert.equal(parsed.checkpoints[1].trucks, 248);
+  assert.throws(() => parseOfficialQueue({ result: [] }), /no checkpoint list/);
+  const impossible = structuredClone(data);
+  impossible.result[0].countAll = 1;
+  assert.throws(() => parseOfficialQueue(impossible), /Inconsistent queue total/);
+});
+
+test("public summary is preferred before the backup reader", async () => {
+  const original = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (target) => {
+    calls.push(String(target));
+    return new Response(JSON.stringify({ result: [
+      { name: "Брест", countCar: 3, countTruck: 0, countBus: 1, countMotorcycle: 0, countAll: 4, countPriority: 0 },
+      { name: "Брузги", countCar: 2, countTruck: 0, countBus: 0, countMotorcycle: 0, countAll: 2, countPriority: 0 },
+    ] }), { status: 200 });
+  };
+  try {
+    const result = await fetchBorderQueue();
+    assert.equal(result.checkpoints.length, 2);
+    assert.equal(calls.length, 1);
+    assert.match(calls[0], /belarusborder/);
+  } finally { globalThis.fetch = original; }
 });
