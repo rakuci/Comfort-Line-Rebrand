@@ -190,7 +190,7 @@ function nonNegativeCount(value) {
   throw new Error("Invalid queue count");
 }
 
-function parseOfficialQueue(payload) {
+export function parseOfficialQueue(payload) {
   if (!Array.isArray(payload?.result) || payload.result.length < 2) {
     throw new Error("Official queue has no checkpoint list");
   }
@@ -214,7 +214,7 @@ function parseOfficialQueue(payload) {
   return { updatedAt: null, checkpoints };
 }
 
-async function fetchBorderQueue() {
+export async function fetchBorderQueue() {
   try {
     const response = await fetch(QUEUE_AGGREGATES_URL, {
       headers: { Accept: "application/json" },
