@@ -1,0 +1,63 @@
+name: Verify live queue UI timestamps
+on:
+  push:
+    branches: [cloudflare-migration]
+    paths:
+      - 'artifacts/comfortline-website/src/components/sections/BorderQueueWidget.tsx'
+      - '.github/workflows/queue-timestamp-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-live-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Inspect rendered page assets for new Minsk clock UI
+        run: |
+          node --input-type=module <<'NODE'
+          const base = 'https://comfortline.by';
+          const wanted = 'Текущее время в Беларуси';
+          const fetchText = async (url) => {
+            const resp = await fetch(url,{signal:AbortSignal.timeout(15000)});
+            if(!resp.ok) throw Error(url+' HTTP '+resp.status);
+            return resp.text();
+          };
+          const html = await fetchText(base+'/');
+          console.log('HTML bytes '+html.length);
+          const initial=[...html.matchAll(/(?:src|href)=["']([^"']+\.js(?:\?[^"']*)?)["']/g)].map(x=>x[1]);
+          console.log('Initial scripts '+JSON.stringify(initial.slice(0,30)));
+          const found=new Set(initial.map(x=>new URL(x,base+'/').href));
+          const queue=[...found];
+          let checked=0, hasClock=false, hasOldLabel=false;
+          while(queue.length && checked<100) {
+            const batch=queue.splice(0,8);
+            const result=await Promise.all(batch.map(async url=>{
+              try{
+                const raw=await fetchText(url);
+                return {url,raw};
+              }catch(error){return {url,error:String(error)}}
+            }));
+            for(const item of result){
+              checked++;
+              if(!item.raw){console.log('FETCH ERROR '+item.url+' '+item.error);continue}
+              if(item.raw.includes(wanted)){
+                hasClock=true;console.log('PASS clock phrase found in '+item.url);
+              }
+              if(item.raw.includes('Данные с mon.declarant.by')){
+                hasOldLabel=true;console.log('OLD source label found in '+item.url);
+              }
+              const refs=[...item.raw.matchAll(/(?:\.|\/)\/assets\/[^"'`\s)]+\.js|\.\/[^"'`\s)]+\.js/g)].map(m=>m[0]);
+              for(const ref of refs){
+                const next=new URL(ref.startsWith('/')?ref:ref,ref.startsWith('/')?base:item.url).href;
+                if(!found.has(next)&&found.size<140){found.add(next);queue.push(next)}
+              }
+            }
+            if(hasClock) break;
+          }
+          console.log(JSON.stringify({liveClockFound:hasClock,oldSourceLabelFound:hasOldLabel,jsFilesChecked:checked,jsFilesDiscovered:found.size}));
+          if(!hasClock) {
+            console.log('Latest frontend is not visibly published yet. Check Cloudflare Worker Git Builds / production deployment.');
+            process.exitCode=1;
+          }
+          NODE
