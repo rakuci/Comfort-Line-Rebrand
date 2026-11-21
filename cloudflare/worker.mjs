@@ -183,7 +183,7 @@ function parseQueue(markdown) {
 // Parse only aggregate counters, never pass through personal or unrelated fields.
 function nonNegativeCount(value) {
   if (typeof value === "number" && Number.isSafeInteger(value) && value >= 0) return value;
-  if (typeof value === "string" && /^\\d+$/.test(value)) {
+  if (typeof value === "string" && /^\d+$/.test(value)) {
     const n = Number(value);
     if (Number.isSafeInteger(n)) return n;
   }
