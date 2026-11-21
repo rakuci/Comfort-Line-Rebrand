@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { RefreshCw, AlertTriangle, Car, Truck, X } from "lucide-react";
 import { useGetBorderQueue, getGetBorderQueueQueryKey, getBorderQueue } from "@workspace/api-client-react";
 import { useLang } from "@/context/language-context";
 
 const REFETCH_INTERVAL_MS = 3 * 60 * 1000;
+const MINSK_TIME_ZONE = "Europe/Minsk";
+
+function formatMinskDateTime(value: Date, isRu: boolean): string {
+  return new Intl.DateTimeFormat(isRu ? "ru-RU" : "en-GB", {
+    timeZone: MINSK_TIME_ZONE,
+    day: "2-digit", month: "2-digit", year: "numeric",
+    hour: "2-digit", minute: "2-digit", hour12: false,
+  }).format(value);
+}
 
 const CHECKPOINT_NAMES_EN: Record<string, string> = {
   "Бенякони": "Benyakoni",
@@ -47,6 +56,14 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
 
   const queryClient = useQueryClient();
   const [isForcing, setIsForcing] = useState(false);
+  // Render after hydration to avoid mismatches between the SSR and browser clocks.
+  const [nowMinsk, setNowMinsk] = useState<string | null>(null);
+  useEffect(() => {
+    const updateClock = () => setNowMinsk(formatMinskDateTime(new Date(), isRu));
+    updateClock();
+    const interval = setInterval(updateClock, 30_000);
+    return () => clearInterval(interval);
+  }, [isRu]);
 
   const { data, isLoading, isError, isFetching, refetch } = useGetBorderQueue(undefined, {
     query: {
@@ -70,11 +87,9 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
 
   const checkpoints = data?.checkpoints ?? [];
   const showError = (isError || data?.error) && checkpoints.length === 0;
-  const receivedAt = data?.fetchedAt
-    ? new Date(data.fetchedAt).toLocaleString(isRu ? "ru-RU" : "en-GB", {
-        timeZone: "Europe/Minsk", day: "2-digit", month: "2-digit", year: "numeric",
-        hour: "2-digit", minute: "2-digit",
-      })
+  const lastFetchDate = data?.fetchedAt ? new Date(data.fetchedAt) : null;
+  const receivedAt = lastFetchDate && !Number.isNaN(lastFetchDate.getTime())
+    ? formatMinskDateTime(lastFetchDate, isRu)
     : null;
 
   return (
@@ -98,6 +113,11 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
             {isRu ? "Данные Белтаможсервиса · " : "Beltamozhservice data · "}
             <a href="https://mon.declarant.by/#/zone" target="_blank" rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-primary">mon.declarant.by</a>
+          </p>
+          <p data-testid="queue-minsk-clock" className={`mt-2 font-medium text-foreground/90 ${isLg ? "text-sm" : "text-xs"}`}>
+            {isRu ? "Текущее время в Беларуси: " : "Current time in Belarus: "}
+            <time>{nowMinsk ?? "—"}</time>
+            <span className="ml-1 text-muted-foreground">(UTC+3)</span>
           </p>
         </div>
         <button
@@ -137,8 +157,8 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
           {(data?.updatedAt || receivedAt) && (
             <p className={`text-muted-foreground mb-3 ${isLg ? "text-sm" : "text-xs"}`}>
               {data?.updatedAt
-                ? (isRu ? "По состоянию на: " : "Source updated: ")
-                : (isRu ? "Данные запрошены: " : "Data requested: ")}
+                ? (isRu ? "Источник обновлён: " : "Source updated: ")
+                : (isRu ? "Данные получены: " : "Data retrieved: ")}
               {data?.updatedAt || receivedAt}
               {data?.stale && (isRu ? " (кэш — данные могут устареть)" : " (cached — may be outdated)")}
             </p>
@@ -223,8 +243,8 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
 
           <p className={`text-muted-foreground mt-3 ${isLg ? "text-xs" : "text-[11px]"}`}>
             {isRu
-              ? "Время указано по UTC+3, переход на летнее время не учитывается"
-              : "Times are UTC+3 and do not observe Daylight Saving Time"}
+              ? "Время — Минск (UTC+3). Дата получения данных не означает время обновления источника."
+              : "Times are in Minsk (UTC+3). Data retrieval time is not necessarily the source update time."}
           </p>
         </>
       )}
