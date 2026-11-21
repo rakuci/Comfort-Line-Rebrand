@@ -3,8 +3,12 @@
 const EMAIL_TO = "info@comfortline.by";
 const EMAIL_FROM = "ComfortLine <noreply@comfortline.by>";
 const RESEND_URL = "https://api.resend.com/emails";
-const JINA_URL = "https://r.jina.ai/https://mon.declarant.by/%23/zone";
+// Public aggregate checkpoint data endpoint used by the official monitor.
+// Do not fetch vehicle registrations, phone numbers or other personal data.
+const QUEUE_AGGREGATES_URL = "https://belarusborder.by/info/checkpoint?token=bts47d5f-6420-4f74-8f78-42e8e4370cc4";
+const JINA_URL = "https://r.jina.ai/https://mon.declarant.by/%23/zone"; // fallback
 const QUEUE_TTL = 5 * 60 * 1000;
+const QUEUE_MAX_STALE = 45 * 60 * 1000;
 const REFRESH_COOLDOWN = 20 * 1000;
 const INSTAGRAM_TTL = 6 * 60 * 60 * 1000;
 
@@ -175,14 +179,60 @@ function parseQueue(markdown) {
   return { updatedAt, checkpoints };
 }
 
-async function fetchBorderQueue() {
-  const res = await fetch(JINA_URL, {
-    headers: { "x-wait-for-selector": "tbody tr", "x-no-cache": "true", "x-timeout": "25" },
+// The official checkpoint-summary API returns counts for each category.
+// Parse only aggregate counters, never pass through personal or unrelated fields.
+function nonNegativeCount(value) {
+  if (typeof value === "number" && Number.isSafeInteger(value) && value >= 0) return value;
+  if (typeof value === "string" && /^\\d+$/.test(value)) {
+    const n = Number(value);
+    if (Number.isSafeInteger(n)) return n;
+  }
+  throw new Error("Invalid queue count");
+}
+
+function parseOfficialQueue(payload) {
+  if (!Array.isArray(payload?.result) || payload.result.length < 2) {
+    throw new Error("Official queue has no checkpoint list");
+  }
+  const names = new Set();
+  const checkpoints = payload.result.map((cp) => {
+    if (typeof cp?.name !== "string" || !cp.name.trim() || names.has(cp.name)) {
+      throw new Error("Invalid or duplicated queue checkpoint");
+    }
+    names.add(cp.name);
+    const cars = nonNegativeCount(cp.countCar);
+    const trucks = nonNegativeCount(cp.countTruck);
+    const buses = nonNegativeCount(cp.countBus);
+    const moto = nonNegativeCount(cp.countMotorcycle);
+    const total = nonNegativeCount(cp.countAll);
+    const priority = nonNegativeCount(cp.countPriority);
+    if (total < cars + trucks + buses + moto) throw new Error("Inconsistent queue total");
+    return { name: cp.name.trim(), cars, trucks, buses, moto, total, priority };
   });
-  if (!res.ok) throw new Error("Queue upstream HTTP " + res.status);
-  const parsed = parseQueue(await res.text());
-  if (!parsed.checkpoints.length) throw new Error("No queue checkpoints parsed");
-  return parsed;
+  // The public summary does not specify the last upstream update timestamp:
+  // never present the request time as an authoritative source-update time.
+  return { updatedAt: null, checkpoints };
+}
+
+async function fetchBorderQueue() {
+  try {
+    const response = await fetch(QUEUE_AGGREGATES_URL, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) throw new Error("Official queue HTTP " + response.status);
+    return parseOfficialQueue(await response.json());
+  } catch (error) {
+    console.warn("Official aggregate queue failed; trying backup reader", String(error));
+    const response = await fetch(JINA_URL, {
+      headers: { "x-wait-for-selector": "tbody tr", "x-no-cache": "true", "x-timeout": "12" },
+      signal: AbortSignal.timeout(13_000),
+    });
+    if (!response.ok) throw new Error("Queue backup HTTP " + response.status);
+    const parsed = parseQueue(await response.text());
+    if (!parsed.checkpoints.length) throw new Error("No queue checkpoints parsed by backup");
+    return parsed;
+  }
 }
 
 async function handleQueue(url) {
@@ -199,7 +249,7 @@ async function handleQueue(url) {
     return json({ ...data, fetchedAt: new Date(now).toISOString(), stale: false, error: false });
   } catch (err) {
     console.warn("Border queue upstream failed", String(err));
-    if (queueCache) return json({
+    if (queueCache && now - queueCache.fetchedAt < QUEUE_MAX_STALE) return json({
       ...queueCache.data, fetchedAt: new Date(queueCache.fetchedAt).toISOString(), stale: true, error: false,
     });
     return json({ updatedAt: null, fetchedAt: new Date(now).toISOString(), checkpoints: [], stale: false, error: true });
