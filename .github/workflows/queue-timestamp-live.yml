@@ -41,6 +41,11 @@ jobs:
             for(const item of result){
               checked++;
               if(!item.raw){console.log('FETCH ERROR '+item.url+' '+item.error);continue}
+              if(item.raw.includes('mon.declarant.by') || item.raw.includes('Живая очередь на границе')) {
+                const pos=item.raw.indexOf('mon.declarant.by');
+                console.log('QUEUE RELATED JS '+item.url+' bytes='+item.raw.length+
+                  ' monContext='+JSON.stringify(item.raw.slice(Math.max(0,pos-70),pos+70)));
+              }
               if(item.raw.includes(wanted)){
                 hasClock=true;console.log('PASS clock phrase found in '+item.url);
               }
@@ -55,6 +60,7 @@ jobs:
             }
             if(hasClock) break;
           }
+          console.log('Asset names '+JSON.stringify([...found].slice(0,100).map(url=>new URL(url).pathname)));
           console.log(JSON.stringify({liveClockFound:hasClock,oldSourceLabelFound:hasOldLabel,jsFilesChecked:checked,jsFilesDiscovered:found.size}));
           if(!hasClock) {
             console.log('Latest frontend is not visibly published yet. Check Cloudflare Worker Git Builds / production deployment.');
