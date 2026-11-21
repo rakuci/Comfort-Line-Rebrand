@@ -70,6 +70,12 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
 
   const checkpoints = data?.checkpoints ?? [];
   const showError = (isError || data?.error) && checkpoints.length === 0;
+  const receivedAt = data?.fetchedAt
+    ? new Date(data.fetchedAt).toLocaleString(isRu ? "ru-RU" : "en-GB", {
+        timeZone: "Europe/Minsk", day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit",
+      })
+    : null;
 
   return (
     <div className={`relative rounded-2xl border border-primary/30 bg-primary/5 ${isLg ? "p-6 md:p-7" : "p-5 md:p-6"} ${className}`}>
@@ -89,7 +95,9 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
             {isRu ? "Живая очередь на границе" : "Live border queue"}
           </h3>
           <p className={`text-muted-foreground mt-0.5 ${isLg ? "text-sm" : "text-xs"}`}>
-            {isRu ? "Данные с mon.declarant.by" : "Data from mon.declarant.by"}
+            {isRu ? "Данные Белтаможсервиса · " : "Beltamozhservice data · "}
+            <a href="https://mon.declarant.by/#/zone" target="_blank" rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-primary">mon.declarant.by</a>
           </p>
         </div>
         <button
@@ -114,19 +122,25 @@ export function BorderQueueWidget({ className = "my-6", size = "default", onClos
           <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
           <span>
             {isRu
-              ? "Не удалось получить данные. Попробуйте обновить страницу позже."
-              : "Could not load live data. Please try refreshing later."}
+              ? "Не удалось получить актуальные данные. "
+              : "Live data is temporarily unavailable. "}
+            <a href="https://mon.declarant.by/#/zone" target="_blank" rel="noopener noreferrer"
+              className="underline underline-offset-2">
+              {isRu ? "Проверить очередь на официальном сайте" : "Check the official queue monitor"}
+            </a>
           </span>
         </div>
       )}
 
       {!isLoading && !showError && checkpoints.length > 0 && (
         <>
-          {data?.updatedAt && (
+          {(data?.updatedAt || receivedAt) && (
             <p className={`text-muted-foreground mb-3 ${isLg ? "text-sm" : "text-xs"}`}>
-              {isRu ? "По состоянию на: " : "As of: "}
-              {data.updatedAt}
-              {data.stale && (isRu ? " (кэш)" : " (cached)")}
+              {data?.updatedAt
+                ? (isRu ? "По состоянию на: " : "Source updated: ")
+                : (isRu ? "Данные запрошены: " : "Data requested: ")}
+              {data?.updatedAt || receivedAt}
+              {data?.stale && (isRu ? " (кэш — данные могут устареть)" : " (cached — may be outdated)")}
             </p>
           )}
 
