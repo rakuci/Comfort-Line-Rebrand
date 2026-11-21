@@ -54,7 +54,7 @@ jobs:
           node --input-type=module <<'NODE'
           const base = 'https://mon.declarant.by/';
           const html = await (await fetch(base, {signal:AbortSignal.timeout(15000)})).text();
-          const script = [...html.matchAll(/<script[^>]*src=["']([^"']*main\\.[^"']+\\.js)["']/g)][0]?.[1];
+          const script = 'main.ca44a5745a89cbe2.js';
           if(!script){ console.log("main JS not found"); process.exit(0); }
           const response = await fetch(new URL(script,base), {signal:AbortSignal.timeout(20000)});
           const js=await response.text();
