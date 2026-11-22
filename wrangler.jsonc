@@ -3,6 +3,7 @@
   "name": "comfortline",
   "main": "./cloudflare/worker.mjs",
   "compatibility_date": "2026-11-20",
+  "triggers": { "crons": ["7,22,37,52 * * * *"] },
   "assets": {
     "directory": "./artifacts/comfortline-website/dist/public",
     "binding": "ASSETS",

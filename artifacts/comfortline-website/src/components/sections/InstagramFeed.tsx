@@ -11,6 +11,8 @@ declare global {
   }
 }
 
+type InstagramVideo = { id: string; caption?: string; media_url: string; thumbnail_url?: string; permalink: string };
+
 const EMBED_SCRIPT_SRC = "https://www.instagram.com/embed.js";
 const INITIAL_VISIBLE = 9;
 const LOAD_INCREMENT = 9;
@@ -42,12 +44,26 @@ export function InstagramFeed() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(INITIAL_VISIBLE);
 
-  const total = instagramPostUrls.length;
+  const [videos, setVideos] = useState<InstagramVideo[]>([]);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/instagram/posts", { signal: controller.signal })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        if (Array.isArray(data?.posts)) setVideos(data.posts);
+      })
+      .catch(() => {})
+      .finally(() => { if (!controller.signal.aborted) setReady(true); });
+    return () => controller.abort();
+  }, []);
+
+  const total = videos.length || instagramPostUrls.length;
   const shown = instagramPostUrls.slice(0, visible);
   const hasMore = visible < total;
 
   useEffect(() => {
-    if (shown.length === 0) return;
+    if (!ready || videos.length || shown.length === 0) return;
     let cancelled = false;
     ensureEmbedScript().then(() => {
       if (cancelled) return;
@@ -56,7 +72,7 @@ export function InstagramFeed() {
     return () => {
       cancelled = true;
     };
-  }, [shown.length]);
+  }, [ready, videos.length, shown.length]);
 
   if (total === 0) return null;
 
@@ -86,7 +102,16 @@ export function InstagramFeed() {
           ref={containerRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center"
         >
-          {shown.map((url) => (
+          {videos.length ? videos.slice(0, visible).map(video => (
+            <article key={video.id} className="w-full max-w-[400px] overflow-hidden rounded-xl border border-border bg-card">
+              <video src={video.media_url} poster={video.thumbnail_url} controls playsInline preload="none"
+                aria-label={video.caption || i.label} className="aspect-[9/16] w-full bg-black object-contain" />
+              <div className="p-4">
+                {video.caption && <p className="mb-2 line-clamp-2 text-sm">{video.caption}</p>}
+                <a href={video.permalink} target="_blank" rel="noopener noreferrer" className="text-sm text-primary underline">{i.viewOnInstagram}</a>
+              </div>
+            </article>
+          )) : shown.map((url) => (
             <blockquote
               key={url}
               className="instagram-media w-full max-w-[400px]"

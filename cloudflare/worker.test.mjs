@@ -124,3 +124,34 @@ test("public summary is preferred before the backup reader", async () => {
     assert.match(calls[0], /belarusborder/);
   } finally { globalThis.fetch = original; }
 });
+
+test("account feed mirrors the newest owned videos and serves a byte range", async t => {
+  const token = "test-token";
+  let copied = 0;
+  const post = { id: "1", username: "transfer_comfortline", media_type: "VIDEO",
+    timestamp: "2026-11-20", media_url: "https://cdn.example/1", permalink: "https://www.instagram.com/reel/one/" };
+  t.mock.method(globalThis, "fetch", async (input, init) => {
+    if (String(input) === post.media_url) return new Response("video");
+    assert.equal(init.headers.Authorization, "Bearer " + token);
+    const page = new URL(input).searchParams.get("after");
+    return Response.json(page ? { data: [post] } : { data: [
+      { ...post, username: "another_account" }, { ...post, media_type: "IMAGE" }
+    ], paging: { next: "next", cursors: { after: "second" } } });
+  });
+  const bucket = {
+    head: async () => null,
+    put: async (key, body) => {
+      assert.equal(key, "instagram/1.mp4");
+      assert.equal(await new Response(body).text(), "video");
+      copied++;
+    },
+    get: async () => ({ body: "vid", size: 5, httpEtag: '"etag"', range: { offset: 0, length: 3 } })
+  };
+  const env = { INSTAGRAM_ACCESS_TOKEN: token, INSTAGRAM_VIDEOS: bucket };
+  const data = await (await worker.fetch(new Request(url + "/api/instagram/posts"), env)).json();
+  assert.equal(copied, 1);
+  assert.deepEqual(data.posts.map(p => p.media_url), ["/api/instagram/1.mp4"]);
+  const video = await worker.fetch(new Request(url + data.posts[0].media_url, { headers: { Range: "bytes=0-2" } }), env);
+  assert.equal(video.status, 206);
+  assert.equal(video.headers.get("Content-Range"), "bytes 0-2/5");
+});

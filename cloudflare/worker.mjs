@@ -10,7 +10,7 @@ const JINA_URL = "https://r.jina.ai/https://mon.declarant.by/%23/zone"; // fallb
 const QUEUE_TTL = 5 * 60 * 1000;
 const QUEUE_MAX_STALE = 45 * 60 * 1000;
 const REFRESH_COOLDOWN = 20 * 1000;
-const INSTAGRAM_TTL = 6 * 60 * 60 * 1000;
+const INSTAGRAM_TTL = 15 * 60 * 1000;
 
 let queueCache = null;
 let queueInFlight = null;
@@ -257,14 +257,58 @@ async function handleQueue(url) {
 }
 
 async function fetchInstagram(token) {
-  const url = new URL("https://graph.instagram.com/me/media");
-  url.searchParams.set("fields", "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp");
-  url.searchParams.set("limit", "12");
-  url.searchParams.set("access_token", token);
-  const response = await fetch(url);
-  const body = await response.json();
-  if (!response.ok || body.error) throw new Error("Instagram Graph request failed");
-  return body.data || [];
+  const url = new URL("https://graph.instagram.com/v25.0/me/media");
+  url.searchParams.set("fields", "id,username,caption,media_type,media_url,thumbnail_url,permalink,timestamp");
+  url.searchParams.set("limit", "50");
+  const posts = new Map();
+  for (let page = 0; page < 5; page++) {
+    const response = await fetch(url, { headers: { Authorization: "Bearer " + token } });
+    if (!response.ok) throw new Error("Instagram Graph request failed");
+    const body = await response.json();
+    if (!Array.isArray(body.data)) throw new Error("Missing Instagram media");
+    for (const post of body.data) {
+      if (post.username?.toLowerCase() !== "transfer_comfortline" || post.media_type !== "VIDEO" ||
+          !/^\d+$/.test(post.id) || !post.media_url?.startsWith("https://")) continue;
+      posts.set(post.id, post);
+    }
+    if (posts.size >= 12 || !body.paging?.next || !body.paging.cursors?.after) break;
+    url.searchParams.set("after", body.paging.cursors.after);
+  }
+  return [...posts.values()].sort((a, b) => b.timestamp.localeCompare(a.timestamp)).slice(0, 12);
+}
+
+// Only mark a video as locally available after its complete object was written.
+async function mirrorInstagram(posts, bucket) {
+  if (!bucket) return posts;
+  return Promise.all(posts.map(async post => {
+    const key = "instagram/" + post.id + ".mp4";
+    try {
+      if (!(await bucket.head(key))) {
+        const video = await fetch(post.media_url);
+        if (!video.ok || !video.body) return post;
+        await bucket.put(key, video.body, { httpMetadata: { contentType: "video/mp4" } });
+      }
+      return { ...post, media_url: "/api/" + key };
+    } catch {
+      return post;
+    }
+  }));
+}
+
+async function serveInstagramVideo(request, bucket, key) {
+  if (!bucket) return new Response(null, { status: 404 });
+  const obj = await bucket.get(key, { range: request.headers });
+  if (!obj) return new Response(null, { status: 404 });
+  const headers = new Headers({ "Content-Type": "video/mp4", "Accept-Ranges": "bytes",
+    "Cache-Control": "public, max-age=3600", ETag: obj.httpEtag });
+  if (obj.range && "offset" in obj.range && "length" in obj.range) {
+    const { offset, length } = obj.range;
+    headers.set("Content-Range", `bytes ${offset}-${offset + length - 1}/${obj.size}`);
+    headers.set("Content-Length", String(length));
+    return new Response(obj.body, { status: 206, headers });
+  }
+  headers.set("Content-Length", String(obj.size));
+  return new Response(obj.body, { headers });
 }
 
 async function handleInstagram(env) {
@@ -275,6 +319,7 @@ async function handleInstagram(env) {
   }
   try {
     if (!instagramInFlight) instagramInFlight = fetchInstagram(env.INSTAGRAM_ACCESS_TOKEN)
+      .then(posts => mirrorInstagram(posts, env.INSTAGRAM_VIDEOS))
       .finally(() => { instagramInFlight = null; });
     const posts = await instagramInFlight;
     instagramCache = { fetchedAt: now, posts };
@@ -310,6 +355,9 @@ async function handleEurRate() {
 }
 
 export default {
+  async scheduled(_event, env, ctx) {
+    if (env.INSTAGRAM_ACCESS_TOKEN && env.INSTAGRAM_VIDEOS) ctx.waitUntil(handleInstagram(env));
+  },
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
@@ -319,6 +367,7 @@ export default {
     if (path === "/api/booking" && method === "POST") return handleForm(request, env, "booking");
     if (path === "/api/contact" && method === "POST") return handleForm(request, env, "contact");
     if (path === "/api/border-queue" && method === "GET") return handleQueue(url);
+    if (method === "GET" && /^\/api\/instagram\/\d+\.mp4$/.test(path)) return serveInstagramVideo(request, env.INSTAGRAM_VIDEOS, path.slice(5));
     if (path === "/api/instagram/posts" && method === "GET") return handleInstagram(env);
     if (path.startsWith("/api/")) return json({ error: "not_found" }, 404);
     // Called on static asset misses only; avoid soft 404s on unknown SEO routes.
