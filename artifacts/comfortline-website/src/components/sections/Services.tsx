@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { BookingModal } from "./BookingModal";
 import { Plane, Users, MapPin, Globe2, ArrowRight, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLang } from "@/context/language-context";
@@ -103,6 +105,17 @@ const sectionLabel = { ru: "Маршруты", en: "Routes" };
 
 export function Services() {
   const { t, lang } = useLang();
+  const ru = lang === "ru";
+  const [requested, setRequested] = useState<string[] | null>(null);
+  const warsaw = ru ? "Варшава" : "Warsaw";
+  const riga = ru ? "Рига" : "Riga";
+  const vilnius = ru ? "Вильнюс" : "Vilnius";
+  const minsk = ru ? "Минск" : "Minsk";
+  const cityLinks = [
+    [warsaw, ru ? "/трансфер-варшава" : "/warsaw-transfer"],
+    [riga, ru ? "/трансфер-рига" : "/riga-transfer"],
+    [vilnius, ru ? "/трансфер-минск-вильнюс" : "/minsk-vilnius-transfer"],
+  ];
   const routes = serviceRoutes[lang];
   const titles = cardTitles[lang];
   const descs = cardDescs[lang];
@@ -116,6 +129,32 @@ export function Services() {
           <div className="w-20 h-1 bg-primary mx-auto mt-6 rounded-full" />
         </div>
 
+        <div className="mb-8 rounded-2xl border border-border bg-card p-5 sm:p-8">
+          <h3 className="text-xl font-bold">{ru ? "Трансферы из Минска и обратно" : "Transfers to and from Minsk"}</h3>
+          <div className="my-4 grid gap-3 sm:grid-cols-3">
+            {cityLinks.map(([city, href]) => (
+              <a key={href} href={href} className="rounded-xl border border-border px-4 py-3 font-semibold hover:border-primary">
+                {minsk} ↔ {city}
+                <span className="block text-sm font-normal text-muted-foreground">{ru ? "Маршрут и цены" : "Route and fares"}</span>
+              </a>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">{ru
+            ? "Между Варшавой, Ригой и Вильнюсом доступность и цену уточняйте на дату поездки. Выберите направление для запроса."
+            : "For travel between Warsaw, Riga and Vilnius, choose a direction to request availability and a fare for your date."}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {[[warsaw, riga], [riga, warsaw], [vilnius, warsaw], [warsaw, vilnius], [vilnius, riga], [riga, vilnius]].map(pair => (
+              <button type="button" key={pair.join("-")} onClick={() => setRequested(pair)}
+                className="rounded-lg border border-border px-3 py-2 text-sm text-primary hover:border-primary">
+                {pair.join(" → ")}
+              </button>
+            ))}
+          </div>
+          <a className="mt-4 inline-block text-sm underline" href={ru ? "/terms" : "/en/terms"}>
+            {ru ? "Условия бронирования, оплаты и отмены" : "Booking, payment and cancellation terms"}
+          </a>
+        </div>
+        {requested && <BookingModal open onClose={() => setRequested(null)} prefilledFrom={requested[0]} prefilledTo={requested[1]} />}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {titles.map((title, index) => {
             const Icon = icons[index];

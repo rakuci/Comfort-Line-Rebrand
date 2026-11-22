@@ -27,7 +27,7 @@ export const BUSINESS = {
     en: "Comfortable transfers from Minsk to Vilnius and Warsaw airports",
   },
   paymentAccepted: ["Cash", "Credit Card"],
-  currenciesAccepted: "EUR, USD, BYN, PLN",
+  currenciesAccepted: "BYN",
 };
 
 export const INDEXNOW_KEY = "c8f3d2a1b94e47f6ae7c1d0b5a8e3c92";
