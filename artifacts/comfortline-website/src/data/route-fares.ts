@@ -1,6 +1,6 @@
 // One-way BYN tariffs set on 2026-11-22. TransferMinsk city-to-city class
 // benchmarks less EUR 1, converted once at 3.2913 BYN/EUR. Empty = quote only.
-// Class order matches the labels below. Airport transfers are quoted separately.
+// Class order matches the labels below. Airport pages reuse the matching city fares.
 export const routeFares: Record<string, { outbound: number[]; inbound: number[] } | undefined> = {
   "/minsk-vilnius-transfer": {
     outbound: [819.53, 984.10, 1313.23, 1806.92, 1313.23, 1642.36],

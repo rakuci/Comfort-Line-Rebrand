@@ -1,3 +1,5 @@
+import { RouteFareTable } from "@/components/RouteFareTable";
+import { routeFares } from "@/data/route-fares";
 import { motion } from "framer-motion";
 import { Plane, Clock, MapPin, Car, ArrowRight, Info, CheckCircle2, PhoneCall, ShieldCheck, ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -10,6 +12,8 @@ import { Seo } from "@/seo/Seo";
 import { taxiServiceJsonLd, faqJsonLd } from "@/seo/jsonld";
 import { SITE_URL } from "@/seo/seo-config";
 import { getHomeSectionHref } from "@/lib/lang-urls";
+
+const fareRoute = "/warsaw-transfer";
 
 const content = {
   ru: {
@@ -234,6 +238,8 @@ function WarsawAirportSeo() {
             ? "Индивидуальный трансфер-такси из Минска в аэропорт Варшавы Шопен (WAW). Фиксированная цена, опытный водитель, помощь на границе Беларусь–Польша."
             : "Private taxi transfer from Minsk to Warsaw Chopin Airport (WAW). Fixed price, professional driver, border assistance included.",
           url: SITE_URL + (isRu ? "/трансфер-минск-варшава-шопен" : "/minsk-warsaw-airport"),
+          priceFrom: routeFares[fareRoute]?.outbound[0],
+          priceCurrency: "BYN",
           fromName: isRu ? "Минск" : "Minsk",
           toName: isRu ? "Аэропорт Варшавы Шопен (WAW)" : "Warsaw Chopin Airport (WAW)",
           distanceKm: "550",
@@ -281,6 +287,7 @@ export default function MinskWarsawAirportPage() {
               </div>
             ))}
           </div>
+          <RouteFareTable lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="WAW" />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {

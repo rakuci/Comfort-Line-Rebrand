@@ -1,3 +1,5 @@
+import { RouteFareTable } from "@/components/RouteFareTable";
+import { routeFares } from "@/data/route-fares";
 import { motion } from "framer-motion";
 import { Plane, Clock, MapPin, Car, ArrowRight, Info, CheckCircle2, PhoneCall, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
@@ -8,6 +10,8 @@ import { Seo } from "@/seo/Seo";
 import { taxiServiceJsonLd } from "@/seo/jsonld";
 import { SITE_URL } from "@/seo/seo-config";
 import { getHomeSectionHref } from "@/lib/lang-urls";
+
+const fareRoute = "/warsaw-transfer";
 
 const content = {
   ru: {
@@ -178,6 +182,8 @@ export default function MinskWarsawModlinAirportPage() {
             ? "Индивидуальный трансфер из Минска в аэропорт Варшавы Модлин (WMI). Фиксированная цена."
             : "Private transfer from Minsk to Warsaw Modlin Airport (WMI). Fixed price.",
           url: SITE_URL + (isRu ? "/трансфер-минск-варшава-модлин" : "/minsk-warsaw-modlin-airport"),
+          priceFrom: routeFares[fareRoute]?.outbound[0],
+          priceCurrency: "BYN",
           fromName: isRu ? "Минск" : "Minsk",
           toName: isRu ? "Аэропорт Варшавы Модлин (WMI)" : "Warsaw Modlin Airport (WMI)",
         })}
@@ -208,6 +214,7 @@ export default function MinskWarsawModlinAirportPage() {
               </div>
             ))}
           </div>
+          <RouteFareTable lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="WMI" />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {

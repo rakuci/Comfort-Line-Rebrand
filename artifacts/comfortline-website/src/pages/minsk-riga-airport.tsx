@@ -1,3 +1,5 @@
+import { RouteFareTable } from "@/components/RouteFareTable";
+import { routeFares } from "@/data/route-fares";
 import { motion } from "framer-motion";
 import { Plane, Clock, MapPin, Car, ArrowRight, Info, CheckCircle2, PhoneCall, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
@@ -9,6 +11,8 @@ import { Seo } from "@/seo/Seo";
 import { taxiServiceJsonLd } from "@/seo/jsonld";
 import { SITE_URL } from "@/seo/seo-config";
 import { getHomeSectionHref } from "@/lib/lang-urls";
+
+const fareRoute = "/riga-transfer";
 
 const content = {
   ru: {
@@ -153,6 +157,8 @@ export default function MinskRigaAirportPage() {
             ? "Индивидуальный трансфер из Минска в международный аэропорт Риги (RIX). Фиксированная цена, подача от двери, опытный водитель."
             : "Private door-to-door transfer from Minsk to Riga International Airport (RIX). Fixed price, professional driver.",
           url: SITE_URL + (isRu ? "/трансфер-минск-рига-аэропорт" : "/minsk-riga-airport"),
+          priceFrom: routeFares[fareRoute]?.outbound[0],
+          priceCurrency: "BYN",
           fromName: isRu ? "Минск" : "Minsk",
           toName: isRu ? "Аэропорт Риги (RIX)" : "Riga International Airport (RIX)",
         })}
@@ -187,6 +193,7 @@ export default function MinskRigaAirportPage() {
               </div>
             ))}
           </div>
+          <RouteFareTable lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="RIX" />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {
