@@ -21,7 +21,7 @@ const variants = {
 };
 
 export function Reviews() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const items = t.reviews.items;
   const totalPages = Math.ceil(items.length / PER_PAGE);
 
@@ -74,6 +74,10 @@ export function Reviews() {
           <h3 className="text-3xl md:text-4xl font-bold text-foreground">
             {t.reviews.heading}
           </h3>
+          <a href="https://www.instagram.com/transfer_comfortline/reels/" target="_blank" rel="noopener noreferrer"
+            className="mt-4 inline-block text-sm text-primary underline underline-offset-4">
+            {lang === "ru" ? "Видеоотзывы пассажиров в Instagram Reels" : "Watch passenger testimonials on Instagram Reels"}
+          </a>
           <div className="w-20 h-1 bg-primary mx-auto mt-6 rounded-full" />
         </div>
 
