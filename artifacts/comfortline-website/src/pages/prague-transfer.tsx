@@ -116,8 +116,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Прага | Прямая поездка в Чехию",
     titleEn: "Minsk to Prague Transfer | Direct Ride to Czech Republic",
-    descRu: "Трансфер из Минска в Прагу. Поездка между городами от 3288,01 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Transfer from Minsk to Prague. City-to-city fares from 3288.01 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Трансфер из Минска в Прагу. Поездка между городами от €999 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Transfer from Minsk to Prague. City-to-city fares from €999 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-прага",
     pathEn: "/prague-transfer",
     breadcrumbRu: "Трансфер в Прагу",

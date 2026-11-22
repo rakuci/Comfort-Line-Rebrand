@@ -411,10 +411,10 @@ const data: RoutePageData = {
        "Warsaw to Minsk & Return Transfer | ComfortLine",
 
     descRu:
-       "Трансфер Варшава — Минск и Минск — Варшава. Поездка между городами от 1313,23 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+       "Трансфер Варшава — Минск и Минск — Варшава. Поездка между городами от €399 за автомобиль. Итоговую стоимость подтверждает водитель.",
 
     descEn:
-       "Private Warsaw to Minsk and Minsk to Warsaw transfer. City-to-city fares from 1313.23 BYN per vehicle. Your driver confirms the final fare.",
+       "Private Warsaw to Minsk and Minsk to Warsaw transfer. City-to-city fares from €399 per vehicle. Your driver confirms the final fare.",
 
     pathRu: "/трансфер-варшава",
     pathEn: "/warsaw-transfer",

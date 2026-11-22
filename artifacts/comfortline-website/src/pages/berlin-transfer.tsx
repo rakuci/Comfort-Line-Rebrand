@@ -116,8 +116,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Берлин | Прямая поездка в Германию",
     titleEn: "Minsk to Berlin Transfer | Direct Ride to Germany",
-    descRu: "Трансфер из Минска в Берлин — столицу Германии. Поездка между городами от 2958,88 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Transfer from Minsk to Berlin, Germany. City-to-city fares from 2958.88 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Трансфер из Минска в Берлин — столицу Германии. Поездка между городами от €899 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Transfer from Minsk to Berlin, Germany. City-to-city fares from €899 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-берлин",
     pathEn: "/berlin-transfer",
     breadcrumbRu: "Трансфер в Берлин",

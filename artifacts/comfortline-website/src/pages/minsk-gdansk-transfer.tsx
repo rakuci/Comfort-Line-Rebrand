@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Гданьск | Польское побережье Балтики",
     titleEn: "Minsk to Gdańsk Transfer | Polish Baltic Coast | ComfortLine",
-    descRu: "Прямой трансфер из Минска в Гданьск. Поездка между городами от 1971,49 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Direct transfer from Minsk to Gdańsk. City-to-city fares from 1971.49 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Прямой трансфер из Минска в Гданьск. Поездка между городами от €599 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Gdańsk. City-to-city fares from €599 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-гданьск",
     pathEn: "/minsk-gdansk-transfer",
     breadcrumbRu: "Трансфер Минск–Гданьск",

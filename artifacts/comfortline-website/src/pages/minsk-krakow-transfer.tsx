@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Краков | Королевская столица Польши",
     titleEn: "Minsk to Kraków Transfer | Poland's Royal Capital",
-    descRu: "Прямой трансфер из Минска в Краков. Из Минска от 2300,62 BYN, из Кракова от 1971,49 BYN за автомобиль.",
-    descEn: "Private Minsk–Kraków transfer to your address or KRK airport. From Minsk, fares start at 2300.62 BYN per car. From Kraków, fares start at 1971.49 BYN.",
+    descRu: "Прямой трансфер из Минска в Краков. Из Минска от €699, из Кракова от €599 за автомобиль.",
+    descEn: "Private Minsk–Kraków transfer to your address or KRK airport. From Minsk, fares start at €699 per car. From Kraków, fares start at €599.",
     pathRu: "/трансфер-минск-краков",
     pathEn: "/minsk-krakow-transfer",
     breadcrumbRu: "Трансфер Минск–Краков",

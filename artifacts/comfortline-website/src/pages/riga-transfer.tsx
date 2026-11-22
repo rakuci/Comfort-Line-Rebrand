@@ -155,8 +155,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Рига — Минск и обратно 24/7 | ComfortLine",
     titleEn: "Private Riga to Minsk & Return Transfer | ComfortLine",
-    descRu: "Трансфер Рига — Минск и Минск — Рига от двери до двери. Поездка между городами от 1148,66 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Private Riga to Minsk and Minsk to Riga transfer. City-to-city fares from 1148.66 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Трансфер Рига — Минск и Минск — Рига от двери до двери. Поездка между городами от €349 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Private Riga to Minsk and Minsk to Riga transfer. City-to-city fares from €349 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-рига",
     pathEn: "/riga-transfer",
     breadcrumbRu: "Трансфер в Ригу",

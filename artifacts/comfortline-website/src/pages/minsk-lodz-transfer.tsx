@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Лодзь | Польский город кино и моды",
     titleEn: "Minsk to Łódź Transfer | Poland's Creative Capital",
-    descRu: "Прямой трансфер из Минска в Лодзь. Поездка между городами от 1477,79 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Direct transfer from Minsk to Łódź. City-to-city fares from 1477.79 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Прямой трансфер из Минска в Лодзь. Поездка между городами от €449 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Łódź. City-to-city fares from €449 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-лодзь",
     pathEn: "/minsk-lodz-transfer",
     breadcrumbRu: "Трансфер Минск–Лодзь",

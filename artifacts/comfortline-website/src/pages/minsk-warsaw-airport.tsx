@@ -1,5 +1,6 @@
 import { RouteFareTable } from "@/components/RouteFareTable";
-import { routeFares } from "@/data/route-fares";
+import { useFareRate } from "@/hooks/use-fare-rate";
+import { roundedByn, routeFares } from "@/data/route-fares";
 import { motion } from "framer-motion";
 import { Plane, Clock, MapPin, Car, ArrowRight, Info, CheckCircle2, PhoneCall, ShieldCheck, ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -203,7 +204,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-function WarsawAirportSeo() {
+function WarsawAirportSeo({ rate }: { rate: ReturnType<typeof useFareRate> }) {
   const { lang } = useLang();
   const isRu = lang === "ru";
 
@@ -238,7 +239,7 @@ function WarsawAirportSeo() {
             ? "Индивидуальный трансфер-такси из Минска в аэропорт Варшавы Шопен (WAW). Фиксированная цена, опытный водитель, помощь на границе Беларусь–Польша."
             : "Private taxi transfer from Minsk to Warsaw Chopin Airport (WAW). Fixed price, professional driver, border assistance included.",
           url: SITE_URL + (isRu ? "/трансфер-минск-варшава-шопен" : "/minsk-warsaw-airport"),
-          priceFrom: routeFares[fareRoute]?.outbound[0],
+          priceFrom: roundedByn(routeFares[fareRoute]!.outbound[0], rate.bynPerEur),
           priceCurrency: "BYN",
           fromName: isRu ? "Минск" : "Minsk",
           toName: isRu ? "Аэропорт Варшавы Шопен (WAW)" : "Warsaw Chopin Airport (WAW)",
@@ -253,12 +254,13 @@ function WarsawAirportSeo() {
 
 export default function MinskWarsawAirportPage() {
   const { lang } = useLang();
+  const rate = useFareRate();
   const c = content[lang];
   const isRu = lang === "ru";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <WarsawAirportSeo />
+      <WarsawAirportSeo rate={rate} />
       <Navbar />
 
       {/* Hero */}
@@ -287,7 +289,7 @@ export default function MinskWarsawAirportPage() {
               </div>
             ))}
           </div>
-          <RouteFareTable lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="WAW" />
+          <RouteFareTable rate={rate} lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="WAW" />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {

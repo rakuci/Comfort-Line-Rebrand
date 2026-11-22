@@ -286,11 +286,35 @@ async function handleInstagram(env) {
   }
 }
 
+let eurRate = null;
+async function handleEurRate() {
+  const day = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Minsk", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
+  if (eurRate?.date === day) return json(eurRate);
+  try {
+    const response = await fetch("https://api.nbrb.by/exrates/rates/EUR?parammode=2&ondate=" + day, {
+      signal: AbortSignal.timeout(5000), cf: { cacheEverything: true, cacheTtl: 3600 },
+    });
+    if (!response.ok) throw new Error("rate unavailable");
+    const row = await response.json();
+    if (row.Cur_Abbreviation !== "EUR" || row.Date?.slice(0, 10) !== day ||
+        row.Cur_Scale !== 1 || !Number.isFinite(row.Cur_OfficialRate) || row.Cur_OfficialRate <= 0) {
+      throw new Error("invalid rate");
+    }
+    eurRate = { date: day, bynPerEur: row.Cur_OfficialRate };
+    return json(eurRate);
+  } catch {
+    return eurRate ? json(eurRate) : json({ error: "rate_unavailable" }, 503);
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
     const method = request.method.toUpperCase();
+    if (path === "/api/eur-rate" && method === "GET") return handleEurRate();
     if (path === "/api/healthz" && method === "GET") return json({ status: "ok" });
     if (path === "/api/booking" && method === "POST") return handleForm(request, env, "booking");
     if (path === "/api/contact" && method === "POST") return handleForm(request, env, "contact");

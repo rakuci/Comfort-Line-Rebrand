@@ -1,54 +1,53 @@
-// One-way BYN tariffs set on 2026-11-22. TransferMinsk city-to-city class
-// benchmarks less EUR 1, converted once at 3.2913 BYN/EUR. Empty = quote only.
+// One-way EUR reference fares per vehicle.
 // Class order matches the labels below. Airport pages reuse the matching city fares.
 export const routeFares: Record<string, { outbound: number[]; inbound: number[] } | undefined> = {
   "/minsk-vilnius-transfer": {
-    outbound: [819.53, 984.10, 1313.23, 1806.92, 1313.23, 1642.36],
-    inbound: [819.53, 984.10, 1313.23, 1806.92, 1313.23, 1642.36],
+    outbound: [249, 299, 399, 549, 399, 499],
+    inbound: [249, 299, 399, 549, 399, 499],
   },
   "/minsk-kaunas-transfer": {
-    outbound: [786.62, 984.10, 1313.23, 1806.92, 1148.66, 1642.36],
-    inbound: [786.62, 984.10, 1313.23, 1806.92, 1148.66, 1642.36],
+    outbound: [239, 299, 399, 549, 349, 499],
+    inbound: [239, 299, 399, 549, 349, 499],
   },
   "/minsk-klaipeda-transfer": {
-    outbound: [1148.66, 1313.23, 1642.36, 2136.05, 1477.79, 1971.49],
-    inbound: [1148.66, 1313.23, 1642.36, 2136.05, 1477.79, 1971.49],
+    outbound: [349, 399, 499, 649, 449, 599],
+    inbound: [349, 399, 499, 649, 449, 599],
   },
   "/riga-transfer": {
-    outbound: [1148.66, 1477.79, 1806.92, 2136.05, 1642.36, 2136.05],
-    inbound: [1148.66, 1477.79, 1806.92, 2136.05, 1642.36, 2136.05],
+    outbound: [349, 449, 549, 649, 499, 649],
+    inbound: [349, 449, 549, 649, 499, 649],
   },
   "/minsk-daugavpils-transfer": {
-    outbound: [819.53, 984.10, 1313.23, 1971.49, 984.10, 1477.79],
-    inbound: [819.53, 984.10, 1313.23, 1971.49, 984.10, 1477.79],
+    outbound: [249, 299, 399, 599, 299, 449],
+    inbound: [249, 299, 399, 599, 299, 449],
   },
   "/warsaw-transfer": {
-    outbound: [1313.23, 1642.36, 2136.05, 2629.75, 1806.92, 2300.62],
-    inbound: [1313.23, 1642.36, 2136.05, 2629.75, 1806.92, 2300.62],
+    outbound: [399, 499, 649, 799, 549, 699],
+    inbound: [399, 499, 649, 799, 549, 699],
   },
   "/minsk-krakow-transfer": {
-    outbound: [2300.62, 2794.31, 2794.31, 3781.70, 2958.88, 2958.88],
-    inbound: [1971.49, 2300.62, 2794.31, 3781.70, 2300.62, 2958.88],
+    outbound: [699, 849, 849, 1149, 899, 899],
+    inbound: [599, 699, 849, 1149, 699, 899],
   },
   "/minsk-gdansk-transfer": {
-    outbound: [1971.49, 2300.62, 2794.31, 3781.70, 2300.62, 2958.88],
-    inbound: [1971.49, 2300.62, 2794.31, 3781.70, 2300.62, 2958.88],
+    outbound: [599, 699, 849, 1149, 699, 899],
+    inbound: [599, 699, 849, 1149, 699, 899],
   },
   "/minsk-lodz-transfer": {
-    outbound: [1477.79, 1806.92, 2300.62, 3123.44, 1806.92, 2465.18],
-    inbound: [1477.79, 1806.92, 2300.62, 3123.44, 1806.92, 2465.18],
+    outbound: [449, 549, 699, 949, 549, 749],
+    inbound: [449, 549, 699, 949, 549, 749],
   },
   "/minsk-poznan-transfer": {
-    outbound: [2136.05, 2465.18, 2958.88, 3946.27, 2465.18, 3123.44],
-    inbound: [2136.05, 2465.18, 2958.88, 3946.27, 2465.18, 3123.44],
+    outbound: [649, 749, 899, 1199, 749, 949],
+    inbound: [649, 749, 899, 1199, 749, 949],
   },
   "/berlin-transfer": {
-    outbound: [2958.88, 3617.14, 4604.53, 6579.31, 3288.01, 4275.40],
-    inbound: [2958.88, 3617.14, 4604.53, 6579.31, 3288.01, 4275.40],
+    outbound: [899, 1099, 1399, 1999, 999, 1299],
+    inbound: [899, 1099, 1399, 1999, 999, 1299],
   },
   "/prague-transfer": {
-    outbound: [3288.01, 3946.27, 5098.22, 7237.57, 3946.27, 4933.66],
-    inbound: [3288.01, 3946.27, 5098.22, 7237.57, 3946.27, 4933.66],
+    outbound: [999, 1199, 1549, 2199, 1199, 1499],
+    inbound: [999, 1199, 1549, 2199, 1199, 1499],
   },
 };
 
@@ -57,7 +56,7 @@ export const fareClasses = {
   en: ["Economy", "Comfort", "Business", "VIP", "Comfort minivan", "Business minivan"],
 };
 
-// Recover the whole-euro reference used when setting these BYN fares.
-export function referenceEuros(byn: number): number {
-  return Math.round(byn / 3.2913);
+export function roundedByn(eur: number, bynPerEur: number): number {
+  // NBRB quotes EUR to four decimal places. Use integer units at the ceiling boundary.
+  return Math.ceil(eur * Math.round(bynPerEur * 10000) / 100000) * 10;
 }

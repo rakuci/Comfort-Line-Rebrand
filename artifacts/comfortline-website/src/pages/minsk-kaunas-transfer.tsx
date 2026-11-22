@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Каунас | Прямая поездка в Литву",
     titleEn: "Minsk to Kaunas Transfer | Direct Ride to Lithuania",
-    descRu: "Прямой трансфер из Минска в Каунас. Поездка между городами от 786,62 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Direct Minsk–Kaunas transfer: ~220 km, 3–4.5 hrs. City-to-city fares from 786.62 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Прямой трансфер из Минска в Каунас. Поездка между городами от €239 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct Minsk–Kaunas transfer: ~220 km, 3–4.5 hrs. City-to-city fares from €239 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-каунас",
     pathEn: "/minsk-kaunas-transfer",
     breadcrumbRu: "Трансфер Минск–Каунас",

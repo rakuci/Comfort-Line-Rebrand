@@ -37,3 +37,8 @@ jobs:
           test -s artifacts/comfortline-website/dist/public/index.html
           test -s artifacts/comfortline-website/dist/public/sitemap.xml
           test -s artifacts/comfortline-website/dist/public/robots.txt
+      - name: Check fare conversion and responsive layout
+        run: |
+          python -m venv "$RUNNER_TEMP/fare-browser"
+          "$RUNNER_TEMP/fare-browser/bin/pip" install --quiet playwright==1.56.0
+          "$RUNNER_TEMP/fare-browser/bin/python" artifacts/comfortline-website/scripts/check-fare-layout.py

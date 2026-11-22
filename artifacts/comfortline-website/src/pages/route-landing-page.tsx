@@ -1,5 +1,6 @@
 import { RouteFareTable } from "@/components/RouteFareTable";
-import { routeFares } from "@/data/route-fares";
+import { useFareRate } from "@/hooks/use-fare-rate";
+import { roundedByn, routeFares } from "@/data/route-fares";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -136,6 +137,7 @@ export function RouteLandingPage({ data }: Props) {
   const relatedRoutes = data.relatedRoutes || RELATED_ROUTES[data.seo.pathRu] || [];
   const isRu = lang === "ru";
   const fares = routeFares[data.seo.pathEn];
+  const rate = useFareRate(Boolean(fares));
   const seoTitle = isRu ? data.seo.titleRu : data.seo.titleEn;
   const seoDesc = isRu ? data.seo.descRu : data.seo.descEn;
   const seoPath = isRu ? data.seo.pathRu : data.seo.pathEn;
@@ -149,7 +151,7 @@ export function RouteLandingPage({ data }: Props) {
     url: SITE_URL + seoPath,
     fromName: data.seo.fromName || (isRu ? "Минск" : "Minsk"),
     toName: data.seo.toName || c.title,
-    priceFrom: fares?.outbound[0] ?? data.seo.priceFrom,
+    priceFrom: fares ? roundedByn(fares.outbound[0], rate.bynPerEur) : data.seo.priceFrom,
     priceCurrency: fares ? "BYN" : data.seo.priceCurrency,
   });
   const allJsonLd: object[] = [serviceJsonLd];
@@ -163,7 +165,7 @@ export function RouteLandingPage({ data }: Props) {
       url: SITE_URL + seoPath,
       fromName: data.seo.reverseFromName || c.prefilledTo,
       toName: data.seo.reverseToName || c.prefilledFrom,
-      priceFrom: fares?.inbound[0] ?? data.seo.priceFrom,
+      priceFrom: fares ? roundedByn(fares.inbound[0], rate.bynPerEur) : data.seo.priceFrom,
       priceCurrency: fares ? "BYN" : data.seo.priceCurrency,
     }));
   }
@@ -216,7 +218,7 @@ export function RouteLandingPage({ data }: Props) {
               </div>
             ))}
           </div>
-          <RouteFareTable lang={lang} cityRoute={data.seo.pathEn} from={c.prefilledFrom} to={c.prefilledTo} />
+          <RouteFareTable rate={rate} lang={lang} cityRoute={data.seo.pathEn} from={c.prefilledFrom} to={c.prefilledTo} />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {

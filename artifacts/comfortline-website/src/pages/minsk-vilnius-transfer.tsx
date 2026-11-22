@@ -340,10 +340,10 @@ const data: RoutePageData = {
       "Private Vilnius to Minsk & Return Transfer | ComfortLine",
 
     descRu:
-      "Трансфер Вильнюс — Минск и Минск — Вильнюс от двери до двери. Поездка между городами от 819,53 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
+      "Трансфер Вильнюс — Минск и Минск — Вильнюс от двери до двери. Поездка между городами от €249 за автомобиль. Итоговую стоимость подтверждает водитель.",
 
     descEn:
-      "Private Vilnius to Minsk and Minsk to Vilnius transfer. City-to-city fares from 819.53 BYN per vehicle. Your driver confirms the final fare.",
+      "Private Vilnius to Minsk and Minsk to Vilnius transfer. City-to-city fares from €249 per vehicle. Your driver confirms the final fare.",
 
     pathRu: "/трансфер-минск-вильнюс",
     pathEn: "/minsk-vilnius-transfer",

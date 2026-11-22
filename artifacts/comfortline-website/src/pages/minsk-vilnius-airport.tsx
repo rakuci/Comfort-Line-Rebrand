@@ -1,5 +1,6 @@
 import { RouteFareTable } from "@/components/RouteFareTable";
-import { referenceEuros, routeFares } from "@/data/route-fares";
+import { useFareRate } from "@/hooks/use-fare-rate";
+import { roundedByn, routeFares } from "@/data/route-fares";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Plane, Clock, MapPin, Car, ArrowRight, Info, CheckCircle2, PhoneCall, ShieldCheck, HelpCircle, ChevronDown, Wallet } from "lucide-react";
@@ -14,8 +15,7 @@ import { getHomeSectionHref } from "@/lib/lang-urls";
 
 const fareRoute = "/minsk-vilnius-transfer";
 
-const economyByn = routeFares[fareRoute]!.outbound[0];
-const economyEur = referenceEuros(economyByn);
+const economyEur = routeFares[fareRoute]!.outbound[0];
 
 const content = {
   ru: {
@@ -30,7 +30,7 @@ const content = {
       rows: [
         ["Рейсовый автобус ECOLINES", "От 180 BYN за пассажира", "5–7 ч + ожидание на границе", "Бюджетные путешественники без багажа"],
         ["Сборный трансфер ExpressBus", "От 200 BYN за пассажира", "4–6 ч", "1 пассажир с лёгким багажом"],
-        ["Индивидуальный трансфер ComfortLine", `От €${economyEur} за автомобиль (${economyByn.toLocaleString("ru-BY")} BYN)`, "2,5–5 ч от двери до терминала", "Семьи, командировки, ночные/утренние рейсы, большой багаж"],
+        ["Индивидуальный трансфер ComfortLine", `От €${economyEur} за автомобиль`, "2,5–5 ч от двери до терминала", "Семьи, командировки, ночные/утренние рейсы, большой багаж"],
       ],
     },
     stats: [
@@ -105,7 +105,7 @@ const content = {
       rows: [
         ["ECOLINES scheduled coach", "Starting at 180 BYN per passenger", "5–7 hrs + border wait", "Solo budget travellers with light luggage"],
         ["ExpressBus shared transfer", "Starting at 200 BYN per passenger", "4–6 hrs", "1 passenger with light luggage"],
-        ["ComfortLine private transfer", `Starting at €${economyEur} per vehicle (${economyByn.toFixed(2)} BYN)`, "2.5–5 hrs door to terminal", "Families, business trips, night/early flights, lots of luggage"],
+        ["ComfortLine private transfer", `Starting at €${economyEur} per vehicle`, "2.5–5 hrs door to terminal", "Families, business trips, night/early flights, lots of luggage"],
       ],
     },
     stats: [
@@ -172,6 +172,7 @@ const content = {
 
 export default function MinskVilniusAirportPage() {
   const { lang } = useLang();
+  const rate = useFareRate();
   const c = content[lang];
   const isRu = lang === "ru";
 
@@ -202,7 +203,7 @@ export default function MinskVilniusAirportPage() {
               ? "Индивидуальный трансфер из Минска в международный аэропорт Вильнюса (VNO). Фиксированная цена, подача от двери, опытный водитель."
               : "Private door-to-door transfer from Minsk to Vilnius International Airport (VNO). Fixed price, professional driver.",
             url: SITE_URL + (isRu ? "/трансфер-минск-вильнюс-аэропорт" : "/minsk-vilnius-airport"),
-            priceFrom: routeFares[fareRoute]?.outbound[0],
+            priceFrom: roundedByn(routeFares[fareRoute]!.outbound[0], rate.bynPerEur),
           priceCurrency: "BYN",
           fromName: isRu ? "Минск" : "Minsk",
             toName: isRu ? "Аэропорт Вильнюса (VNO)" : "Vilnius International Airport (VNO)",
@@ -242,7 +243,7 @@ export default function MinskVilniusAirportPage() {
               </div>
             ))}
           </div>
-          <RouteFareTable lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="VNO" />
+          <RouteFareTable rate={rate} lang={lang} cityRoute={fareRoute} from={isRu ? "Минск" : "Minsk"} to="VNO" />
           <div className="mt-8">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal", {
@@ -285,7 +286,9 @@ export default function MinskVilniusAirportPage() {
                   <tr key={i} className={`${i < c.comparison.rows.length - 1 ? "border-b border-border/50" : ""} ${i === c.comparison.rows.length - 1 ? "bg-primary/[0.04]" : ""}`}>
                     {row.map((cell, j) => (
                       <td key={j} className={`px-4 py-3 align-top ${j === 0 ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
-                        {cell}
+                        {cell}{i === 2 && j === 1 && (
+                          <span className="block mt-1 font-medium tabular-nums">{roundedByn(economyEur, rate.bynPerEur).toLocaleString(isRu ? "ru-BY" : "en-GB")} BYN</span>
+                        )}
                       </td>
                     ))}
                   </tr>

@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Клайпеда | Паром в Германию и Швецию",
     titleEn: "Minsk to Klaipėda Transfer | Ferry to Germany & Sweden",
-    descRu: "Прямой трансфер из Минска в Клайпеду. Поездка между городами от 1148,66 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Direct transfer from Minsk to Klaipėda. City-to-city fares from 1148.66 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Прямой трансфер из Минска в Клайпеду. Поездка между городами от €349 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Klaipėda. City-to-city fares from €349 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-клайпеда",
     pathEn: "/minsk-klaipeda-transfer",
     breadcrumbRu: "Трансфер Минск–Клайпеда",

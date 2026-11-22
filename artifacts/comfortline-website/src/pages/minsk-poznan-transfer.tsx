@@ -131,8 +131,8 @@ const data: RoutePageData = {
   seo: {
     titleRu: "Трансфер Минск — Познань | Старейший город Польши",
     titleEn: "Minsk to Poznań Transfer | Poland's Ancient Capital",
-    descRu: "Прямой трансфер из Минска в Познань. Поездка между городами от 2136,05 BYN за автомобиль. Итоговую стоимость подтверждает водитель.",
-    descEn: "Direct transfer from Minsk to Poznań. City-to-city fares from 2136.05 BYN per vehicle. Your driver confirms the final fare.",
+    descRu: "Прямой трансфер из Минска в Познань. Поездка между городами от €649 за автомобиль. Итоговую стоимость подтверждает водитель.",
+    descEn: "Direct transfer from Minsk to Poznań. City-to-city fares from €649 per vehicle. Your driver confirms the final fare.",
     pathRu: "/трансфер-минск-познань",
     pathEn: "/minsk-poznan-transfer",
     breadcrumbRu: "Трансфер Минск–Познань",
