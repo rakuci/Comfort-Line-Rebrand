@@ -3,13 +3,13 @@ import { useLang } from "@/context/language-context";
 import { gtagEvent } from "@/lib/gtag";
 
 const GOOGLE_REVIEW_URL =
-  "https://maps.app.goo.gl/oBgzb3Z5maMfhbwc7";
+  "https://www.google.com/maps?cid=8221901216004637668";
 
 const YANDEX_REVIEW_URL =
   "https://yandex.by/profile/225346737717";
 
 const TRIPADVISOR_REVIEW_URL =
-  "https://www.tripadvisor.com/UserReviewEdit-d34505679?m=68676";
+  "https://www.tripadvisor.com/Attraction_Review-g294448-d34505679-Reviews-ComfortLine-Minsk_Minsk_Region.html";
 
 function YandexIcon({
   className = "",

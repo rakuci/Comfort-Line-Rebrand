@@ -131,9 +131,25 @@ const RELATED_ROUTES: Record<string, { ru: string; en: string; pathRu: string; p
   ],
 };
 
+const routeReviews: Record<string, { author: string; date: string; ru: string; en: string; url: string } | undefined> = {
+  "/warsaw-transfer": {
+    author: "Vitali B", date: "2026-08-05",
+    ru: "В отзыве о поездке из Варшавы в Минск автор рассказывает, как семья добиралась домой после трансатлантического перелёта.",
+    en: "The reviewer describes travelling home with family from Warsaw to Minsk after a transatlantic flight.",
+    url: "https://www.tripadvisor.com/ShowUserReviews-g294448-d34505679-r1071614783-ComfortLine-Minsk_Minsk_Region.html",
+  },
+  "/minsk-kaunas-transfer": {
+    author: "Arnold P", date: "2026-07-06",
+    ru: "Пассажир, ехавший из Каунаса в Минск, отметил, что водитель приехал вовремя и дал полезные советы перед пересечением границы.",
+    en: "On a trip from Kaunas to Minsk, the reviewer appreciated the on-time pickup and the driver's advice before crossing the border.",
+    url: "https://www.tripadvisor.com/ShowUserReviews-g294448-d34505679-r1067254519-ComfortLine-Minsk_Minsk_Region.html",
+  },
+};
+
 export function RouteLandingPage({ data }: Props) {
   const { lang } = useLang();
   const c = data[lang];
+  const review = routeReviews[data.seo.pathEn];
   const relatedRoutes = data.relatedRoutes || RELATED_ROUTES[data.seo.pathRu] || [];
   const isRu = lang === "ru";
   const fares = routeFares[data.seo.pathEn];
@@ -401,6 +417,19 @@ export function RouteLandingPage({ data }: Props) {
                 </a>
               ))}
             </nav>
+          </section>
+        )}
+
+        {review && (
+          <section className="rounded-2xl border border-border bg-card p-6">
+            <h2 className="text-xl font-bold">{isRu ? "Отзыв о поездке" : "A traveller’s account"}</h2>
+            <p className="my-3">{review[lang]}</p>
+            <p className="text-sm text-muted-foreground">{review.author} · <time dateTime={review.date}>
+              {new Intl.DateTimeFormat(isRu ? "ru" : "en-GB", { dateStyle: "long", timeZone: "UTC" }).format(new Date(review.date))}
+            </time></p>
+            <a className="mt-3 inline-block text-sm text-primary underline" href={review.url} target="_blank" rel="noopener noreferrer">
+              {isRu ? "Прочитать отзыв на Tripadvisor" : "Read the original review on Tripadvisor"}
+            </a>
           </section>
         )}
 

@@ -372,7 +372,7 @@ const ru: Translations = {
     },
   },
   reviewLinks: {
-    heading: "Оставить отзыв",
+    heading: "Отзывы о ComfortLine",
     google: "Google Карты",
     yandex: "Яндекс",
     tripadvisor: "Tripadvisor",
@@ -611,7 +611,7 @@ const en: Translations = {
     },
   },
   reviewLinks: {
-    heading: "Leave a Review",
+    heading: "ComfortLine reviews",
     google: "Google Maps",
     yandex: "Yandex",
     tripadvisor: "Tripadvisor",
