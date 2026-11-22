@@ -61,6 +61,7 @@ function load(file) {
       const base = specifier.startsWith("@/")
         ? path.join(root, "src", specifier.slice(2))
         : path.resolve(path.dirname(file), specifier);
+      if (base.endsWith(".json")) return require(base);
       const target = [base + ".ts", base + ".tsx"].find(existsSync);
       assert.ok(target, `Cannot resolve ${specifier} from ${file}`);
       return load(target);
