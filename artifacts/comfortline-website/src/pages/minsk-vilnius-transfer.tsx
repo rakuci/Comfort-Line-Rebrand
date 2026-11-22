@@ -8,7 +8,7 @@ const data: RoutePageData = {
     title: "Трансфер Минск — Вильнюс и Вильнюс — Минск",
 
     subtitle:
-      "Индивидуальный трансфер Минск — Вильнюс и Вильнюс — Минск от двери до двери. Заберём из центра, Старого города, у вокзала, аэропорта VNO или по другому адресу в Вильнюсе.",
+      "Индивидуальный трансфер между Минском и Вильнюсом в обе стороны. Укажите адрес в Старом городе, отель или нужный вокзал. Если вы приезжаете поездом или автобусом, сообщите время прибытия.",
 
     stats: [
       { label: "Расстояние", value: "Около 180 км" },
@@ -173,7 +173,7 @@ const data: RoutePageData = {
     title: "Minsk to Vilnius and Vilnius to Minsk Transfer",
 
     subtitle:
-      "Private Minsk to Vilnius and Vilnius to Minsk transfer. Door-to-door pickup in Vilnius Old Town, the city centre, at the railway or bus station, VNO Airport or another address.",
+      "Travel between Minsk and Vilnius Old Town, a hotel or a city address in either direction. For a station pickup, specify the rail or bus station and your arrival time.",
 
     stats: [
       { label: "Distance", value: "About 180 km" },

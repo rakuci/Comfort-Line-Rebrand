@@ -11,7 +11,7 @@ const data: RoutePageData = {
     title: "Трансфер Минск — Варшава и Варшава — Минск",
 
     subtitle:
-       "Индивидуальное такси Минск — Варшава и обратно от двери до двери. Отдельный автомобиль без попутчиков, подача по адресу и стоимость поездки по запросу.",
+       "Индивидуальное такси между Минском и Варшавой в обе стороны. Укажите адрес отеля, дома или вокзала Warszawa Centralna и число пассажиров, чтобы водитель подтвердил стоимость поездки.",
 
     stats: [
       {
@@ -215,7 +215,7 @@ const data: RoutePageData = {
     title: "Minsk to Warsaw and Warsaw to Minsk Transfer",
 
     subtitle:
-       "Private door-to-door taxi from Minsk to Warsaw and back. Travel in a dedicated vehicle with no shared passengers, pickup at your address and a price provided on request.",
+       "Book a private car between Minsk and a Warsaw address in either direction. For pickup at Warszawa Centralna, include your train arrival time and meeting point when requesting a fare.",
 
     stats: [
       {

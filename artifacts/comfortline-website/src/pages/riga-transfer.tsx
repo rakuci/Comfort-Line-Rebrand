@@ -5,7 +5,7 @@ const data: RoutePageData = {
   ru: {
     badge: "Трансфер Минск — Рига — Минск",
     title: "Трансфер Минск — Рига и Рига — Минск",
-    subtitle: "Индивидуальный трансфер в обе стороны от двери до двери. Подача в центре Риги, Старом городе, у вокзала, аэропорта RIX, отеля или по адресу, включая Юрмалу.",
+    subtitle: "Индивидуальный трансфер между Минском и Ригой в обе стороны. Для встречи в Старой Риге укажите отель или улицу, для встречи у вокзала — название станции и время прибытия. Точку подачи согласуем при бронировании.",
     stats: [
       { label: "Расстояние", value: "~470 км" },
       { label: "Время в пути", value: "5–7 ч" },
@@ -80,7 +80,7 @@ const data: RoutePageData = {
   en: {
     badge: "Minsk — Riga — Minsk Transfer",
     title: "Minsk to Riga and Riga to Minsk Transfer",
-    subtitle: "Private door-to-door transfer in both directions. Pickup in central Riga, Old Town, at the stations, RIX Airport, your hotel or another address, including Jūrmala.",
+    subtitle: "Book a private transfer between Minsk and Riga in either direction. For Old Riga, give your hotel or street address. For a station pickup, send the station name and arrival time so the meeting point can be agreed.",
     stats: [
       { label: "Distance", value: "~470 km" },
       { label: "Travel time", value: "5–7 hrs" },

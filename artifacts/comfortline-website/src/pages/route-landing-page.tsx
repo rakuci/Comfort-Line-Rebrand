@@ -1,3 +1,4 @@
+import { CityAirportLinks } from "@/components/CityAirportLinks";
 import { RouteFareTable } from "@/components/RouteFareTable";
 import { useFareRate } from "@/hooks/use-fare-rate";
 import { roundedByn, routeFares } from "@/data/route-fares";
@@ -226,6 +227,7 @@ export function RouteLandingPage({ data }: Props) {
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight text-balance">{c.title}</h1>
           <p className="text-muted-foreground text-base md:text-lg max-w-2xl mb-10">{c.subtitle}</p>
+          <CityAirportLinks lang={lang} pathEn={data.seo.pathEn} />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             {c.stats.map((s) => (
               <div key={s.label} className="bg-card border border-border rounded-xl p-4 overflow-hidden">

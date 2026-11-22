@@ -1,3 +1,4 @@
+import { CityAirportLinks } from "@/components/CityAirportLinks";
 import { RouteFareTable } from "@/components/RouteFareTable";
 import { useFareRate } from "@/hooks/use-fare-rate";
 import { roundedByn, routeFares } from "@/data/route-fares";
@@ -183,6 +184,7 @@ export default function MinskRigaAirportPage() {
           <p className="text-muted-foreground text-base md:text-lg max-w-2xl mb-6">
             {c.subtitle}
           </p>
+          <CityAirportLinks lang={lang} pathEn="/minsk-riga-airport" />
           <p className="text-muted-foreground/90 text-sm md:text-[15px] leading-relaxed max-w-3xl mb-10">
             {c.seoIntro}
           </p>
