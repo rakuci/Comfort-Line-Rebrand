@@ -39,7 +39,7 @@ export function RouteFareTable({ lang, cityRoute, from, to, rate }: Props) {
                 <td key={labels[j]} className="px-2 py-3 sm:px-4">
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 leading-snug tabular-nums">
                     <strong className="text-primary">{isRu ? "От" : "Starting at"} <span className="whitespace-nowrap">€{direction[i]}</span></strong>
-                    <span className="whitespace-nowrap font-medium">{roundedByn(direction[i], rate.bynPerEur).toLocaleString(locale)} BYN</span>
+                    <span className="font-medium">{isRu ? "От" : "Starting from"} <span className="whitespace-nowrap">{roundedByn(direction[i], rate.bynPerEur).toLocaleString(locale)} BYN</span></span>
                   </div>
                 </td>
               ))}

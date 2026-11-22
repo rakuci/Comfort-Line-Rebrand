@@ -103,8 +103,8 @@ const content = {
     comparison: {
       headers: ["Transport", "Price", "Travel time", "Best for"],
       rows: [
-        ["ECOLINES scheduled coach", "Starting at 180 BYN per passenger", "5–7 hrs + border wait", "Solo budget travellers with light luggage"],
-        ["ExpressBus shared transfer", "Starting at 200 BYN per passenger", "4–6 hrs", "1 passenger with light luggage"],
+        ["ECOLINES scheduled coach", "Starting from 180 BYN per passenger", "5–7 hrs + border wait", "Solo budget travellers with light luggage"],
+        ["ExpressBus shared transfer", "Starting from 200 BYN per passenger", "4–6 hrs", "1 passenger with light luggage"],
         ["ComfortLine private transfer", `Starting at €${economyEur} per vehicle`, "2.5–5 hrs door to terminal", "Families, business trips, night/early flights, lots of luggage"],
       ],
     },
@@ -287,7 +287,7 @@ export default function MinskVilniusAirportPage() {
                     {row.map((cell, j) => (
                       <td key={j} className={`px-4 py-3 align-top ${j === 0 ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
                         {cell}{i === 2 && j === 1 && (
-                          <span className="block mt-1 font-medium tabular-nums">{roundedByn(economyEur, rate.bynPerEur).toLocaleString(isRu ? "ru-BY" : "en-GB")} BYN</span>
+                          <span className="block mt-1 font-medium tabular-nums">{isRu ? "От" : "Starting from"} <span className="whitespace-nowrap">{roundedByn(economyEur, rate.bynPerEur).toLocaleString(isRu ? "ru-BY" : "en-GB")} BYN</span></span>
                         )}
                       </td>
                     ))}
