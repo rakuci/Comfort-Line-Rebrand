@@ -9,7 +9,9 @@ import { ReviewLinks } from "@/components/layout/ReviewLinks";
 import { gtagEvent, gtagPhoneConversion } from "@/lib/gtag";
 import { analyticsPage, trackEvent } from "@/lib/analytics";
 
-const navHrefs = ["#services", "#fleet", "#advantages", "#reviews"];
+import { getHomeSectionHref } from "@/lib/lang-urls";
+
+const navSections = ["services", "fleet", "advantages", "reviews"];
 const BRANDBOOK_KEY = "comfortline-brandbook-revealed";
 const TAP_THRESHOLD = 5;
 const TAP_WINDOW_MS = 3000;
@@ -71,7 +73,7 @@ export function Footer() {
 
           {/* Logo & About */}
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
-            <a href="#" className="inline-block mb-6">
+            <a href={lang === "en" ? "/en" : "/"} className="inline-block mb-6">
               <Logo variant="stacked" scheme={logoScheme} height={72} showTagline />
             </a>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
@@ -104,7 +106,7 @@ export function Footer() {
             <h4 className="font-bold text-foreground mb-6">{f.navHeading}</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               {f.navLinks.map((label, i) => (
-                <li key={i}><a href={navHrefs[i]} className="hover:text-primary transition-colors">{label}</a></li>
+                <li key={i}><a href={getHomeSectionHref(lang, navSections[i])} className="hover:text-primary transition-colors">{label}</a></li>
               ))}
               <li><a href={f.blogHref} className="hover:text-primary transition-colors">{f.blogLabel}</a></li>
               <li><a href={f.faqHref} className="hover:text-primary transition-colors">{f.faqLabel}</a></li>
@@ -163,10 +165,10 @@ export function Footer() {
           <div className="flex flex-wrap gap-4 items-center">
             <span>{f.legalName}</span>
             <span>{f.unp}</span>
-            <a href="/privacy" className="hover:text-primary transition-colors underline underline-offset-2">
+            <a href={lang === "en" ? "/en/privacy" : "/privacy"} className="hover:text-primary transition-colors underline underline-offset-2">
               {f.privacyPolicy}
             </a>
-            <a href="/terms" className="hover:text-primary transition-colors underline underline-offset-2">
+            <a href={lang === "en" ? "/en/terms" : "/terms"} className="hover:text-primary transition-colors underline underline-offset-2">
               {f.terms}
             </a>
             {brandbookVisible && (

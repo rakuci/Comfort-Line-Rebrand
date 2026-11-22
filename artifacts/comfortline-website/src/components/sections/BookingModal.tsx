@@ -380,9 +380,9 @@ export function BookingModal({
                     </div>
                     <span className="text-sm text-gray-600 leading-snug">
                       {m.privacyText}{" "}
-                      <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{m.privacyLink}</a>
+                      <a href={t.lang === "en" ? "/en/privacy" : "/privacy"} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{m.privacyLink}</a>
                       {" "}{m.privacyAnd}{" "}
-                      <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{m.termsLink}</a>
+                      <a href={t.lang === "en" ? "/en/terms" : "/terms"} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{m.termsLink}</a>
                     </span>
                   </label>
 

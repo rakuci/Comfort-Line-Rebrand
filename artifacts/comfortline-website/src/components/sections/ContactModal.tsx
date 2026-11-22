@@ -207,9 +207,9 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
                   </div>
                   <span className="text-sm text-gray-600 leading-snug">
                     {c.privacyText}{" "}
-                    <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{c.privacyLink}</a>
+                    <a href={lang === "en" ? "/en/privacy" : "/privacy"} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{c.privacyLink}</a>
                     {" "}{c.privacyAnd}{" "}
-                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{c.termsLink}</a>
+                    <a href={lang === "en" ? "/en/terms" : "/terms"} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{c.termsLink}</a>
                   </span>
                 </label>
 

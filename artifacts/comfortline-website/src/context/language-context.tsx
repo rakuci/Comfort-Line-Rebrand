@@ -281,7 +281,7 @@ const ru: Translations = {
   pricing: {
     label: "Тарифы",
     heading: "Цены на трансфер",
-    subheading: "Выберите направление — фиксированные цены на популярные маршруты.",
+    subheading: "Выберите маршрут, чтобы посмотреть начальную цену и запросить расчёт поездки.",
     popular: "Популярный выбор",
     book: "Заказать",
     routes: [
@@ -383,6 +383,7 @@ const ru: Translations = {
     navLinks: ["Услуги", "Автопарк", "Преимущества", "Отзывы"],
     servicesHeading: "Направления",
     serviceLinks: [
+      { label: "Минск — Вильнюс (город)", href: "/трансфер-минск-вильнюс" },
       { label: "Минск — Вильнюс (VNO)", href: "/трансфер-минск-вильнюс-аэропорт" },
       { label: "Такси Минск — Варшава", href: "/трансфер-варшава" },
       { label: "Минск — Варшава (WAW)", href: "/трансфер-минск-варшава-шопен" },
@@ -519,7 +520,7 @@ const en: Translations = {
   pricing: {
     label: "Rates",
     heading: "Transfer Prices",
-    subheading: "Select a route — fixed rates on all popular destinations.",
+    subheading: "Choose a route to see its starting fare and request a quote.",
     popular: "Most popular",
     book: "Book",
     routes: [
@@ -621,6 +622,7 @@ const en: Translations = {
     navLinks: ["Services", "Fleet", "Why Us", "Reviews"],
     servicesHeading: "Routes",
     serviceLinks: [
+      { label: "Minsk — Vilnius city transfer", href: "/minsk-vilnius-transfer" },
       { label: "Minsk — Vilnius (VNO)", href: "/minsk-vilnius-airport" },
       { label: "Minsk — Warsaw city transfer", href: "/warsaw-transfer" },
       { label: "Minsk — Warsaw (WAW)", href: "/minsk-warsaw-airport" },
@@ -640,7 +642,7 @@ const en: Translations = {
     blogLabel: "Blog",
     blogHref: "/blog",
     faqLabel: "FAQ",
-    faqHref: "/faq",
+    faqHref: "/en/faq",
     contactsHeading: "Contacts",
     copyright: "All rights reserved.",
     legalName: "IE Murashko Andrey Antonovich",

@@ -312,9 +312,9 @@ function collectBelarusCityRoutes() {
     introRu: entry.introRu,
     introEn: entry.introEn,
     fromNameRu: catalog.cities[entry.from].ru,
-    fromNameEn: catalog.cities[entry.from].ru,
+    fromNameEn: catalog.cities[entry.from].en,
     toNameRu: catalog.cities[entry.to].ru,
-    toNameEn: catalog.cities[entry.to].ru,
+    toNameEn: catalog.cities[entry.to].en,
   }));
 }
 
@@ -513,18 +513,18 @@ const manualRoutes = [
     pageType: "home",
     pathRu: "/",
     pathEn: "/en",
-    titleRu: "ComfortLine — комфортный трансфер Минск–Вильнюс аэропорт",
-    titleEn: "ComfortLine — Comfortable Transfers Minsk–Vilnius Airport",
+    titleRu: "Трансферы по Беларуси и в Европу | ComfortLine",
+    titleEn: "Private Transfers in Belarus and to Europe | ComfortLine",
     descRu:
-      "Комфортный трансфер из Минска в аэропорт Вильнюса (VNO) и аэропорт Варшавы (WAW, Модлин), Берлин и города Европы.",
+      "Выберите трансфер по Беларуси или между Минском, Вильнюсом, Варшавой и Ригой. Смотрите маршруты и начальные цены. Запросите стоимость поездки у водителя.",
     descEn:
-      "Comfortable transfers from Minsk to Vilnius Airport (VNO) and Warsaw Airport (WAW, Modlin), Berlin and major European cities.",
+      "Plan a private transfer within Belarus or between Minsk, Vilnius, Warsaw and Riga. Compare city and airport routes, see starting fares and request a quote.",
     h1Ru: "ComfortLine — комфортный трансфер из Минска",
     h1En: "ComfortLine — Comfortable Transfers from Minsk",
     introRu:
-      "Комфортный трансфер из Минска в аэропорт Вильнюса (VNO) и аэропорт Варшавы (WAW, Модлин), Берлин и города Европы. Фиксированная цена, опытный водитель, комфортные авто.",
+      "Выберите трансфер по Беларуси или между Минском, Вильнюсом, Варшавой и Ригой. Смотрите маршруты и начальные цены. Запросите стоимость поездки у водителя.",
     introEn:
-      "Comfortable transfers from Minsk to Vilnius Airport (VNO) and Warsaw Airport (WAW, Modlin), Berlin and major European cities. Fixed prices, English-speaking drivers, comfortable vehicles.",
+      "Plan a private transfer within Belarus or between Minsk, Vilnius, Warsaw and Riga. Compare city and airport routes, see starting fares and request a quote.",
   },
   {
     ogSlug: "faq",

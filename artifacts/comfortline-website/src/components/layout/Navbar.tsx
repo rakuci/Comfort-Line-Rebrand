@@ -157,7 +157,7 @@ export function Navbar() {
           <div className="flex items-center justify-between h-14 min-[1700px]:h-9">
 
           {/* Logo */}
-          <a href="/" className="shrink-0 opacity-90 hover:opacity-100 transition-opacity">
+          <a href={lang === "en" ? "/en" : "/"} className="shrink-0 opacity-90 hover:opacity-100 transition-opacity">
             <Logo
               variant="full"
               scheme={isDark ? "dark" : "light"}

@@ -1,5 +1,7 @@
 import { ARTICLES } from "@/data/blog-articles";
 
+import cityRoutes from "@/data/belarus-city-route-pages.json";
+
 type Lang = "ru" | "en";
 
 const RU_TO_EN: Record<string, string> = {
@@ -46,6 +48,8 @@ const RU_TO_EN: Record<string, string> = {
   "/трансфер-минск-тракай":              "/minsk-trakai-transfer",
   "/трансфер-минск-клайпеда":            "/minsk-klaipeda-transfer",
   "/трансфер-минск-друскининкай":        "/minsk-druskininkai-transfer",
+  ...Object.fromEntries(cityRoutes.map((route) => [route.pathRu, route.pathEn])),
+  "/трансферы-по-городам-беларуси": "/belarus-city-transfers",
   "/блог":                               "/blog",
 };
 

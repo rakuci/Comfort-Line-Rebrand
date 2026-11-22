@@ -19,6 +19,7 @@
  *   3. Insert a freshly generated RU+EN <url> pair for every article right
  *      after the /blog index block.
  */
+import { collectAllRoutes } from "./route-manifest.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -154,35 +155,36 @@ export function regenerateSitemap(sitemapXml, articles) {
   return header + keptBlocks.join("\n") + footer;
 }
 
-// Add exactly the route pairs actually registered in the client/SSR route table.
-// Keep older sitemap entries intact; this section is safe to rerun on every build.
-function regenerateCityRouteSitemap(xml, pages) {
-  const pairList = [
-    ...pages.map((page) => [page.pathRu, page.pathEn]),
-    ["/трансферы-по-городам-беларуси", "/belarus-city-transfers"],
-  ];
-  const urls = new Set(pairList.flat().map((p) => SITE_URL + encodeURI(p)));
-  const kept = xml.replace(/<url>[\s\S]*?<\/url>/g, (block) => {
+// The prerender inventory owns the canonical URLs. Existing entries supply
+// editorial dates and image metadata where those are available.
+export function syncRouteInventory(xml, routes) {
+  const pairs = new Map();
+  for (const { pathRu, pathEn } of routes) {
+    const ru = new URL(pathRu, SITE_URL).href;
+    const en = new URL(pathEn, SITE_URL).href;
+    for (const loc of [ru, en]) {
+      if (pairs.has(loc)) throw new Error(`Duplicate sitemap route: ${loc}`);
+      pairs.set(loc, { ru, en });
+    }
+  }
+
+  function entry(loc, pair, block = "") {
+    const alternates = [["ru", pair.ru], ["en", pair.en], ["x-default", pair.ru]]
+      .map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`);
+    const metadata = block.match(/<lastmod>[^<]+<\/lastmod>|<image:image>[\s\S]*?<\/image:image>/g) || [];
+    return ["  <url>", `    <loc>${loc}</loc>`, ...[...metadata, ...alternates].map(tag => "    " + tag), "  </url>"].join("\n");
+  }
+
+  const blocks = [];
+  for (const [block] of xml.matchAll(/<url>[\s\S]*?<\/url>/g)) {
     const loc = /<loc>([^<]+)<\/loc>/.exec(block)?.[1];
-    return urls.has(loc) ? "" : block;
-  });
-  const blocks = pairList.flatMap(([pathRu, pathEn]) => {
-    const ru = SITE_URL + encodeURI(pathRu);
-    const en = SITE_URL + encodeURI(pathEn);
-    const entry = (url) =>
-      "  <url>\n" +
-      "    <loc>" + url + "</loc>\n" +
-      "    <lastmod>2026-11-21</lastmod>\n" +
-      "    <changefreq>monthly</changefreq>\n" +
-      "    <priority>0.7</priority>\n" +
-      "    <xhtml:link rel=\"alternate\" hreflang=\"ru\" href=\"" + ru + "\"/>\n" +
-      "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" + en + "\"/>\n" +
-      "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" + ru + "\"/>\n" +
-      "  </url>";
-    return [entry(ru), entry(en)];
-  });
-  if (!kept.includes("</urlset>")) throw new Error("Missing sitemap closing tag");
-  return kept.replace(/\s*<\/urlset>/, "\n" + blocks.join("\n") + "\n</urlset>");
+    if (!pairs.has(loc)) continue;
+    blocks.push(entry(loc, pairs.get(loc), block));
+    pairs.delete(loc);
+  }
+  for (const [loc, pair] of pairs) blocks.push(entry(loc, pair));
+  const header = xml.slice(0, xml.indexOf("<url>")).trimEnd();
+  return header + "\n" + blocks.join("\n") + "\n</urlset>\n";
 }
 
 function main() {
@@ -192,8 +194,8 @@ function main() {
 
   const sitemapXml = fs.readFileSync(SITEMAP_PATH, "utf8");
   const blogUpdated = regenerateSitemap(sitemapXml, articles);
-  const cityPages = JSON.parse(fs.readFileSync(path.join(ROOT, "src/data/belarus-city-route-pages.json"), "utf8"));
-  const updated = regenerateCityRouteSitemap(blogUpdated, cityPages);
+  const { allRoutes } = collectAllRoutes();
+  const updated = syncRouteInventory(blogUpdated, allRoutes);
   fs.writeFileSync(SITEMAP_PATH, updated, "utf8");
 
   process.stdout.write(

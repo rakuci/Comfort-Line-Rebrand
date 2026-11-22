@@ -145,3 +145,13 @@ test("generated checks fail explicitly on missing and invalid images; no JPEG ge
     rmSync(temp, { recursive: true, force: true });
   }
 });
+
+test("sitemap follows the complete prerender inventory when routes change", async () => {
+  const { syncRouteInventory } = await import("../generate-blog-sitemap.mjs");
+  const pair = { pathRu: "/новая", pathEn: "/new" };
+  const updated = syncRouteInventory(sitemap, [pair]);
+  assert.equal((updated.match(/<url>/g) || []).length, 2);
+  assert.equal((updated.match(/hreflang="en" href="https:\/\/comfortline.by\/new"/g) || []).length, 2);
+  assert.ok(updated.includes(`<loc>https://comfortline.by${encodeURI(pair.pathRu)}</loc>`));
+  assert.equal(syncRouteInventory(updated, [pair]), updated);
+});

@@ -27,19 +27,18 @@ export function Seo(props: SeoProps) {
   // SEO language — derived from the ACTUAL URL, not the user's preference.
   // This ensures Googlebot sees the correct title/description/<html lang> for each URL variant.
   // e.g. a RU-preferring user on /minsk-vilnius-airport still gets EN meta tags.
-  // Compare the FULL url (pathname + search) so that shared pages, which have
-  // distinct RU/EN pathnames (e.g. /faq vs /en/faq) or (for a few legacy
-  // utility pages) a `?lang=en` query string, are matched correctly instead of
-  // always falling into the RU branch.
   let seoIsRu = isRu;
   let canonicalPath = isRu ? props.pathRu : props.pathEn;
   if (typeof window !== "undefined") {
-    const liveFull = window.location.pathname + window.location.search;
-    const decodedFull = decodeURIComponent(window.location.pathname) + window.location.search;
-    if (liveFull === props.pathEn || decodedFull === props.pathEn) {
+    const pathname = decodeURIComponent(window.location.pathname);
+    const languageQuery = new URLSearchParams(window.location.search).get("lang");
+    const matchPath = props.pathEn.includes("?") && languageQuery === "en"
+      ? pathname + "?lang=en"
+      : pathname;
+    if (matchPath === props.pathEn) {
       seoIsRu = false;
       canonicalPath = props.pathEn;
-    } else if (liveFull === props.pathRu || decodedFull === props.pathRu) {
+    } else if (matchPath === props.pathRu) {
       seoIsRu = true;
       canonicalPath = props.pathRu;
     }
