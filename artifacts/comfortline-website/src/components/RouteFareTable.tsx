@@ -17,9 +17,6 @@ export function RouteFareTable({ lang, cityRoute, from, to, rate }: Props) {
   const same = fares.outbound.every((value, i) => value === fares.inbound[i]);
   const directions = same ? [fares.outbound] : [fares.outbound, fares.inbound];
   const labels = same ? [`${from} ↔ ${to}`] : [`${from} → ${to}`, `${to} → ${from}`];
-  const rateDate = new Date(rate.date + "T12:00:00Z").toLocaleDateString(locale, {
-    day: "numeric", month: "short", year: "numeric", timeZone: "UTC",
-  });
   return (
     <section className="mt-8 max-w-3xl">
       <h2 className="mb-3 text-xl font-semibold">{isRu ? "Стоимость поездки" : "Transfer fares"}</h2>
@@ -47,12 +44,7 @@ export function RouteFareTable({ lang, cityRoute, from, to, rate }: Props) {
           ))}</tbody>
         </table>
       </div>
-      <p className="my-3 text-xs leading-relaxed text-muted-foreground">
-        <a className="underline underline-offset-2" href={`https://api.nbrb.by/exrates/rates/EUR?parammode=2&ondate=${rate.date}`}>{isRu ? "Курс НБРБ" : "NBRB rate"}</a>
-        {" · "}{rateDate}{" · 1 EUR = "}{rate.bynPerEur.toLocaleString(locale, { maximumFractionDigits: 4 })} BYN.
-        {isRu ? " Сумма в BYN округлена вверх до 10 рублей." : " BYN fares are rounded up to the nearest 10 rubles."}
-      </p>
-      <p className="text-sm text-muted-foreground">{isRu
+      <p className="mt-3 text-sm text-muted-foreground">{isRu
         ? "Оплата только в белорусских рублях (BYN). По вашей заявке водитель подтвердит окончательную стоимость в BYN до выезда. Суммы в евро приведены для справки. Цена зависит от даты и времени, адресов, класса автомобиля, числа пассажиров, багажа и дополнительных остановок."
         : "Payment is accepted only in Belarusian rubles (BYN). When you request a quote, your driver will confirm the final fare in BYN before departure. Euro amounts are for reference. The fare depends on the date and time, addresses, vehicle class, passengers, luggage and extra stops."}</p>
     </section>
