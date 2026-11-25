@@ -126,13 +126,14 @@ test("public summary is preferred before the backup reader", async () => {
 });
 
 test("account feed mirrors the newest owned videos and serves a byte range", async t => {
-  const token = "test-token";
+  const token = "EAA-test-token";
   let copied = 0;
   const post = { id: "1", username: "transfer_comfortline", media_type: "VIDEO",
     timestamp: "2026-11-20", media_url: "https://cdn.example/1", permalink: "https://www.instagram.com/reel/one/" };
   t.mock.method(globalThis, "fetch", async (input, init) => {
     if (String(input) === post.media_url) return new Response("video");
     assert.equal(init.headers.Authorization, "Bearer " + token);
+    assert.equal(new URL(input).origin + new URL(input).pathname, "https://graph.facebook.com/v27.0/17841456791586879/media");
     const page = new URL(input).searchParams.get("after");
     return Response.json(page ? { data: [post] } : { data: [
       { ...post, username: "another_account" }, { ...post, media_type: "IMAGE" }
@@ -147,7 +148,7 @@ test("account feed mirrors the newest owned videos and serves a byte range", asy
     },
     get: async () => ({ body: "vid", size: 5, httpEtag: '"etag"', range: { offset: 0, length: 3 } })
   };
-  const env = { INSTAGRAM_ACCESS_TOKEN: token, INSTAGRAM_VIDEOS: bucket };
+  const env = { INSTAGRAM_ACCESS_TOKEN: token, INSTAGRAM_USER_ID: "17841456791586879", INSTAGRAM_API_VERSION: "v27.0", INSTAGRAM_VIDEOS: bucket };
   const data = await (await worker.fetch(new Request(url + "/api/instagram/posts"), env)).json();
   assert.equal(copied, 1);
   assert.deepEqual(data.posts.map(p => p.media_url), ["/api/instagram/1.mp4"]);

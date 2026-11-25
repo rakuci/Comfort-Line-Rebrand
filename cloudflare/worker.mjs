@@ -256,15 +256,27 @@ async function handleQueue(url) {
   }
 }
 
-async function fetchInstagram(token) {
-  const url = new URL("https://graph.instagram.com/v25.0/me/media");
+async function fetchInstagram(env) {
+  const token = env.INSTAGRAM_ACCESS_TOKEN.trim();
+  const version = env.INSTAGRAM_API_VERSION || "v27.0";
+  const user = env.INSTAGRAM_USER_ID || "me";
+  const facebookLogin = token.startsWith("EAA");
+  if (!/^v\d+\.\d+$/.test(version) || !(user === "me" || /^\d+$/.test(user)) ||
+      (facebookLogin && user === "me")) throw new Error("account_configuration");
+  const host = facebookLogin ? "graph.facebook.com" : "graph.instagram.com";
+  const url = new URL(`https://${host}/${version}/${user}/media`);
   url.searchParams.set("fields", "id,username,caption,media_type,media_url,thumbnail_url,permalink,timestamp");
   url.searchParams.set("limit", "50");
   const posts = new Map();
   for (let page = 0; page < 5; page++) {
     const response = await fetch(url, { headers: { Authorization: "Bearer " + token } });
-    if (!response.ok) throw new Error("Instagram Graph request failed");
     const body = await response.json();
+    if (!response.ok || body.error) {
+      const code = body.error?.code;
+      const subcode = body.error?.error_subcode;
+      throw new Error(Number.isInteger(code)
+        ? `meta_${code}${Number.isInteger(subcode) ? "_" + subcode : ""}` : "upstream_error");
+    }
     if (!Array.isArray(body.data)) throw new Error("Missing Instagram media");
     for (const post of body.data) {
       if (post.username?.toLowerCase() !== "transfer_comfortline" || post.media_type !== "VIDEO" ||
@@ -318,7 +330,7 @@ async function handleInstagram(env) {
     return json({ posts: instagramCache.posts, configured: true, cached: true });
   }
   try {
-    if (!instagramInFlight) instagramInFlight = fetchInstagram(env.INSTAGRAM_ACCESS_TOKEN)
+    if (!instagramInFlight) instagramInFlight = fetchInstagram(env)
       .then(posts => mirrorInstagram(posts, env.INSTAGRAM_VIDEOS))
       .finally(() => { instagramInFlight = null; });
     const posts = await instagramInFlight;
@@ -327,7 +339,8 @@ async function handleInstagram(env) {
   } catch (err) {
     console.warn("Instagram upstream failed", String(err));
     if (instagramCache) return json({ posts: instagramCache.posts, configured: true, cached: true, stale: true });
-    return json({ posts: [], configured: true, error: true });
+    const reason = /^(account_configuration|meta_\d+(?:_\d+)?)$/.test(err?.message) ? err.message : "upstream_error";
+    return json({ posts: [], configured: true, error: true, reason });
   }
 }
 
