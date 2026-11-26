@@ -1,3 +1,4 @@
+import { HolidayRide } from "./components/HolidayRide";
 import { lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
@@ -211,6 +212,7 @@ function App() {
             <LanguageProvider>
               <ShoppingEnquiryProvider>
                 <Router />
+                <HolidayRide />
               </ShoppingEnquiryProvider>
             </LanguageProvider>
           </WouterRouter>

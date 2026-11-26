@@ -1,0 +1,80 @@
+.holiday-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.holiday-flight {
+  --carriage-width: clamp(134px, 16vw, 260px);
+  position: absolute;
+  top: clamp(72px, 10vh, 110px);
+  width: var(--carriage-width);
+  animation: holiday-cross 54s linear -12s infinite;
+}
+
+.holiday-carriage {
+  position: relative;
+  animation: holiday-glide 5.8s ease-in-out infinite alternate;
+}
+
+.holiday-carriage img { display: block; width: 100%; height: auto; }
+
+.holiday-lights {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8% 7%, #fff4aa 0, #ffd66580 .7%, transparent 2%),
+    radial-gradient(circle at 6% 19%, #ffe99c 0, transparent 1.4%),
+    radial-gradient(circle at 10.5% 17%, #ff747e 0, transparent 1.6%),
+    radial-gradient(circle at 11.5% 28%, #78deff 0, transparent 1.5%),
+    radial-gradient(circle at 6% 31%, #ff7777 0, transparent 1.5%);
+  animation: holiday-glimmer 3.6s ease-in-out infinite alternate;
+}
+
+.holiday-snow {
+  position: absolute;
+  inset: -180px -50px 0;
+  background-repeat: repeat;
+  animation: holiday-drift var(--period) linear infinite;
+}
+
+.holiday-snow-far {
+  --period: 16s;
+  background-size: 177px 166px;
+  background-image: radial-gradient(circle at 20px 22px, #fffc 0 .8px, transparent 1.4px),
+    radial-gradient(circle at 137px 115px, #fff7 0 .6px, transparent 1.3px);
+  opacity: .42;
+}
+
+.holiday-snow-near {
+  --period: 10s;
+  background-size: 257px 166px;
+  background-image: radial-gradient(circle at 91px 65px, #fff 0 1px, transparent 2px);
+  opacity: .53;
+}
+
+@keyframes holiday-cross {
+  from { transform: translate3d(calc(-1 * var(--carriage-width)), 0, 0); }
+  to { transform: translate3d(100vw, 0, 0); }
+}
+@keyframes holiday-glide {
+  from { transform: translateY(4px) rotate(1deg); }
+  to { transform: translateY(-6px) rotate(-1deg); }
+}
+@keyframes holiday-glimmer { from { opacity: .25; } to { opacity: .95; } }
+@keyframes holiday-drift {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(12px, 83px, 0); }
+  100% { transform: translate3d(0, 166px, 0); }
+}
+
+@media (max-width: 600px) {
+  .holiday-flight { animation-duration: 36s; }
+  .holiday-snow-far { display: none; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .holiday-sky { display: none; }
+}
